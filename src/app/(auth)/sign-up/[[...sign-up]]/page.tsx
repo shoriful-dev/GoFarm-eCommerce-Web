@@ -1,14 +1,14 @@
 'use client';
+
+import Container from '@/components/Container';
+import { signInImage } from '@/images';
 import { useAuthStore } from '@/store/authStore';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import signInImage from '@/images/auth/sign-up.png';
-import Container from '@/components/Container';
-import Link from 'next/link';
-import { Eye, EyeOff } from 'lucide-react';
 
-const SignUpPage = () => {
+const SignUpPagep = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const redirectTo = searchParams.get('redirectTo');
@@ -17,7 +17,7 @@ const SignUpPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
@@ -27,58 +27,84 @@ const SignUpPage = () => {
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if(password !== confirmPassword){
-      setError('Password do not match')
-    }
-    if(password.length < 6){
-      setError('Password must be at least 6 characters long')
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
       return;
     }
-    if(!agreeToTerms){
-      setError('You must agree to the Terms and Conditions')
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
+    if (!agreeToTerms) {
+      setError('You must agree to the Terms and Conditions');
       return;
     }
     setLoading(true);
     try {
-      await signUp(email, password, name)
-      router.push(`/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`);
+      await signUp(email, password, name);
+      // rediredct to sign-in page after successful signup
+      router.push(
+        `/sign-in${
+          redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''
+        }`
+      );
     } catch (error) {
-      setError('Failed to create account. please try again')
-      console.log('Error', error)
+      setError('Failed to create account. Please try again.');
+      console.log('Error', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+      router.push(redirectTo || '/user/dashboard');
+    } catch (error) {
+      setError('Failed to sign in with Google. Please try again.');
+      console.log('Error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gofarm-white">
-      <Container className="grid md:grid-cols-2 items-center p-4 max-w-6xl w-full gap-4">
+      <Container className="grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full p-4">
         <div className="md:max-w-md w-full p-4">
           <form onSubmit={handleEmailSignup}>
             <div className="mb-12 space-y-5">
-              <Link href={'/'} className="inline-block">
-                <Image src={'/logo.svg'} alt="Logo" width={120} height={40} />
+              <Link href="/" className="inline-block">
+                <Image src={'/logo.svg'} alt="logo" width={120} height={40} />
               </Link>
               <h1 className="text-gofarm-black text-3xl font-bold">
                 Create Account
               </h1>
               <p className="text-base text-gofarm-gray">
-                Already have an account
+                Already have an account?{' '}
                 <Link
-                  href={`/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`}
+                  href={`/sign-in${
+                    redirectTo
+                      ? `?redirectTo=${encodeURIComponent(redirectTo)}`
+                      : ''
+                  }`}
                   className="text-gofarm-green font-medium hover:underline ml-1 whitespace-nowrap"
                 >
                   Sign in here
                 </Link>
               </p>
             </div>
-            {/* error */}
+            {/* Error */}
             {error && (
               <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg text-sm font-medium">
                 <p>{error}</p>
               </div>
             )}
-            {/* Full name */}
-            <div className="">
+            {/* Full Name */}
+            <div>
               <label className="text-gofarm-black text-sm font-medium block mb-2">
                 Full Name
               </label>
@@ -109,85 +135,106 @@ const SignUpPage = () => {
               </label>
               <div className="relative flex items-center">
                 <input
-                  type="email"
                   name="email"
+                  type="email"
                   required
                   value={email}
+                  onChange={e => setEmail(e.target.value)}
                   className="w-full text-gofarm-black text-sm border-b border-gofarm-gray/30 focus:border-gofarm-green pl-2 pr-8 py-3 outline-none transition-colors"
                   placeholder="Enter email"
-                  onChange={e => setEmail(e.target.value)}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#6b7280"
+                  stroke="#6b7280"
                   className="w-4.5 h-4.5 absolute right-2"
-                  viewBox="0 0 24 24"
+                  viewBox="0 0 682.667 682.667"
                 >
-                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
+                  <defs>
+                    <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                      <path d="M0 512h512V0H0Z" data-original="#000000"></path>
+                    </clipPath>
+                  </defs>
+                  <g
+                    clipPath="url(#a)"
+                    transform="matrix(1.33 0 0 -1.33 0 682.667)"
+                  >
+                    <path
+                      fill="none"
+                      strokeMiterlimit="10"
+                      strokeWidth="40"
+                      d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
+                      data-original="#000000"
+                    ></path>
+                    <path
+                      d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
+                      data-original="#000000"
+                    ></path>
+                  </g>
                 </svg>
               </div>
             </div>
             {/* Password */}
             <div className="mt-8">
-              <label className="text-gofarm-black text-sm font-medium block mb-2">
+              <label className="text-gofarm-black text-[13px] font-medium block mb-2">
                 Password
               </label>
               <div className="relative flex items-center">
                 <input
-                  type={showPassword ? 'text' : 'password'}
                   name="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
+                  onChange={e => setPassword(e.target.value)}
                   className="w-full text-gofarm-black text-sm border-b border-gofarm-gray/30 focus:border-gofarm-green pl-2 pr-8 py-3 outline-none transition-colors"
                   placeholder="At least 6 characters"
-                  onChange={e => setPassword(e.target.value)}
                 />
-                {showPassword ? (
-                  <EyeOff
-                    size={18}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-                    onClick={() => setShowPassword(false)}
-                  />
-                ) : (
-                  <Eye
-                    size={18}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-                    onClick={() => setShowPassword(true)}
-                  />
-                )}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#6b7280"
+                  stroke="#6b7280"
+                  className="w-4.5 h-4.5 absolute right-2 cursor-pointer"
+                  viewBox="0 0 128 128"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <path
+                    d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
+                    data-original="#000000"
+                  ></path>
+                </svg>
               </div>
             </div>
             {/* Confirm Password */}
             <div className="mt-8">
-              <label className="text-gofarm-black text-sm font-medium block mb-2">
+              <label className="text-gofarm-black text-[13px] font-medium block mb-2">
                 Confirm Password
               </label>
               <div className="relative flex items-center">
                 <input
+                  name="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
-                  name="confirmpassword"
                   required
                   value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
                   className="w-full text-gofarm-black text-sm border-b border-gofarm-gray/30 focus:border-gofarm-green pl-2 pr-8 py-3 outline-none transition-colors"
                   placeholder="Confirm your password"
-                  onChange={e => setConirmPassword(e.target.value)}
                 />
-                {showConfirmPassword ? (
-                  <EyeOff
-                    size={18}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-                    onClick={() => setShowConfirmPassword(false)}
-                  />
-                ) : (
-                  <Eye
-                    size={18}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-                    onClick={() => setShowConfirmPassword(true)}
-                  />
-                )}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#6b7280"
+                  stroke="#6b7280"
+                  className="w-4.5 h-4.5 absolute right-2 cursor-pointer"
+                  viewBox="0 0 128 128"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <path
+                    d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
+                    data-original="#000000"
+                  ></path>
+                </svg>
               </div>
             </div>
-            {/* agree term & Condition */}
+            {/* Terms and Conditions */}
             <div className="flex items-center mt-8">
               <input
                 type="checkbox"
@@ -200,14 +247,14 @@ const SignUpPage = () => {
               <label className="ml-3 block text-sm text-gofarm-black">
                 I agree to the{' '}
                 <Link
-                  href={'/terms'}
+                  href="/terms"
                   className="text-gofarm-green font-medium hover:underline"
                 >
                   Terms and Conditions
                 </Link>
               </label>
             </div>
-            {/* buttons */}
+            {/* Buttons */}
             <div className="mt-8">
               <button
                 type="submit"
@@ -222,53 +269,63 @@ const SignUpPage = () => {
               <p className="text-sm text-gofarm-black text-center">or</p>
               <hr className="w-full border-gofarm-gray/30" />
             </div>
-            <div className="">
+            <div className="flex items-center justify-center gap-5">
               {/* Google */}
-              <button>
+              <button type="button" onClick={handleGoogleSignIn} className='cursor-pointer'>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 48 48"
                   className="w-7 h-7 inline"
+                  viewBox="0 0 512 512"
                 >
                   <path
-                    fill="#EA4335"
-                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.61l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+                    fill="#fbbd00"
+                    d="M120 256c0-25.367 6.989-49.13 19.131-69.477v-86.308H52.823C18.568 144.703 0 198.922 0 256s18.568 111.297 52.823 155.785h86.308v-86.308C126.989 305.13 120 281.367 120 256z"
+                    data-original="#fbbd00"
                   />
                   <path
-                    fill="#4285F4"
-                    d="M46.98 24.55c0-1.57-.14-3.09-.4-4.55H24v9.02h12.94c-.56 2.97-2.23 5.48-4.75 7.18l7.73 5.99c4.52-4.18 7.06-10.34 7.06-17.64z"
+                    fill="#0f9d58"
+                    d="m256 392-60 60 60 60c57.079 0 111.297-18.568 155.785-52.823v-86.216h-86.216C305.044 385.147 281.181 392 256 392z"
+                    data-original="#0f9d58"
                   />
                   <path
-                    fill="#FBBC05"
-                    d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.97-6.19z"
+                    fill="#31aa52"
+                    d="m139.131 325.477-86.308 86.308a260.085 260.085 0 0 0 22.158 25.235C123.333 485.371 187.62 512 256 512V392c-49.624 0-93.117-26.72-116.869-66.523z"
+                    data-original="#31aa52"
                   />
                   <path
-                    fill="#34A853"
-                    d="M24 48c6.48 0 11.93-2.13 15.9-5.81l-7.73-5.99c-2.15 1.45-4.9 2.3-8.17 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+                    fill="#3c79e6"
+                    d="M512 256a258.24 258.24 0 0 0-4.192-46.377l-2.251-12.299H256v120h121.452a135.385 135.385 0 0 1-51.884 55.638l86.216 86.216a260.085 260.085 0 0 0 25.235-22.158C485.371 388.667 512 324.38 512 256z"
+                    data-original="#3c79e6"
+                  />
+                  <path
+                    fill="#cf2d48"
+                    d="m352.167 159.833 10.606 10.606 84.853-84.852-10.606-10.606C388.668 26.629 324.381 0 256 0l-60 60 60 60c36.326 0 70.479 14.146 96.167 39.833z"
+                    data-original="#cf2d48"
+                  />
+                  <path
+                    fill="#eb4132"
+                    d="M256 120V0C187.62 0 123.333 26.629 74.98 74.98a259.849 259.849 0 0 0-22.158 25.235l86.308 86.308C162.883 146.72 206.376 120 256 120z"
+                    data-original="#eb4132"
                   />
                 </svg>
               </button>
-              {/* GitHub */}
-              <button>
+              {/* Github */}
+              <button className='cursor-pointer'>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
                   className="w-7 h-7 inline"
+                  fill="#000"
+                  viewBox="0 0 24 24"
                 >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.1-.75.08-.74.08-.74 1.22.09 1.86 1.26 1.86 1.26 1.08 1.85 2.83 1.32 3.52 1.01.11-.78.42-1.32.76-1.62-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.24 2.87.12 3.17.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.21.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"
-                  />
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                 </svg>
               </button>
             </div>
           </form>
         </div>
-        <div className="">
+        <div>
           <Image
-            alt="signInImage"
+            alt="signup-image"
             src={signInImage}
             width={500}
             height={500}
@@ -280,4 +337,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignUpPagep;
