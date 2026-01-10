@@ -1,10 +1,9 @@
-import UserTest from "@/components/UserTest";
+import HomeBanner from "@/components/HomeBanner";
 
 export default function Home() {
   return (
     <div className="">
-      <h1>Welcome to our websites</h1>
-      <UserTest/>
+      <HomeBanner/>
     </div>
   );
 }
