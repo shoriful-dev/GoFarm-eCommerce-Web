@@ -1,28 +1,21 @@
-// import { useAuthStore } from '@/store/authStore';
-// import { useRouter, useSearchParams } from 'next/navigation';
-// import { useState } from 'react';
+'use client';
+import { useAuthStore } from '@/store/authStore';
+import CartIcon from './CartIcon';
 import Container from './Container';
+import FavoriteIcon from './FavoriteIcon';
 import Logo from './Logo';
+import NotificationBellIcon from './NotificationBellIcon';
 import SearchBar from './SearchBar';
 import TopHeaderBadge from './TopHeaderBadge';
+import UserDropDown from './UserDropDown';
+import Link from 'next/link';
 
 const ClientHeader = () => {
-  // const { user, loading } = useAuthStore();
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const [isMounted, setIsMounted] = useState(false);
-  // const [isVisible, setIsVisible] = useState(true);
-  // const [lastScrollY, setLastScrollY] = useState(0);
-  // const [isVendor, setIsVendor] = useState(false);
-
-  // Track when component is mounted on client side
-  // useEffect(() => {
-  //   setIsMounted(true);
-  // },[])
+  const { user, loading } = useAuthStore();
   return (
     <>
       <header>
-        <TopHeaderBadge/>
+        <TopHeaderBadge />
         <div>
           <Container className="flex items-center justify-between py-3 lg:py-4">
             <Logo />
@@ -47,9 +40,29 @@ const ClientHeader = () => {
             </div>
           </Container>
         </div>
+        {/* Bottom Header Menu */}
+        <div className="bg-gofarm-white border-y border-gofarm-gray/20">
+          <Container className="flex items-center justify-between py-2 lg:py-3">
+            <div className="flex md:hidden items-center">
+              <MobileMenu />
+            </div>
+            <div className="flex">
+              <HeaderMenu />
+            </div>
+            {/* Right: Help Button */}
+            <div className="flex items-center gap-2">
+              <Link
+                href="/help"
+                className="text-sm font-medium text-gofarm-gray hover:text-gofarm-light-green hoverEffect whitespace-nowrap"
+              >
+                Need Help?
+              </Link>
+            </div>
+          </Container>
+        </div>
       </header>
     </>
   );
-}
+};
 
 export default ClientHeader;
