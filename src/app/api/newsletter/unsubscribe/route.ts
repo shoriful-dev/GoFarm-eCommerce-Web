@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { unsubscribeFromNewsletter } from "@/actions/subscriptionActions";
+import { unsubscribeFromNewsletter } from "../../../../../actions/subscriptionActions";
 
 export async function POST(request: NextRequest) {
   try {
