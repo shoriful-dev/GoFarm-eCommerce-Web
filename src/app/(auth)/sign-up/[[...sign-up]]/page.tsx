@@ -12,7 +12,7 @@ const SignUpPagep = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const redirectTo = searchParams.get('redirectTo');
-  const { signUp, signInWithGoogle, signInWithGithub } = useAuthStore();
+  const { signUp, signInWithGoogle } = useAuthStore();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
