@@ -9,6 +9,8 @@ import SearchBar from './SearchBar';
 import TopHeaderBadge from './TopHeaderBadge';
 import UserDropDown from './UserDropDown';
 import Link from 'next/link';
+import HeaderMenu from './HeaderMenu';
+import MobileMenu from './MobileMenu';
 
 const ClientHeader = () => {
   const { user, loading } = useAuthStore();
