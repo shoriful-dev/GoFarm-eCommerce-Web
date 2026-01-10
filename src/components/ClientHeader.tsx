@@ -3,6 +3,7 @@
 // import { useState } from 'react';
 import Container from './Container';
 import Logo from './Logo';
+import SearchBar from './SearchBar';
 import TopHeaderBadge from './TopHeaderBadge';
 
 const ClientHeader = () => {
