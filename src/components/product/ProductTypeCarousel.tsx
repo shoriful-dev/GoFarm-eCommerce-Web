@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { ALL_PRODUCTS_QUERY_RESULT } from '../../../sanity.types';
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-import { motion } from 'motion/react';
-import ProductCard from './ProductCard';
+import { useEffect, useRef, useState } from "react";
+import { ALL_PRODUCTS_QUERY_RESULT } from "../../../sanity.types";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
+import ProductCard from "./ProductCard";
 
 interface Props {
   variantId: string;
@@ -24,7 +24,8 @@ const ProductTypeCarousel = ({
   const [cardWidth, setCardWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Update items per view based on screen size
+  //   Update items per view based on screen size
+
   useEffect(() => {
     const updateItemsPerView = () => {
       const width = window.innerWidth;
@@ -49,10 +50,9 @@ const ProductTypeCarousel = ({
     };
 
     updateItemsPerView();
-    window.addEventListener('resize', updateItemsPerView);
-    return () => window.removeEventListener('resize', updateItemsPerView);
+    window.addEventListener("resize", updateItemsPerView);
+    return () => window.removeEventListener("resize", updateItemsPerView);
   }, []);
-  
   // Calculate card width based on container width and items per view
   useEffect(() => {
     if (containerRef.current) {
@@ -68,11 +68,11 @@ const ProductTypeCarousel = ({
   const maxIndex = Math.max(0, products.length - 1);
 
   const handlePrev = () => {
-    setCurrentIndex(prev => Math.max(0, prev - 1));
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex(prev => Math.min(maxIndex, prev + 1));
+    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
   const canGoPrev = currentIndex > 0;
@@ -89,14 +89,14 @@ const ProductTypeCarousel = ({
             {variantTitle}
           </h3>
           <span className="px-3 py-1 bg-gofarm-light-orange text-gofarm-green text-sm font-semibold rounded-full">
-            {products?.length} {products?.length === 1 ? 'Product' : 'Products'}
+            {products?.length} {products?.length === 1 ? "Product" : "Products"}
           </span>
         </div>
         <Link
           href={`/products/${variantSlug}`}
           className="flex items-center gap-2 text-gofarm-green hover:text-gofarm-light-green font-semibold text-sm lg:text-base hoverEffect group"
         >
-          View More{' '}
+          View More{" "}
           <ArrowRight
             size={18}
             className="group-hover:translate-x-1 transition-transform"
@@ -104,6 +104,9 @@ const ProductTypeCarousel = ({
         </Link>
       </div>
       <div className="relative">
+        {/* Carousel Container */}
+        {/* Navigation Buttons */}
+        {/* Products Grid */}
         <div className="overflow-hidden w-full" ref={containerRef}>
           <motion.div
             className="flex gap-4"
@@ -113,7 +116,7 @@ const ProductTypeCarousel = ({
                 (cardWidth + 16) /* 16 is the gap between cards */,
             }}
             transition={{
-              type: 'spring',
+              type: "spring",
               stiffness: 300,
               damping: 30,
             }}

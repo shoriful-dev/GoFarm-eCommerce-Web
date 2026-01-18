@@ -1,13 +1,14 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { Button } from '../ui/button';
-import { ShoppingBag } from 'lucide-react';
-import QuantityButtons from './QuantityButtons';
-import { Product, PRODUCT_BY_SLUG_QUERY_RESULT } from '../../../sanity.types';
-import useCartStore from '../../../store';
-import { cn } from '@/lib/utils';
-import { showToast } from '@/lib/toast';
-import PriceFormatter from './PriceFormatter';
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
+import React, { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import { ShoppingBag } from "lucide-react";
+import QuantityButtons from "./QuantityButtons";
+import { Product, PRODUCT_BY_SLUG_QUERY_RESULT } from "../../../sanity.types";
+import useCartStore from "../../../store";
+import { cn } from "@/lib/utils";
+import { showToast } from "@/lib/toast";
+import PriceFormatter from "./PriceFormatter";
 
 interface Props {
   product: Product | PRODUCT_BY_SLUG_QUERY_RESULT;
@@ -38,7 +39,7 @@ const AddToCartButton = ({
   const effectivePrice = basePrice - discountAmount;
 
   // All hooks must be called before any conditional logic
-  const itemCount = getItemCount(product?._id || '');
+  const itemCount = getItemCount(product?._id || "");
   const isOutOfStock = product?.stock === 0;
 
   // Use useEffect to set isClient to true after component mounts
@@ -80,7 +81,7 @@ const AddToCartButton = ({
         selectedOptions?.color?.name,
       ]
         .filter(Boolean)
-        .join(', ');
+        .join(", ");
 
       const priceInfo =
         discount > 0
@@ -96,16 +97,16 @@ const AddToCartButton = ({
         ? `${selectionText} • ${priceInfo} • ${qtyDisplay}`
         : `${priceInfo} • ${qtyDisplay}`;
 
-      showToast.addToCart(product?.name || 'Product', {
+      showToast.addToCart(product?.name || "Product", {
         description,
         onViewCart: () => {
-          window.location.href = '/cart';
+          window.location.href = "/cart";
         },
       });
     } else {
       showToast.error(
-        'Stock Limit Reached',
-        `Only ${maxStock}${baseWeight ? 'kg' : ' items'} available in stock`,
+        "Stock Limit Reached",
+        `Only ${maxStock}${baseWeight ? "kg" : " items"} available in stock`
       );
     }
   };
@@ -118,8 +119,8 @@ const AddToCartButton = ({
         <Button
           disabled
           className={cn(
-            'w-full bg-gray-200 text-gray-500 shadow-none border border-gray-300',
-            className,
+            "w-full bg-gray-200 text-gray-500 shadow-none border border-gray-300",
+            className
           )}
         >
           <ShoppingBag /> Loading...
@@ -144,7 +145,7 @@ const AddToCartButton = ({
       ) : (
         <Button
           onClick={handleAddToCart}
-          variant={'outline'}
+          variant={"outline"}
           disabled={isOutOfStock}
           className="w-full flex-1 rounded-md border-2 border-gofarm-green hover:border-gofarm-green relative overflow-hidden group/button"
         >

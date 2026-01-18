@@ -1,12 +1,14 @@
-import { Product } from '../../../sanity.types';
-import Link from 'next/link';
-import Image from 'next/image';
-import { image } from '@/sanity/image';
-import { Badge, StarIcon } from 'lucide-react';
-import ProductSidemenu from './ProductSideMenu';
-import Title from '../common/Title';
-import PriceView from './PriceView';
-import AddToCartButton from './AddToCartButton';
+import React from "react";
+import { Product } from "../../../sanity.types";
+import Link from "next/link";
+import Image from "next/image";
+import { image } from "@/sanity/image";
+import Title from "../common/Title";
+import { StarIcon } from "lucide-react";
+import PriceView from "./PriceView";
+import AddToCartButton from "./AddToCartButton";
+import ProductSideMenu from "./ProductSideMenu";
+import { Badge } from "../ui/badge";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const isOutOfStock = product?.stock === 0;
@@ -23,12 +25,12 @@ const ProductCard = ({ product }: { product: Product }) => {
           >
             <Image
               src={image(product?.images[0]).url()}
-              alt={product?.name || 'Product Image'}
+              alt={product?.name || "Product Image"}
               width={500}
               height={500}
               loading="lazy"
               className={`w-full h-full object-cover transition-all duration-500 ${
-                isOutOfStock ? 'opacity-40 grayscale' : 'group-hover:scale-110'
+                isOutOfStock ? "opacity-40 grayscale" : "group-hover:scale-110"
               }`}
             />
           </Link>
@@ -41,17 +43,17 @@ const ProductCard = ({ product }: { product: Product }) => {
             </Badge>
           ) : (
             <>
-              {product?.status === 'sale' && (
+              {product?.status === "sale" && (
                 <Badge className="bg-gofarm-orange text-white text-[10px] px-2 py-0.5 shadow-md">
                   Sale
                 </Badge>
               )}
-              {product?.status === 'new' && (
+              {product?.status === "new" && (
                 <Badge className="bg-gofarm-green text-white text-[10px] px-2 py-0.5 shadow-md">
                   New
                 </Badge>
               )}
-              {product?.status === 'hot' && (
+              {product?.status === "hot" && (
                 <Badge className="bg-red-500 text-white text-[10px] px-2 py-0.5 shadow-md">
                   Hot
                 </Badge>
@@ -65,7 +67,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           )}
         </div>
         {/* Prouct Side Menu */}
-        <ProductSidemenu product={product} />
+        <ProductSideMenu product={product} />
       </div>
       {/* Content Container */}
       <div className="p-3 space-y-2">
@@ -83,9 +85,9 @@ const ProductCard = ({ product }: { product: Product }) => {
                 <StarIcon
                   key={index}
                   className={`w-3 h-3 ${
-                    isFilled ? 'text-amber-400' : 'text-gray-300'
+                    isFilled ? "text-amber-400" : "text-gray-300"
                   }`}
-                  fill={isFilled ? '#fbbf24' : '#d1d5db'}
+                  fill={isFilled ? "#fbbf24" : "#d1d5db"}
                 />
               );
             })}

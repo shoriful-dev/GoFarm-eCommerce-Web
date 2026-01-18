@@ -13,11 +13,11 @@ import {
   TrolleyIcon,
   UserIcon,
   UsersIcon,
-} from '@sanity/icons'
-import type {StructureResolver} from 'sanity/structure'
+} from '@sanity/icons';
+import type { StructureResolver } from 'sanity/structure';
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
-export const structure: StructureResolver = (S) =>
+export const structure: StructureResolver = S =>
   S.list()
     .title('GoFarm Admin')
     .items([
@@ -36,7 +36,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('product')
                     .title('All Products')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.listItem()
@@ -46,7 +48,7 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('productVariant')
                     .title('Product Variants')
-                    .defaultOrdering([{field: 'weight', direction: 'asc'}]),
+                    .defaultOrdering([{ field: 'weight', direction: 'asc' }]),
                 ),
 
               S.listItem()
@@ -56,7 +58,7 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('productWeight')
                     .title('Product Weights')
-                    .defaultOrdering([{field: 'weight', direction: 'asc'}]),
+                    .defaultOrdering([{ field: 'weight', direction: 'asc' }]),
                 ),
 
               S.listItem()
@@ -66,7 +68,7 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('productSize')
                     .title('Product Sizes')
-                    .defaultOrdering([{field: 'weight', direction: 'asc'}]),
+                    .defaultOrdering([{ field: 'weight', direction: 'asc' }]),
                 ),
 
               S.listItem()
@@ -76,7 +78,7 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('productColor')
                     .title('Product Colors')
-                    .defaultOrdering([{field: 'weight', direction: 'asc'}]),
+                    .defaultOrdering([{ field: 'weight', direction: 'asc' }]),
                 ),
 
               S.listItem()
@@ -86,7 +88,7 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('category')
                     .title('Categories')
-                    .defaultOrdering([{field: 'title', direction: 'asc'}]),
+                    .defaultOrdering([{ field: 'title', direction: 'asc' }]),
                 ),
 
               S.listItem()
@@ -96,7 +98,7 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('brand')
                     .title('Brands')
-                    .defaultOrdering([{field: 'title', direction: 'asc'}]),
+                    .defaultOrdering([{ field: 'title', direction: 'asc' }]),
                 ),
 
               S.listItem()
@@ -106,7 +108,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('review')
                     .title('Reviews')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
               S.divider(),
               S.listItem()
@@ -116,7 +120,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('vendorProduct')
                     .title('Vendor Products')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
             ]),
         ),
@@ -138,7 +144,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('banner')
                     .title('Home Banners')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
             ]),
         ),
@@ -160,7 +168,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('order')
                     .title('All Orders')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.listItem()
@@ -171,7 +181,9 @@ export const structure: StructureResolver = (S) =>
                   S.documentTypeList('order')
                     .title('Pending Orders')
                     .filter('_type == "order" && status == "pending"')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.listItem()
@@ -182,7 +194,9 @@ export const structure: StructureResolver = (S) =>
                   S.documentTypeList('order')
                     .title('Processing Orders')
                     .filter('_type == "order" && status == "processing"')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.listItem()
@@ -193,7 +207,9 @@ export const structure: StructureResolver = (S) =>
                   S.documentTypeList('order')
                     .title('Delivered Orders')
                     .filter('_type == "order" && status == "delivered"')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.listItem()
@@ -204,7 +220,9 @@ export const structure: StructureResolver = (S) =>
                   S.documentTypeList('order')
                     .title('Cancelled Orders')
                     .filter('_type == "order" && status == "cancelled"')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.divider(),
@@ -216,7 +234,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('subscription')
                     .title('Subscriptions')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
             ]),
         ),
@@ -238,7 +258,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('user')
                     .title('All Users')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.listItem()
@@ -248,7 +270,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('address')
                     .title('User Addresses')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.listItem()
@@ -259,7 +283,9 @@ export const structure: StructureResolver = (S) =>
                   S.documentTypeList('userAccessRequest')
                     .title('Access Requests')
                     .filter('_type == "userAccessRequest"')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
               S.divider(),
               S.listItem()
@@ -270,7 +296,9 @@ export const structure: StructureResolver = (S) =>
                   S.documentTypeList('store')
                     .title('Local Stores')
                     .filter('_type == "store"')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
             ]),
         ),
@@ -292,7 +320,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('blog')
                     .title('Blog Posts')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.listItem()
@@ -302,7 +332,7 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('blogcategory')
                     .title('Blog Categories')
-                    .defaultOrdering([{field: 'title', direction: 'asc'}]),
+                    .defaultOrdering([{ field: 'title', direction: 'asc' }]),
                 ),
 
               S.listItem()
@@ -312,7 +342,7 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('author')
                     .title('Authors')
-                    .defaultOrdering([{field: 'name', direction: 'asc'}]),
+                    .defaultOrdering([{ field: 'name', direction: 'asc' }]),
                 ),
             ]),
         ),
@@ -334,7 +364,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('contact')
                     .title('Contact Submissions')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
 
               S.listItem()
@@ -344,7 +376,9 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('sentNotification')
                     .title('Sent Notifications')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
             ]),
         ),
@@ -365,8 +399,11 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.documentTypeList('coupon')
                     .title('Coupons')
-                    .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+                    .defaultOrdering([
+                      { field: '_createdAt', direction: 'desc' },
+                    ]),
                 ),
             ]),
         ),
-    ])
+    ]);
+    

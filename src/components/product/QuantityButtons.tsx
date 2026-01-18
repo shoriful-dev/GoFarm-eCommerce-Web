@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button } from '../ui/button';
-import { Minus, Plus } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Product, PRODUCT_BY_SLUG_QUERY_RESULT } from '../../../sanity.types';
-import useCartStore from '../../../store';
-import { showToast } from '@/lib/toast';
+import React from "react";
+import { Button } from "../ui/button";
+import { Minus, Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Product, PRODUCT_BY_SLUG_QUERY_RESULT } from "../../../sanity.types";
+import useCartStore from "../../../store";
+import { showToast } from "@/lib/toast";
 
 interface Props {
   product: Product | PRODUCT_BY_SLUG_QUERY_RESULT;
@@ -14,19 +14,19 @@ interface Props {
 
 const QuantityButtons = ({ product, className, borderStyle }: Props) => {
   const { addItem, removeItem, getItemCount } = useCartStore();
-  const itemCount = getItemCount(product?._id || '');
+  const itemCount = getItemCount(product?._id || "");
   const isOutOfStock = product?.stock === 0;
 
   // Calculate quantity unit based on baseWeight
   const baseWeight = product?.baseWeight;
   const selectedWeight = product?.selectedWeight;
   let qtyUnit = 1;
-  let displayUnit = '';
+  let displayUnit = "";
 
   if (baseWeight && selectedWeight?.numericValue) {
     qtyUnit = selectedWeight.numericValue / baseWeight;
     // Display as kg if baseWeight is used
-    displayUnit = 'kg';
+    displayUnit = "kg";
   }
 
   const handleRemoveProduct = () => {
@@ -35,13 +35,13 @@ const QuantityButtons = ({ product, className, borderStyle }: Props) => {
     const newCount = itemCount - qtyUnit;
     if (newCount > 0) {
       showToast.success(
-        'Quantity Updated',
-        `${product?.name} quantity decreased to ${newCount}${displayUnit}`,
+        "Quantity Updated",
+        `${product?.name} quantity decreased to ${newCount}${displayUnit}`
       );
     } else {
       showToast.success(
-        'Item Removed',
-        `${product?.name} removed from your cart`,
+        "Item Removed",
+        `${product?.name} removed from your cart`
       );
     }
   };
@@ -54,22 +54,22 @@ const QuantityButtons = ({ product, className, borderStyle }: Props) => {
     if (maxStock >= newCount) {
       addItem(product as Product);
       showToast.success(
-        'Quantity Updated',
-        `${product?.name} quantity increased to ${newCount}${displayUnit}`,
+        "Quantity Updated",
+        `${product?.name} quantity increased to ${newCount}${displayUnit}`
       );
     } else {
       showToast.error(
-        'Stock Limit Reached',
-        `Only ${maxStock}${displayUnit} available in stock`,
+        "Stock Limit Reached",
+        `Only ${maxStock}${displayUnit} available in stock`
       );
     }
   };
   return (
     <div
       className={cn(
-        'flex items-center gap-1 pb-1 text-base',
+        "flex items-center gap-1 pb-1 text-base",
         className,
-        borderStyle,
+        borderStyle
       )}
     >
       <Button

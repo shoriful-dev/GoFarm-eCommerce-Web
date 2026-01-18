@@ -1,24 +1,25 @@
-'use client';
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
 
-import { useEffect, useState } from 'react';
-import { ALL_PRODUCTS_QUERY_RESULT } from '../../../sanity.types';
-import { client } from '@/sanity/lib/client';
-import { Button } from '../ui/button';
-import Container from '../Container';
-import ProductTypeCarousel from './ProductTypeCarousel';
-import HomeTabbar from './HomeTabbar';
-import { ProductGridSkeleton } from './ProductSkeletons';
-import { AnimatePresence, motion } from 'motion/react';
-import ProductCard from './ProductCard';
-import NoProductAvailable from './NoProductAvailable';
+import { useEffect, useState } from "react";
+import { ALL_PRODUCTS_QUERY_RESULT } from "../../../sanity.types";
+import { client } from "@/sanity/lib/client";
+import { Button } from "../ui/button";
+import Container from "../Container";
+import ProductTypeCarousel from "./ProductTypeCarousel";
+import HomeTabbar from "./HomeTabbar";
+import { ProductGridSkeleton } from "./ProductSkeletons";
+import { AnimatePresence, motion } from "motion/react";
+import ProductCard from "./ProductCard";
+import NoProductAvailable from "./NoProductAvailable";
 
-type ViewMode = 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5' | 'list';
+type ViewMode = "grid-2" | "grid-3" | "grid-4" | "grid-5" | "list";
 type SortOption =
-  | 'name-asc'
-  | 'name-desc'
-  | 'price-asc'
-  | 'price-desc'
-  | 'newest';
+  | "name-asc"
+  | "name-desc"
+  | "price-asc"
+  | "price-desc"
+  | "newest";
 
 interface ProductVariant {
   _id: string;
@@ -39,14 +40,14 @@ const ProductGrid = () => {
   const [loading, setLoading] = useState(false);
   const [variantsLoading, setVariantsLoading] = useState(true);
   const [carouselsLoading, setCarouselsLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState('');
-  const [viewMode, setViewMode] = useState<ViewMode>('grid-5');
-  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
+  const [selectedTab, setSelectedTab] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid-5");
+  const [sortBy, setSortBy] = useState<SortOption>("name-asc");
   const [showFilters, setShowFilters] = useState(false);
   const [productsPerPage] = useState(20);
   const [priceRange, setPriceRange] = useState([0, 1000]);
-  const [stockStatus, setStockStatus] = useState<string>('all');
-  const [rating, setRating] = useState<string>('all');
+  const [stockStatus, setStockStatus] = useState<string>("all");
+  const [rating, setRating] = useState<string>("all");
   const [mounted, setMounted] = useState(false);
 
   // Fix hydration issues
@@ -67,7 +68,7 @@ const ProductGrid = () => {
         setSelectedTab(variants[0]._id);
       }
     } catch (error) {
-      console.error('Error fetching product variants:', error);
+      console.error("Error fetching product variants:", error);
     } finally {
       setVariantsLoading(false);
     }
@@ -100,7 +101,7 @@ const ProductGrid = () => {
         }
         setProductsByVariant(productsByVariantData);
       } catch (error) {
-        console.log('Error fetching products by variant:', error);
+        console.log("Error fetching products by variant:", error);
       } finally {
         setCarouselsLoading(false);
       }
@@ -108,7 +109,7 @@ const ProductGrid = () => {
     fetchProductsByVariant();
   }, [productVariants]);
   const query = `*[_type == "product" && references($variantId)] | order(${getSortQuery(
-    sortBy,
+    sortBy
   )}){
   ...,
   "categories": categories[]->title,
@@ -118,18 +119,18 @@ const ProductGrid = () => {
 
   function getSortQuery(sort: SortOption): string {
     switch (sort) {
-      case 'name-asc':
-        return 'name asc';
-      case 'name-desc':
-        return 'name desc';
-      case 'price-asc':
-        return 'price asc';
-      case 'price-desc':
-        return 'price desc';
-      case 'newest':
-        return '_createdAt desc';
+      case "name-asc":
+        return "name asc";
+      case "name-desc":
+        return "name desc";
+      case "price-asc":
+        return "price asc";
+      case "price-desc":
+        return "price desc";
+      case "newest":
+        return "_createdAt desc";
       default:
-        return 'name asc';
+        return "name asc";
     }
   }
 
@@ -143,7 +144,7 @@ const ProductGrid = () => {
         setProducts(await response);
         setFilteredProducts(await response);
       } catch (error) {
-        console.log('Product fetching Error', error);
+        console.log("Product fetching Error", error);
       } finally {
         setLoading(false);
       }
@@ -157,7 +158,7 @@ const ProductGrid = () => {
 
     // Filter by price range
     if (priceRange[0] > 0 || priceRange[1] < 1000) {
-      filtered = filtered.filter(product => {
+      filtered = filtered.filter((product) => {
         const price = product.price || 0;
         const finalPrice = product.discount
           ? price - price * (product.discount / 100)
@@ -167,11 +168,11 @@ const ProductGrid = () => {
     }
 
     // Filter by stock status
-    if (stockStatus !== 'all') {
-      filtered = filtered.filter(product => {
-        if (stockStatus === 'in-stock') {
+    if (stockStatus !== "all") {
+      filtered = filtered.filter((product) => {
+        if (stockStatus === "in-stock") {
           return (product.stock || 0) > 0;
-        } else if (stockStatus === 'out-of-stock') {
+        } else if (stockStatus === "out-of-stock") {
           return (product.stock || 0) === 0;
         }
         return true;
@@ -179,17 +180,17 @@ const ProductGrid = () => {
     }
 
     // Filter by status (using status as a proxy for "rating/quality")
-    if (rating !== 'all') {
-      filtered = filtered.filter(product => {
-        if (rating === '5') {
-          return product.status === 'hot'; // Hot products = 5 stars
-        } else if (rating === '4') {
-          return product.status === 'hot' || product.status === 'new'; // Hot or New = 4+ stars
-        } else if (rating === '3') {
+    if (rating !== "all") {
+      filtered = filtered.filter((product) => {
+        if (rating === "5") {
+          return product.status === "hot"; // Hot products = 5 stars
+        } else if (rating === "4") {
+          return product.status === "hot" || product.status === "new"; // Hot or New = 4+ stars
+        } else if (rating === "3") {
           return (
-            product.status === 'hot' ||
-            product.status === 'new' ||
-            product.status === 'sale'
+            product.status === "hot" ||
+            product.status === "new" ||
+            product.status === "sale"
           ); // All products = 3+ stars
         }
         return true;
@@ -205,18 +206,18 @@ const ProductGrid = () => {
 
   const getGridClasses = () => {
     switch (viewMode) {
-      case 'grid-2':
-        return 'grid-cols-1 sm:grid-cols-2 gap-6';
-      case 'grid-3':
-        return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5';
-      case 'grid-4':
-        return 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4';
-      case 'grid-5':
-        return 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3';
-      case 'list':
-        return 'grid-cols-1 gap-4';
+      case "grid-2":
+        return "grid-cols-1 sm:grid-cols-2 gap-6";
+      case "grid-3":
+        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5";
+      case "grid-4":
+        return "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4";
+      case "grid-5":
+        return "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3";
+      case "list":
+        return "grid-cols-1 gap-4";
       default:
-        return 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4';
+        return "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4";
     }
   };
 
@@ -230,13 +231,13 @@ const ProductGrid = () => {
     label: string;
   }) => (
     <Button
-      variant={viewMode === mode ? 'default' : 'outline'}
+      variant={viewMode === mode ? "default" : "outline"}
       size="sm"
       onClick={() => setViewMode(mode)}
       className={`p-2 hoverEffect ${
         viewMode === mode
-          ? 'bg-gofarm-light-green hover:bg-gofarm-green border-gofarm-light-green'
-          : 'hover:border-gofarm-light-green hover:text-gofarm-light-green'
+          ? "bg-gofarm-light-green hover:bg-gofarm-green border-gofarm-light-green"
+          : "hover:border-gofarm-light-green hover:text-gofarm-light-green"
       }`}
       title={label}
     >
@@ -262,7 +263,7 @@ const ProductGrid = () => {
       {/* Product type Carousels */}
       {carouselsLoading ? (
         <div className="space-y-6 mb-12">
-          {[1, 2, 3].map(i => (
+          {[1, 2, 3].map((i) => (
             <div
               key={i}
               className="h-96 bg-gofarm-light-gray/30 rounded-2xl animate-pulse"
@@ -271,7 +272,7 @@ const ProductGrid = () => {
         </div>
       ) : (
         <div>
-          {productVariants?.map(variant => {
+          {productVariants?.map((variant) => {
             const variantProducts = productsByVariant[variant._id] || [];
             if (variantProducts?.length === 0) return null;
             return (
@@ -322,7 +323,7 @@ const ProductGrid = () => {
                   }}
                   className="group"
                 >
-                  {viewMode === 'list' ? (
+                  {viewMode === "list" ? (
                     // <ProductListCard product={product} />
                     <div>List View Coming Soon</div>
                   ) : (
@@ -335,7 +336,9 @@ const ProductGrid = () => {
       ) : (
         <NoProductAvailable
           selectedTab={selectedTab}
-          variantTitle={productVariants.find(v => v._id === selectedTab)?.title}
+          variantTitle={
+            productVariants.find((v) => v._id === selectedTab)?.title
+          }
         />
       )}
     </Container>
