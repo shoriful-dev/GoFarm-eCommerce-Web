@@ -1339,3 +1339,850 @@ type ArrayOf<T> = Array<
     _key: string;
   }
 >;
+
+// Source: src/sanity/queries/query.ts
+// Variable: BANNER_QUERY
+// Query: *[_type == 'banner'] | order(publishedAt desc)
+export type BANNER_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "banner";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  title?: string;
+  buttonTitle?: string;
+  buttonHref?: string;
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: FEATURED_CATEGORY_QUERY
+// Query: *[_type == 'category' && featured == true] | order(name desc)
+export type FEATURED_CATEGORY_QUERY_RESULT = Array<never>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: ALL_PRODUCTS_QUERY
+// Query: *[_type=="product"] | order(name asc)
+export type ALL_PRODUCTS_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+  description?: string;
+  price?: number;
+  baseWeight?: number;
+  discount?: number;
+  categories?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+  stock?: number;
+  brand?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "brand";
+  };
+  status?: "hot" | "new" | "sale";
+  variant?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "productVariant";
+  };
+  hasWeights?: boolean;
+  useAllWeights?: boolean;
+  weights?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productWeight";
+  }>;
+  hasVariants?: boolean;
+  useAllSizes?: boolean;
+  sizes?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productSize";
+  }>;
+  useAllColors?: boolean;
+  colors?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productColor";
+  }>;
+  isFeatured?: boolean;
+  isOffer?: boolean;
+  enableRatingsManagement?: boolean;
+  averageRating?: number;
+  totalReviews?: number;
+  ratingDistribution?: {
+    fiveStars?: number;
+    fourStars?: number;
+    threeStars?: number;
+    twoStars?: number;
+    oneStar?: number;
+  };
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: DEAL_PRODUCTS
+// Query: *[_type == 'product' && status == 'hot'] | order(name asc){  ...,"categories": categories[]->title}
+export type DEAL_PRODUCTS_RESULT = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+  description?: string;
+  price?: number;
+  baseWeight?: number;
+  discount?: number;
+  categories: Array<string | null> | null;
+  stock?: number;
+  brand?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "brand";
+  };
+  status: "hot";
+  variant?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "productVariant";
+  };
+  hasWeights?: boolean;
+  useAllWeights?: boolean;
+  weights?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productWeight";
+  }>;
+  hasVariants?: boolean;
+  useAllSizes?: boolean;
+  sizes?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productSize";
+  }>;
+  useAllColors?: boolean;
+  colors?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productColor";
+  }>;
+  isFeatured?: boolean;
+  isOffer?: boolean;
+  enableRatingsManagement?: boolean;
+  averageRating?: number;
+  totalReviews?: number;
+  ratingDistribution?: {
+    fiveStars?: number;
+    fourStars?: number;
+    threeStars?: number;
+    twoStars?: number;
+    oneStar?: number;
+  };
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: FEATURE_PRODUCTS
+// Query: *[_type == 'product' && isFeatured == true] | order(name asc){  ...,"categories": categories[]->title}
+export type FEATURE_PRODUCTS_RESULT = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+  description?: string;
+  price?: number;
+  baseWeight?: number;
+  discount?: number;
+  categories: Array<string | null> | null;
+  stock?: number;
+  brand?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "brand";
+  };
+  status?: "hot" | "new" | "sale";
+  variant?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "productVariant";
+  };
+  hasWeights?: boolean;
+  useAllWeights?: boolean;
+  weights?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productWeight";
+  }>;
+  hasVariants?: boolean;
+  useAllSizes?: boolean;
+  sizes?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productSize";
+  }>;
+  useAllColors?: boolean;
+  colors?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productColor";
+  }>;
+  isFeatured: true;
+  isOffer?: boolean;
+  enableRatingsManagement?: boolean;
+  averageRating?: number;
+  totalReviews?: number;
+  ratingDistribution?: {
+    fiveStars?: number;
+    fourStars?: number;
+    threeStars?: number;
+    twoStars?: number;
+    oneStar?: number;
+  };
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: BRANDS_QUERY
+// Query: *[_type=='brand'] | order(name asc)
+export type BRANDS_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "brand";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: LATEST_BLOG_QUERY
+// Query: *[_type == 'blog' && isLatest == true]|order(name asc){    ...,    blogcategories[]->{    title  }  }
+export type LATEST_BLOG_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "blog";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  author?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "author";
+  };
+  mainImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  blogcategories: Array<{
+    title: string | null;
+  }> | null;
+  publishedAt?: string;
+  isLatest: true;
+  body?: BlockContent;
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: GET_ALL_BLOG
+// Query: *[_type == 'blog'] | order(publishedAt desc)[0...$quantity]{  ...,       blogcategories[]->{    title}    }
+export type GET_ALL_BLOG_RESULT = Array<{
+  _id: string;
+  _type: "blog";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  author?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "author";
+  };
+  mainImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  blogcategories: Array<{
+    title: string | null;
+  }> | null;
+  publishedAt?: string;
+  isLatest?: boolean;
+  body?: BlockContent;
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: SINGLE_BLOG_QUERY
+// Query: *[_type == "blog" && slug.current == $slug][0]{  ...,     author->{    name,    image,  },  blogcategories[]->{    title,    "slug": slug.current,  },}
+export type SINGLE_BLOG_QUERY_RESULT = {
+  _id: string;
+  _type: "blog";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  author: {
+    name: string | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+  } | null;
+  mainImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  blogcategories: Array<{
+    title: string | null;
+    slug: string | null;
+  }> | null;
+  publishedAt?: string;
+  isLatest?: boolean;
+  body?: BlockContent;
+} | null;
+
+// Source: src/sanity/queries/query.ts
+// Variable: BLOG_CATEGORIES
+// Query: *[_type == "blog"]{     blogcategories[]->{    ...    }  }
+export type BLOG_CATEGORIES_RESULT = Array<{
+  blogcategories: Array<{
+    _id: string;
+    _type: "blogcategory";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    slug?: Slug;
+    description?: string;
+  }> | null;
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: OTHERS_BLOG_QUERY
+// Query: *[  _type == "blog"  && defined(slug.current)  && slug.current != $slug]|order(publishedAt desc)[0...$quantity]{...  publishedAt,  title,  mainImage,  slug,  author->{    name,    image,  },  categories[]->{    title,    "slug": slug.current,  }}
+export type OTHERS_BLOG_QUERY_RESULT = Array<{
+  title: string | null;
+  mainImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  slug: Slug | null;
+  author: {
+    name: string | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+  } | null;
+  categories: null;
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: ADDRESS_QUERY
+// Query: *[_type=="address"] | order(publishedAt desc)
+export type ADDRESS_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "address";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  email?: string;
+  user?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "user";
+  };
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
+  countryCode?: string;
+  stateCode?: string;
+  subArea?: string;
+  type?: "home" | "office" | "other";
+  default?: boolean;
+  createdAt?: string;
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: ALLCATEGORIES_QUERY
+// Query: *[_type == 'category'] | order(name asc) [0...$quantity]
+export type ALLCATEGORIES_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: ADMIN_CATEGORIES_QUERY
+// Query: *[_type == 'category'] | order(title asc) {    _id,    title,    slug,    description,    featured  }
+export type ADMIN_CATEGORIES_QUERY_RESULT = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  featured: null;
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: PRODUCT_BY_SLUG_QUERY
+// Query: *[_type == "product" && slug.current == $slug] | order(name asc) [0]{    ...,    "averageRating": math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating),    "totalReviews": count(*[_type == "review" && product._ref == ^._id && status == "approved"]),    variant->{      _id,      title,      slug    },    brand->{      _id,      title,      slug    },    categories[]->{      _id,      title,      slug    },    "weights": select(      useAllWeights == true => *[_type == "productWeight" && isActive == true] | order(weight asc) {        _id,        name,        value,        unit,        numericValue,        isActive      },      weights[]->{        _id,        name,        value,        unit,        numericValue,        isActive      }    ),    "sizes": select(      useAllSizes == true => *[_type == "productSize" && isActive == true] | order(weight asc) {        _id,        value,        isActive      },      sizes[]->{        _id,        value,        isActive      }    ),    "colors": select(      useAllColors == true => *[_type == "productColor" && isActive == true] | order(weight asc) {        _id,        name,        "value": hexCode,        isActive      },      colors[]->{        _id,        name,        "value": hexCode,        isActive      }    )  }
+export type PRODUCT_BY_SLUG_QUERY_RESULT = {
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+  description?: string;
+  price?: number;
+  baseWeight?: number;
+  discount?: number;
+  categories: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+  }> | null;
+  stock?: number;
+  brand: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+  } | null;
+  status?: "hot" | "new" | "sale";
+  variant: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+  } | null;
+  hasWeights?: boolean;
+  useAllWeights?: boolean;
+  weights:
+    | Array<{
+        _id: string;
+        name: string | null;
+        value: string | null;
+        unit: "g" | "kg" | "lb" | "oz" | null;
+        numericValue: number | null;
+        isActive: true;
+      }>
+    | Array<{
+        _id: string;
+        name: string | null;
+        value: string | null;
+        unit: "g" | "kg" | "lb" | "oz" | null;
+        numericValue: number | null;
+        isActive: boolean | null;
+      }>
+    | null;
+  hasVariants?: boolean;
+  useAllSizes?: boolean;
+  sizes:
+    | Array<{
+        _id: string;
+        value: string | null;
+        isActive: true;
+      }>
+    | Array<{
+        _id: string;
+        value: string | null;
+        isActive: boolean | null;
+      }>
+    | null;
+  useAllColors?: boolean;
+  colors:
+    | Array<{
+        _id: string;
+        name: string | null;
+        value: string | null;
+        isActive: true;
+      }>
+    | Array<{
+        _id: string;
+        name: string | null;
+        value: string | null;
+        isActive: boolean | null;
+      }>
+    | null;
+  isFeatured?: boolean;
+  isOffer?: boolean;
+  enableRatingsManagement?: boolean;
+  averageRating: number | null;
+  totalReviews: number;
+  ratingDistribution?: {
+    fiveStars?: number;
+    fourStars?: number;
+    threeStars?: number;
+    twoStars?: number;
+    oneStar?: number;
+  };
+} | null;
+
+// Source: src/sanity/queries/query.ts
+// Variable: RELATED_PRODUCTS_QUERY
+// Query: *[_type == "product" && count((categories[]._ref)[@ in $categoryIds]) > 0 && slug.current != $currentSlug] | order(name asc) [0...$limit]{    _id,    name,    slug,    price,    discount,    stock,    images,    categories[]->{      _id,      title,      slug    }  }
+export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
+  _id: string;
+  name: string | null;
+  slug: Slug | null;
+  price: number | null;
+  discount: number | null;
+  stock: number | null;
+  images: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }> | null;
+  categories: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+  }> | null;
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: BRAND_QUERY
+// Query: *[_type == "product" && slug.current == $slug]{"brandName": brand->title}
+export type BRAND_QUERY_RESULT = Array<{
+  brandName: string | null;
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: PRODUCTS_BY_VARIANT_QUERY
+// Query: *[_type == "product" && variant->slug.current == $variantSlug] | order(name asc) {    ...,    variant->{      _id,      title,      slug,      description,      image    },    brand->{      _id,      title,      slug    },    categories[]->{      _id,      title,      slug    },    "averageRating": math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating),    "totalReviews": count(*[_type == "review" && product._ref == ^._id && status == "approved"])  }
+export type PRODUCTS_BY_VARIANT_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+  description?: string;
+  price?: number;
+  baseWeight?: number;
+  discount?: number;
+  categories: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+  }> | null;
+  stock?: number;
+  brand: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+  } | null;
+  status?: "hot" | "new" | "sale";
+  variant: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    description: string | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+  } | null;
+  hasWeights?: boolean;
+  useAllWeights?: boolean;
+  weights?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productWeight";
+  }>;
+  hasVariants?: boolean;
+  useAllSizes?: boolean;
+  sizes?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productSize";
+  }>;
+  useAllColors?: boolean;
+  colors?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "productColor";
+  }>;
+  isFeatured?: boolean;
+  isOffer?: boolean;
+  enableRatingsManagement?: boolean;
+  averageRating: number | null;
+  totalReviews: number;
+  ratingDistribution?: {
+    fiveStars?: number;
+    fourStars?: number;
+    threeStars?: number;
+    twoStars?: number;
+    oneStar?: number;
+  };
+}>;
+
+// Source: src/sanity/queries/query.ts
+// Variable: VARIANT_BY_SLUG_QUERY
+// Query: *[_type == "productVariant" && slug.current == $slug][0]{    _id,    title,    slug,    description,    image,    seoTitle,    seoDescription,    "productCount": count(*[_type == "product" && variant._ref == ^._id])  }
+export type VARIANT_BY_SLUG_QUERY_RESULT = {
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  productCount: number;
+} | null;
+
+// Query TypeMap
+import "@sanity/client";
+declare module "@sanity/client" {
+  interface SanityQueries {
+    "*[_type == 'banner'] | order(publishedAt desc)": BANNER_QUERY_RESULT;
+    "*[_type == 'category' && featured == true] | order(name desc)": FEATURED_CATEGORY_QUERY_RESULT;
+    '*[_type=="product"] | order(name asc)': ALL_PRODUCTS_QUERY_RESULT;
+    "*[_type == 'product' && status == 'hot'] | order(name asc){\n  ...,\"categories\": categories[]->title\n}": DEAL_PRODUCTS_RESULT;
+    "*[_type == 'product' && isFeatured == true] | order(name asc){\n  ...,\"categories\": categories[]->title\n}": FEATURE_PRODUCTS_RESULT;
+    "*[_type=='brand'] | order(name asc) ": BRANDS_QUERY_RESULT;
+    " *[_type == 'blog' && isLatest == true]|order(name asc){\n    ...,\n    blogcategories[]->{\n    title\n  }\n  }": LATEST_BLOG_QUERY_RESULT;
+    "*[_type == 'blog'] | order(publishedAt desc)[0...$quantity]{\n  ...,  \n     blogcategories[]->{\n    title\n}\n    }\n  ": GET_ALL_BLOG_RESULT;
+    '*[_type == "blog" && slug.current == $slug][0]{\n  ..., \n    author->{\n    name,\n    image,\n  },\n  blogcategories[]->{\n    title,\n    "slug": slug.current,\n  },\n}': SINGLE_BLOG_QUERY_RESULT;
+    '*[_type == "blog"]{\n     blogcategories[]->{\n    ...\n    }\n  }': BLOG_CATEGORIES_RESULT;
+    '*[\n  _type == "blog"\n  && defined(slug.current)\n  && slug.current != $slug\n]|order(publishedAt desc)[0...$quantity]{\n...\n  publishedAt,\n  title,\n  mainImage,\n  slug,\n  author->{\n    name,\n    image,\n  },\n  categories[]->{\n    title,\n    "slug": slug.current,\n  }\n}': OTHERS_BLOG_QUERY_RESULT;
+    '*[_type=="address"] | order(publishedAt desc)': ADDRESS_QUERY_RESULT;
+    "*[_type == 'category'] | order(name asc) [0...$quantity]": ALLCATEGORIES_QUERY_RESULT;
+    "*[_type == 'category'] | order(title asc) {\n    _id,\n    title,\n    slug,\n    description,\n    featured\n  }": ADMIN_CATEGORIES_QUERY_RESULT;
+    '*[_type == "product" && slug.current == $slug] | order(name asc) [0]{\n    ...,\n    "averageRating": math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating),\n    "totalReviews": count(*[_type == "review" && product._ref == ^._id && status == "approved"]),\n    variant->{\n      _id,\n      title,\n      slug\n    },\n    brand->{\n      _id,\n      title,\n      slug\n    },\n    categories[]->{\n      _id,\n      title,\n      slug\n    },\n    "weights": select(\n      useAllWeights == true => *[_type == "productWeight" && isActive == true] | order(weight asc) {\n        _id,\n        name,\n        value,\n        unit,\n        numericValue,\n        isActive\n      },\n      weights[]->{\n        _id,\n        name,\n        value,\n        unit,\n        numericValue,\n        isActive\n      }\n    ),\n    "sizes": select(\n      useAllSizes == true => *[_type == "productSize" && isActive == true] | order(weight asc) {\n        _id,\n        value,\n        isActive\n      },\n      sizes[]->{\n        _id,\n        value,\n        isActive\n      }\n    ),\n    "colors": select(\n      useAllColors == true => *[_type == "productColor" && isActive == true] | order(weight asc) {\n        _id,\n        name,\n        "value": hexCode,\n        isActive\n      },\n      colors[]->{\n        _id,\n        name,\n        "value": hexCode,\n        isActive\n      }\n    )\n  }': PRODUCT_BY_SLUG_QUERY_RESULT;
+    '*[_type == "product" && count((categories[]._ref)[@ in $categoryIds]) > 0 && slug.current != $currentSlug] | order(name asc) [0...$limit]{\n    _id,\n    name,\n    slug,\n    price,\n    discount,\n    stock,\n    images,\n    categories[]->{\n      _id,\n      title,\n      slug\n    }\n  }': RELATED_PRODUCTS_QUERY_RESULT;
+    '*[_type == "product" && slug.current == $slug]{\n"brandName": brand->title\n}': BRAND_QUERY_RESULT;
+    '*[_type == "product" && variant->slug.current == $variantSlug] | order(name asc) {\n    ...,\n    variant->{\n      _id,\n      title,\n      slug,\n      description,\n      image\n    },\n    brand->{\n      _id,\n      title,\n      slug\n    },\n    categories[]->{\n      _id,\n      title,\n      slug\n    },\n    "averageRating": math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating),\n    "totalReviews": count(*[_type == "review" && product._ref == ^._id && status == "approved"])\n  }': PRODUCTS_BY_VARIANT_QUERY_RESULT;
+    '*[_type == "productVariant" && slug.current == $slug][0]{\n    _id,\n    title,\n    slug,\n    description,\n    image,\n    seoTitle,\n    seoDescription,\n    "productCount": count(*[_type == "product" && variant._ref == ^._id])\n  }': VARIANT_BY_SLUG_QUERY_RESULT;
+  }
+}
