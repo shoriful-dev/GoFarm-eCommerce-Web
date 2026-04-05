@@ -15,7 +15,6 @@ const PriceView = ({ price, discount, className }: Props) => {
     <div className="flex items-center justify-between gap-5">
       <div className="flex items-center gap-2">
         {discount && discountAmount > 0 && (
-        {discount && discountAmount > 0 && (
           <div className="flex items-center gap-1">
             <PriceFormatter
               amount={originalPrice}
