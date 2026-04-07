@@ -31,7 +31,6 @@ import { Separator } from './ui/separator';
 import { Slider } from './ui/slider';
 import NoProductAvailable from './NoProductAvailable';
 import ProductCard from './product/ProductCard';
-import { cn } from '@/lib/utils';
 
 interface Props {
   initialProducts: Product[];
