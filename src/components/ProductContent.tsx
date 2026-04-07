@@ -34,9 +34,9 @@ import PriceView from './product/PriceView';
 import ProductOptions from './ProductOptions';
 import AddToCartButton from './product/AddToCartButton';
 import FavoriteButton from './FavoriteButton';
-// import ProductCharacteristics from './ProductCharacteristics';
+import ProductCharacteristics from './ProductCharacteristics';
 import { Button } from './ui/button';
-// import RelatedProducts from './RelatedProducts';
+import RelatedProducts from './RelatedProducts';
 
 interface ProductContentProps {
   product: PRODUCT_BY_SLUG_QUERY_RESULT;
