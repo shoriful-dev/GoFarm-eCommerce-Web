@@ -153,6 +153,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       throw error;
     }
   },
+  
   completeEmailLinkSignIn: async (email: string) => {
     try {
       if (!isSignInWithEmailLink(auth, window.location.href)) {
