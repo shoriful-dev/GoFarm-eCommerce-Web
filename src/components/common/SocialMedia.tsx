@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from '../ui/tooltip';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 interface Props {
   className?: string;
@@ -48,7 +49,7 @@ const SocialMedia = ({ className, iconClassName, tooltipClassName }: Props) => {
         {socialLink.map(item => (
           <Tooltip key={item.title}>
             <TooltipTrigger asChild>
-              <a
+              <Link
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -58,7 +59,7 @@ const SocialMedia = ({ className, iconClassName, tooltipClassName }: Props) => {
                 )}
               >
                 {item.icon}
-              </a>
+              </Link>
             </TooltipTrigger>
             <TooltipContent
               className={cn(
