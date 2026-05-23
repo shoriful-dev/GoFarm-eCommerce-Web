@@ -1,3 +1,4 @@
+import { Product } from './sanity.types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import _ from 'lodash';
@@ -37,7 +38,7 @@ async function debouncedSyncCartToSanity(items: CartItem[]): Promise<void> {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          items: items.map(item => ({
+          items: items.map((item) => ({
             product: { _id: item.product._id },
             quantity: item.quantity,
           })),
@@ -74,7 +75,7 @@ async function flushCartSync(): Promise<void> {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          items: pendingCartItems.map(item => ({
+          items: pendingCartItems.map((item) => ({
             product: { _id: item.product._id },
             quantity: item.quantity,
           })),
@@ -103,7 +104,7 @@ async function syncCartToSanity(items: CartItem[]): Promise<void> {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        items: items.map(item => ({
+        items: items.map((item) => ({
           productId: item.product._id,
           quantity: item.quantity,
         })),
@@ -115,10 +116,7 @@ async function syncCartToSanity(items: CartItem[]): Promise<void> {
 }
 
 // Helper function to sync single cart item to Sanity
-async function syncCartItemToSanity(
-  productId: string,
-  quantity: number
-): Promise<void> {
+async function syncCartItemToSanity(productId: string, quantity: number): Promise<void> {
   try {
     const token = await getAuthToken();
     if (!token) return;
@@ -156,7 +154,7 @@ async function deleteCartItemFromSanity(productId: string): Promise<void> {
 // Helper function to sync wishlist to Sanity
 async function syncWishlistItemToSanity(
   productId: string,
-  action: 'add' | 'remove'
+  action: 'add' | 'remove',
 ): Promise<void> {
   try {
     const token = await getAuthToken();
@@ -180,15 +178,42 @@ function generateCartHash(items: CartItem[]): string {
   if (items.length === 0) return '';
 
   const sorted = [...items].sort((a, b) =>
-    (a.product._id || '').localeCompare(b.product._id || '')
+    (a.product._id || '').localeCompare(b.product._id || ''),
   );
 
-  return sorted.map(item => `${item.product._id}:${item.quantity}`).join('|');
+  return sorted.map((item) => `${item.product._id}:${item.quantity}`).join('|');
 }
 
 export interface CartItem {
-  product: any;
+  product: Product;
   quantity: number;
+}
+
+/**
+ * Some products carry weight metadata that the generated `Product` type
+ * doesn't model yet (the schema-derived type lags the actual document).
+ * We narrow to the two fields we actually consume in the cart math so we
+ * can drop the `as any` casts that previously hid typos like
+ * `selectedWeight.numberValue` etc.
+ */
+type ProductWithWeight = Product & {
+  baseWeight?: number;
+  selectedWeight?: { numericValue?: number } | null;
+};
+
+function getWeightIncrement(product: Product): number {
+  const p = product as ProductWithWeight;
+  const baseWeight = p.baseWeight;
+  const selected = p.selectedWeight?.numericValue;
+  if (
+    typeof baseWeight === 'number' &&
+    baseWeight > 0 &&
+    typeof selected === 'number' &&
+    selected > 0
+  ) {
+    return selected / baseWeight;
+  }
+  return 1;
 }
 
 export interface AppliedCoupon {
@@ -204,10 +229,8 @@ interface StoreState {
   isLoadingCart: boolean; // Loading state for cart
   lastSyncedCartHash: string | null; // Hash of last synced cart state (persisted)
   appliedCoupon: AppliedCoupon | null; // Applied coupon
-  addItem: (product: any) => void;
-  addMultipleItems: (
-    products: Array<{ product: any; quantity: number }>
-  ) => void;
+  addItem: (product: Product) => void;
+  addMultipleItems: (products: Array<{ product: Product; quantity: number }>) => void;
   removeItem: (productId: string) => void;
   deleteCartProduct: (productId: string) => void;
   resetCart: () => Promise<void>;
@@ -224,8 +247,8 @@ interface StoreState {
   removeCoupon: () => void;
   getCouponDiscount: () => number;
   // favorite
-  favoriteProduct: any[];
-  addToFavorite: (product: any) => Promise<void>;
+  favoriteProduct: Product[];
+  addToFavorite: (product: Product) => Promise<void>;
   removeFromFavorite: (productId: string) => void;
   resetFavorite: () => void;
   loadWishlistFromSanity: () => Promise<void>;
@@ -235,7 +258,7 @@ interface StoreState {
   orderStep: 'validating' | 'creating' | 'emailing' | 'redirecting';
   setOrderPlacementState: (
     isPlacing: boolean,
-    step?: 'validating' | 'creating' | 'emailing' | 'redirecting'
+    step?: 'validating' | 'creating' | 'emailing' | 'redirecting',
   ) => void;
 }
 
@@ -247,30 +270,19 @@ const useCartStore = create<StoreState>()(
       isLoadingCart: false, // Initialize loading state
       lastSyncedCartHash: null, // Initialize cart hash
       appliedCoupon: null, // Initialize coupon state
-      addItem: product =>
-        set(state => {
-          const existingItem = _.find(
-            state.items,
-            item => item.product._id === product._id
-          );
+      addItem: (product) =>
+        set((state) => {
+          const existingItem = _.find(state.items, (item) => item.product._id === product._id);
 
           // Calculate increment based on baseWeight
-          const baseWeight = (product as any).baseWeight;
-          const selectedWeight = (product as any).selectedWeight;
-          let incrementQty = 1;
-
-          if (baseWeight && selectedWeight?.numericValue) {
-            // Calculate how many base units this weight represents
-            // e.g., if baseWeight is 1000g and selected is 3000g, incrementQty = 3
-            incrementQty = selectedWeight.numericValue / baseWeight;
-          }
+          const incrementQty = getWeightIncrement(product);
 
           let newItems;
           if (existingItem) {
-            newItems = _.map(state.items, item =>
+            newItems = _.map(state.items, (item) =>
               item.product._id === product._id
                 ? { ...item, quantity: item.quantity + incrementQty }
-                : item
+                : item,
             );
           } else {
             newItems = [...state.items, { product, quantity: incrementQty }];
@@ -281,21 +293,18 @@ const useCartStore = create<StoreState>()(
 
           return { items: newItems };
         }),
-      addMultipleItems: products =>
-        set(state => {
+      addMultipleItems: (products) =>
+        set((state) => {
           let updatedItems = [...state.items];
 
           _.forEach(products, ({ product, quantity }) => {
-            const existingItem = _.find(
-              updatedItems,
-              item => item.product._id === product._id
-            );
+            const existingItem = _.find(updatedItems, (item) => item.product._id === product._id);
 
             if (existingItem) {
-              updatedItems = _.map(updatedItems, item =>
+              updatedItems = _.map(updatedItems, (item) =>
                 item.product._id === product._id
                   ? { ...item, quantity: item.quantity + quantity }
-                  : item
+                  : item,
               );
             } else {
               updatedItems.push({ product, quantity });
@@ -304,26 +313,16 @@ const useCartStore = create<StoreState>()(
 
           return { items: updatedItems };
         }),
-      removeItem: productId =>
-        set(state => {
-          const existingItem = _.find(
-            state.items,
-            item => item.product._id === productId
-          );
+      removeItem: (productId) =>
+        set((state) => {
+          const existingItem = _.find(state.items, (item) => item.product._id === productId);
 
           if (!existingItem) {
             return state;
           }
 
           // Calculate decrement based on baseWeight
-          const baseWeight = (existingItem.product as any).baseWeight;
-          const selectedWeight = (existingItem.product as any).selectedWeight;
-          let decrementQty = 1;
-
-          if (baseWeight && selectedWeight?.numericValue) {
-            // Calculate how many base units to remove
-            decrementQty = selectedWeight.numericValue / baseWeight;
-          }
+          const decrementQty = getWeightIncrement(existingItem.product);
 
           const newItems = _.reduce(
             state.items,
@@ -338,7 +337,7 @@ const useCartStore = create<StoreState>()(
               }
               return acc;
             },
-            [] as CartItem[]
+            [] as CartItem[],
           );
 
           // Sync entire cart to Sanity with debouncing
@@ -346,12 +345,9 @@ const useCartStore = create<StoreState>()(
 
           return { items: newItems };
         }),
-      deleteCartProduct: productId =>
-        set(state => {
-          const newItems = _.filter(
-            state.items,
-            item => item.product._id !== productId
-          );
+      deleteCartProduct: (productId) =>
+        set((state) => {
+          const newItems = _.filter(state.items, (item) => item.product._id !== productId);
 
           // Sync entire cart to Sanity with debouncing
           debouncedSyncCartToSanity(newItems);
@@ -405,7 +401,7 @@ const useCartStore = create<StoreState>()(
         return _.reduce(
           get().items,
           (total, item) => total + (item.product.price ?? 0) * item.quantity,
-          0
+          0,
         );
       },
       getSubTotalPrice: () => {
@@ -419,7 +415,7 @@ const useCartStore = create<StoreState>()(
             const grossPrice = currentPrice + discountAmount;
             return total + grossPrice * item.quantity;
           },
-          0
+          0,
         );
       },
       getTotalDiscount: () => {
@@ -432,39 +428,27 @@ const useCartStore = create<StoreState>()(
             const discountAmount = (discount * currentPrice) / 100;
             return total + discountAmount * item.quantity;
           },
-          0
+          0,
         );
       },
-      getItemCount: productId => {
-        const item = _.find(
-          get().items,
-          item => item.product._id === productId
-        );
+      getItemCount: (productId) => {
+        const item = _.find(get().items, (item) => item.product._id === productId);
         return item ? item.quantity : 0;
       },
       getGroupedItems: () => get().items,
-      addToFavorite: (product: any) => {
-        return new Promise<void>(resolve => {
+      addToFavorite: (product: Product) => {
+        return new Promise<void>((resolve) => {
           set((state: StoreState) => {
-            const isFavorite = _.some(
-              state.favoriteProduct,
-              item => item._id === product._id
-            );
+            const isFavorite = _.some(state.favoriteProduct, (item) => item._id === product._id);
 
             // Sync to Sanity in background
             if (product._id) {
-              syncWishlistItemToSanity(
-                product._id,
-                isFavorite ? 'remove' : 'add'
-              );
+              syncWishlistItemToSanity(product._id, isFavorite ? 'remove' : 'add');
             }
 
             return {
               favoriteProduct: isFavorite
-                ? _.filter(
-                    state.favoriteProduct,
-                    item => item._id !== product._id
-                  )
+                ? _.filter(state.favoriteProduct, (item) => item._id !== product._id)
                 : [...state.favoriteProduct, { ...product }],
             };
           });
@@ -476,24 +460,19 @@ const useCartStore = create<StoreState>()(
         syncWishlistItemToSanity(productId, 'remove');
 
         set((state: StoreState) => ({
-          favoriteProduct: _.filter(
-            state.favoriteProduct,
-            item => item?._id !== productId
-          ),
+          favoriteProduct: _.filter(state.favoriteProduct, (item) => item?._id !== productId),
         }));
       },
       resetFavorite: () => {
         // Clear wishlist from Sanity in background
         const token = getAuthToken();
         if (token) {
-          token.then(t => {
+          token.then((t) => {
             if (t) {
               fetch('/api/user/wishlist', {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${t}` },
-              }).catch(err =>
-                console.error('Failed to clear wishlist from Sanity:', err)
-              );
+              }).catch((err) => console.error('Failed to clear wishlist from Sanity:', err));
             }
           });
         }
@@ -623,7 +602,7 @@ const useCartStore = create<StoreState>()(
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              items: items.map(item => ({
+              items: items.map((item) => ({
                 product: { _id: item.product._id },
                 quantity: item.quantity,
               })),
@@ -661,11 +640,7 @@ const useCartStore = create<StoreState>()(
               const sanityWishlist = data.wishlist;
 
               // Combine both lists and remove duplicates by _id
-              const mergedWishlist = _.unionBy(
-                sanityWishlist,
-                localWishlist,
-                '_id'
-              );
+              const mergedWishlist = _.unionBy(sanityWishlist, localWishlist, '_id');
 
               set({ favoriteProduct: mergedWishlist });
 
@@ -693,7 +668,7 @@ const useCartStore = create<StoreState>()(
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              items: products.map(p => ({ _id: p._id })),
+              items: products.map((p) => ({ _id: p._id })),
             }),
           });
         } catch (error) {
@@ -713,7 +688,7 @@ const useCartStore = create<StoreState>()(
     {
       name: 'cart-store',
       // Persist cart items, wishlist, coupon, and sync hash
-      partialize: state => ({
+      partialize: (state) => ({
         items: state.items,
         favoriteProduct: state.favoriteProduct,
         appliedCoupon: state.appliedCoupon,
@@ -724,8 +699,8 @@ const useCartStore = create<StoreState>()(
         ...currentState,
         ...persistedState,
       }),
-    }
-  )
+    },
+  ),
 );
 
 export default useCartStore;

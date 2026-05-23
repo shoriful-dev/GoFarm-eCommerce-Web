@@ -8,9 +8,6 @@ import nextDynamic from 'next/dynamic';
 import type { Metadata } from 'next';
 import type { Category } from '@/sanity.types';
 
-// Below-the-fold sections are lazy-loaded so the initial JS bundle for the
-// home route stays minimal. Each gets a lightweight placeholder so layout
-// doesn't shift while the chunk streams in.
 const SectionPlaceholder = ({ height = 'h-72' }: { height?: string }) => (
   <div
     className={`mt-12 ${height} bg-gofarm-light-gray/20 rounded-2xl mx-4 lg:mx-8 animate-pulse`}
@@ -35,12 +32,6 @@ const LatestBlog = nextDynamic(() => import('@/components/LatestBlog'), {
 
 export const dynamic = 'force-dynamic';
 
-/**
- * Per-page metadata. The root layout already supplies a sensible
- * default, but the home page benefits from a tailored title +
- * Open Graph card so social previews don't fall back to the generic
- * site name.
- */
 export const metadata: Metadata = {
   title: 'GoFarm — Fresh produce, dairy & pantry essentials delivered',
   description:
@@ -62,9 +53,6 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const [categoriesRaw, allProducts] = await Promise.all([getCategories(8), getAllProducts()]);
-  // `getCategories()` is wrapped in `unstable_cache` + `sanityFetch`,
-  // which loses the GROQ result type. The shape returned matches
-  // `Category[]` (plus a synthetic `productCount` we don't read here).
   const categories = categoriesRaw as unknown as Category[];
   const totalProductCount = allProducts?.length || 0;
 

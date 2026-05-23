@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import ProductCard from './ProductCard';
 import ProductListCard from './ProductListCard';
 import ProductTypeCarousel from './ProductTypeCarousel';
 import { motion, AnimatePresence } from 'motion/react';
@@ -26,6 +25,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
+import ProductCard from './product/ProductCard';
 
 type ViewMode = 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5' | 'list';
 type SortOption = 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'newest';

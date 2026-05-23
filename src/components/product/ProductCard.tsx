@@ -1,5 +1,4 @@
 import React from "react";
-import { Product } from "../../../sanity.types";
 import Link from "next/link";
 import Image from "next/image";
 import { image } from "@/sanity/image";
@@ -9,6 +8,7 @@ import PriceView from "./PriceView";
 import AddToCartButton from "./AddToCartButton";
 import ProductSideMenu from "./ProductSideMenu";
 import { Badge } from "../ui/badge";
+import { Product } from "@/sanity.types";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const isOutOfStock = product?.stock === 0;
