@@ -303,5 +303,3 @@ export function trackUserLoginEnhanced(
     });
   }
 }
-
-// Add more as needed for your analytics needs
