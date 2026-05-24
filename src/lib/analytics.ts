@@ -84,7 +84,6 @@ export function trackProductView(params: ProductViewParams) {
   trackEvent('view_product', params);
 }
 
-// Additional e-commerce tracking functions
 export function trackCartView(userId?: string) {
   trackEvent('view_cart', { userId });
 }
