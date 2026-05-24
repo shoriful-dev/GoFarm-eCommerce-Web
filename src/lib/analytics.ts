@@ -1,5 +1,3 @@
-// Centralized analytics service for Firebase event tracking
-
 import { analytics } from '@/lib/firebase';
 import { logEvent, Analytics } from 'firebase/analytics';
 
