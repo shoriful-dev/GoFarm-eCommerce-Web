@@ -49,7 +49,6 @@ export function trackEvent(
   if (typeof window !== 'undefined' && analytics) {
     logEvent(analytics as Analytics, eventName, eventParams);
   } else {
-    // Optionally, queue events or log to console in dev
     if (process.env.NODE_ENV === 'development') {
       console.log(`[Analytics] ${eventName}`, eventParams);
     }
