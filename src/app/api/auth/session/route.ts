@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
     const { token } = await request.json();
     if (!token) {
       return NextResponse.json({ error: 'No token provided' }, { status: 400 });
-    }
+    };
     const response = NextResponse.json({ success: true });
     response.cookies.set('session', token, {
       httpOnly: true,
