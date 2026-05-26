@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useAuthStore } from '@/store/authStore';
 import { Button } from './ui/button';
