@@ -96,7 +96,6 @@ const UserDropDown = () => {
 
   // Handle hover with delay
   const handleMouseEnter = () => {
-    // Clear any pending leave timeout
     if (leaveTimeoutRef.current) {
       clearTimeout(leaveTimeoutRef.current);
       leaveTimeoutRef.current = null;
