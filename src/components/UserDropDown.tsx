@@ -32,7 +32,6 @@ const UserDropDown = () => {
   const walletBalance = useUserDataStore(state => state.walletBalance);
   const isLoadingOrders = useUserDataStore(state => state.isLoading);
   const refreshUserData = useUserDataStore(state => state.refreshUserData);
-  // Check if user is admin (checks both env var and Sanity isAdmin field)
   const isAdmin = useIsAdmin(user?.email, user?.uid);
 
   useEffect(() => {
