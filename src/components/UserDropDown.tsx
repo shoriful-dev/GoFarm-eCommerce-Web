@@ -98,7 +98,6 @@ const UserDropDown = () => {
       leaveTimeoutRef.current = null;
     }
 
-    // Set a timeout to open the dropdown
     hoverTimeoutRef.current = setTimeout(() => {
       handleOpenChange(true);
     }, 200);
