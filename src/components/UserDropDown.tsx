@@ -68,7 +68,6 @@ const UserDropDown = () => {
     }
   }, [isEmployee]);
 
-  // Refresh user data when dropdown opens
   const handleOpenChange = async (newOpen: boolean) => {
     setOpen(newOpen);
     if (newOpen && user) {
