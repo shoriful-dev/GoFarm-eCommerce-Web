@@ -74,8 +74,6 @@ const UserDropDown = () => {
     if (newOpen && user) {
       // Force refresh user data to get latest employee status
       await refreshUserData(user.uid);
-
-      // Also re-check user status from API
       try {
         const statusResponse = await fetch('/api/user/status');
         if (statusResponse.ok) {
