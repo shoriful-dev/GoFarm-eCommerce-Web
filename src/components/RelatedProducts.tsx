@@ -49,7 +49,6 @@ const RelatedProducts = ({
             >
               <CardContent>
                 {/* Product Image */}
-
                 <div className="relative aspect-square mb-4 overflow-hidden rounded-lg bg-gray-100">
                   {imageUrl ? (
                     <Image
