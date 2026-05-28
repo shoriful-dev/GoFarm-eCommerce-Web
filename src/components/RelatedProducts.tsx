@@ -127,7 +127,6 @@ const RelatedProducts = ({
                       </span>
                     )}
                   </div>
-
                   {/* Add to Cart Button */}
                   <AddToCartButton
                     product={product}
