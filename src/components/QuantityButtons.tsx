@@ -17,7 +17,6 @@ const QuantityButtons = ({ product, className, borderStyle }: Props) => {
   const itemCount = getItemCount(product?._id || '');
   const isOutOfStock = product?.stock === 0;
 
-  // Calculate quantity unit based on baseWeight
   const baseWeight = (product as any)?.baseWeight;
   const selectedWeight = (product as any)?.selectedWeight;
   let qtyUnit = 1;
