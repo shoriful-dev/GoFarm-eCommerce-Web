@@ -18,7 +18,6 @@ const RelatedProducts = ({
   currentProduct,
   relatedProducts,
 }: RelatedProductsProps) => {
-  // If no related products found, return null
   if (!relatedProducts || relatedProducts.length === 0) {
     return null;
   }
