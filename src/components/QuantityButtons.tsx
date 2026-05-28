@@ -24,7 +24,6 @@ const QuantityButtons = ({ product, className, borderStyle }: Props) => {
 
   if (baseWeight && selectedWeight?.numericValue) {
     qtyUnit = selectedWeight.numericValue / baseWeight;
-    // Display as kg if baseWeight is used
     displayUnit = 'kg';
   }
 
