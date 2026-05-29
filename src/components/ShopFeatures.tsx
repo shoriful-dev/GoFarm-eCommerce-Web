@@ -344,7 +344,7 @@ const ShopFeatures = () => {
         </div>
       </div>
 
-      {/* Feature Modal */}
+      {/* Feature Modals */}
       <FeatureModal isOpen={isModalOpen} onClose={handleCloseModal} feature={selectedFeature} />
     </Container>
   );
