@@ -200,3 +200,4 @@ const ProductTypeCarousel = ({ variantTitle, variantSlug, products }: ProductTyp
 };
 
 export default ProductTypeCarousel;
+
