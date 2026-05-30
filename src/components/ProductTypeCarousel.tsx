@@ -21,7 +21,6 @@ const ProductTypeCarousel = ({ variantTitle, variantSlug, products }: ProductTyp
   const [cardWidth, setCardWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Update items per view based on screen size
   useEffect(() => {
     const updateItemsPerView = () => {
       const width = window.innerWidth;
