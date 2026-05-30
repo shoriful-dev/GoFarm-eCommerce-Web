@@ -59,7 +59,6 @@ const QuantityButtons = ({ product, className, borderStyle }: Props) => {
         'Quantity Updated',
         `${product?.name} quantity increased to ${newCount}${displayUnit}`,
       );
-      // Firebase Analytics event
       trackAddToCart({
         productId: product._id,
         name: product.name || 'Unknown',
