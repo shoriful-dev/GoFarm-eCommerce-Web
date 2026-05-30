@@ -39,7 +39,7 @@ const QuantityButtons = ({ product, className, borderStyle }: Props) => {
     } else {
       showToast.success('Item Removed', `${product?.name} removed from your cart`);
     }
-    // Firebase Analytics event
+    
     trackRemoveFromCart({
       productId: product._id,
       name: product.name || 'Unknown',
