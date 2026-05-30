@@ -138,7 +138,6 @@ const RelatedProducts = ({
           );
         })}
       </div>
-      {/* View More Button */}
       <div className="text-center mt-8">
         <Button
           variant="outline"
