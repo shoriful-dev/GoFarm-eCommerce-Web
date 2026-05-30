@@ -62,8 +62,6 @@ const ProductTypeCarousel = ({ variantTitle, variantSlug, products }: ProductTyp
 
   // Scroll by one product at a time
   const maxIndex = Math.max(0, products.length - 1);
-  // Whether there are actually more products than fit on screen at once.
-  // If everything fits, we treat this as a static grid — no nav arrows, no dots.
   const isScrollable = products.length > itemsPerView;
 
   const handlePrev = () => {
