@@ -1,4 +1,5 @@
 'use client';
+
 import { Product, PRODUCT_BY_SLUG_QUERY_RESULT } from '@/sanity.types';
 import { useEffect, useState, memo, useCallback } from 'react';
 import { showToast } from '@/lib/toast';
