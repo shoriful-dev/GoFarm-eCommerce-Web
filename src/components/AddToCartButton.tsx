@@ -37,7 +37,6 @@ const AddToCartButton = memo(({ product, className, selectedOptions, displayPric
   const itemCount = getItemCount(product?._id || '');
   const isOutOfStock = product?.stock === 0;
 
-  // Use useEffect to set isClient to true after component mounts
   // This ensures that the component only renders on the client-side
   // Preventing hydration errors due to server/client mismatch
   useEffect(() => {
