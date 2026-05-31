@@ -26,8 +26,7 @@ interface Props {
 const AddToCartButton = memo(({ product, className, selectedOptions, displayPrice }: Props) => {
   const { addItem, getItemCount } = useCartStore();
   const [isClient, setIsClient] = useState(false);
-
-  // Use the display price if provided, otherwise use product price
+  
   const basePrice = displayPrice ?? product?.price ?? 0;
 
   // Apply discount to get the actual price to be stored in cart
