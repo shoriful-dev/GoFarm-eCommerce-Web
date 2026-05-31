@@ -29,7 +29,6 @@ const AddToCartButton = memo(({ product, className, selectedOptions, displayPric
   
   const basePrice = displayPrice ?? product?.price ?? 0;
 
-  // Apply discount to get the actual price to be stored in cart
   const discount = product?.discount ?? 0;
   const discountAmount = discount > 0 ? (discount * basePrice) / 100 : 0;
   const effectivePrice = basePrice - discountAmount;
