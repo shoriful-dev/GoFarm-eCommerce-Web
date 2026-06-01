@@ -80,7 +80,6 @@ const BannerCarousel = ({ banners }: BannerCarouselProps) => {
                     <h2 className="text-3xl sm:text-4xl md:text-5xl max-w-lg font-bold text-gofarm-black leading-tight animate-fadeInUp">
                       {banner?.title}
                     </h2>
-                    {/* CTA Button */}
                     <div className="animate-fadeInUp delay-200">
                       <Link
                         href={banner.buttonHref}
