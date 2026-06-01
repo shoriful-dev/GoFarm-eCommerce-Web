@@ -105,7 +105,7 @@ const BannerCarousel = ({ banners }: BannerCarouselProps) => {
             <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 hover:text-white transition-all" />
           </>
         )}
-        {/* Dots Indicator */}
+        
         {banners.length > 1 && (
           <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
             {banners.map((_, index) => (
