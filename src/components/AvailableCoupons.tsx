@@ -272,7 +272,6 @@ export default function AvailableCoupons() {
                     )}
                   </div>
 
-                  {/* Action Button with linear */}
                   <Button
                     asChild
                     className="w-full bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 group/btn font-bold"
