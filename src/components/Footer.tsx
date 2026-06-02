@@ -8,7 +8,6 @@ import FooterTop from './layout/FooterTop';
 import NewsletterForm from './NewsletterForm';
 
 const Footer = async () => {
-  // Fetch categories from Sanity
   const categoriesQuery = `*[_type == "category"] | order(_createdAt desc) [0...7] {
     _id,
     title,
