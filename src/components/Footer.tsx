@@ -24,7 +24,6 @@ const Footer = async () => {
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="mb-2">
-              {/* <Logo variant="sm" /> */}
               <Logo className="w-32" />
             </div>
             <p className="text-gofarm-gray text-sm">
