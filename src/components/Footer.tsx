@@ -21,7 +21,6 @@ const Footer = async () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FooterTop />
 
-        {/* Main footer content */}
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="mb-2">
