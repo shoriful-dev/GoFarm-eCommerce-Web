@@ -86,7 +86,6 @@ const Footer = async () => {
           </div>
         </div>
 
-        {/* Bottom copyright section */}
         <div className="py-6 border-t border-gofarm-light-gray text-center text-sm text-gofarm-gray">
           <p>
             © {new Date().getFullYear()}{' '}
