@@ -19,7 +19,6 @@ const Footer = async () => {
   return (
     <footer className="bg-gofarm-white border-t border-gofarm-light-gray mt-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Top section with contact info */}
         <FooterTop />
 
         {/* Main footer content */}
