@@ -27,7 +27,6 @@ const PremiumDialog = ({
 }: PremiumDialogProps) => {
   const url = purchaseUrl || process.env.NEXT_PUBLIC_PURCHASE_CODE_URL || 'https://reactbd.com';
 
-  // Close on Escape
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
