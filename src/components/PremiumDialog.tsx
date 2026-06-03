@@ -64,7 +64,6 @@ const PremiumDialog = ({
       aria-labelledby="premium-dialog-title"
       className="fixed inset-0 z-100 flex items-center justify-center p-4"
     >
-      {/* Backdrop */}
       <button
         type="button"
         aria-label="Close premium dialog"
