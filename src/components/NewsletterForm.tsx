@@ -14,7 +14,6 @@ const NewsletterForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Reset message
     setMessage(null);
 
     if (!email.trim()) {
