@@ -36,7 +36,6 @@ const PremiumDialog = ({
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
-  // Lock body scroll while open
   useEffect(() => {
     if (!open) return;
     const original = document.body.style.overflow;
