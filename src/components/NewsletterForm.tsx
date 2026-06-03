@@ -17,7 +17,6 @@ const NewsletterForm = () => {
     // Reset message
     setMessage(null);
 
-    // Basic validation
     if (!email.trim()) {
       setMessage({
         type: 'error',
