@@ -1,4 +1,4 @@
-import { sanityFetch } from '../lib/live';
+import { sanityFetch } from "../lib/live";
 
 // User Queries
 export const USER_BY_FIREBASE_ID_QUERY = `
@@ -248,9 +248,10 @@ export const getUserByClerkId = async (firebaseUid: string) => {
       query: USER_BY_FIREBASE_ID_QUERY,
       params: { firebaseUid },
     });
-    return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return data as any;
   } catch (error) {
-    console.error('Error fetching user by Clerk ID:', error);
+    console.error("Error fetching user by Clerk ID:", error);
     return null;
   }
 };
@@ -261,9 +262,10 @@ export const getUserAddresses = async (userId: string) => {
       query: USER_ADDRESSES_QUERY,
       params: { userId },
     });
-    return data ?? [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any) ?? [];
   } catch (error) {
-    console.error('Error fetching user addresses:', error);
+    console.error("Error fetching user addresses:", error);
     return [];
   }
 };
@@ -274,9 +276,10 @@ export const getUserCart = async (firebaseUid: string) => {
       query: USER_CART_QUERY,
       params: { firebaseUid },
     });
-    return data?.cart ?? [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any)?.cart ?? [];
   } catch (error) {
-    console.error('Error fetching user cart:', error);
+    console.error("Error fetching user cart:", error);
     return [];
   }
 };
@@ -287,9 +290,10 @@ export const getUserWishlist = async (firebaseUid: string) => {
       query: USER_WISHLIST_QUERY,
       params: { firebaseUid },
     });
-    return data?.wishlist ?? [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any)?.wishlist ?? [];
   } catch (error) {
-    console.error('Error fetching user wishlist:', error);
+    console.error("Error fetching user wishlist:", error);
     return [];
   }
 };
@@ -300,22 +304,39 @@ export const getUserOrders = async (firebaseUid: string) => {
       query: USER_ORDERS_QUERY,
       params: { firebaseUid },
     });
-    return data ?? [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any) ?? [];
   } catch (error) {
-    console.error('Error fetching user orders:', error);
+    console.error("Error fetching user orders:", error);
     return [];
   }
 };
 
-export const getOrderById = async (orderId: string) => {
+/**
+ * Loose order shape returned by `getOrderById`. The full GROQ result
+ * isn't surfaced by typegen yet (the projection is dynamic), so we
+ * widen to a record and let consumers narrow the fields they read.
+ * Replace this with the generated type once `pnpm typegen` produces
+ * `ORDER_BY_ID_QUERY_RESULT`.
+ */
+export type OrderByIdResult = Record<string, unknown> & {
+  _id?: string;
+  firebaseUid?: string;
+  orderNumber?: string;
+  customerName?: string;
+};
+
+export const getOrderById = async (
+  orderId: string,
+): Promise<OrderByIdResult | null> => {
   try {
     const { data } = await sanityFetch({
       query: ORDER_BY_ID_QUERY,
       params: { orderId },
     });
-    return data;
+    return (data as OrderByIdResult | null) ?? null;
   } catch (error) {
-    console.error('Error fetching order by ID:', error);
+    console.error("Error fetching order by ID:", error);
     return null;
   }
 };
@@ -344,9 +365,10 @@ export const getUserNotifications = async (firebaseUid: string) => {
       query: USER_NOTIFICATIONS_QUERY,
       params: { firebaseUid },
     });
-    return data?.notifications || [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any)?.notifications || [];
   } catch (error) {
-    console.error('Error fetching user notifications:', error);
+    console.error("Error fetching user notifications:", error);
     return [];
   }
 };
@@ -369,10 +391,11 @@ export const markNotificationAsRead = async (
     });
 
     if (!user.data) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
-    const updatedNotifications = user.data.notifications.map(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updatedNotifications = (user.data as any).notifications.map(
       (notification: any) => {
         if (notification.id === notificationId) {
           return {
@@ -385,17 +408,17 @@ export const markNotificationAsRead = async (
       },
     );
 
-    const { writeClient } = await import('../lib/client');
+    const { writeClient } = await import("../lib/client");
 
     await writeClient
-      .patch(user.data._id)
+      .patch((user.data as any)._id)
       .set({ notifications: updatedNotifications })
       .commit();
 
     return { success: true };
   } catch (error) {
-    console.error('Error marking notification as read:', error);
-    return { success: false, error: 'Failed to mark notification as read' };
+    console.error("Error marking notification as read:", error);
+    return { success: false, error: "Failed to mark notification as read" };
   }
 };
 
@@ -410,23 +433,23 @@ export const deleteUserNotification = async (
     });
 
     if (!user.data) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
-    const updatedNotifications = user.data.notifications.filter(
+    const updatedNotifications = (user.data as any).notifications.filter(
       (notification: any) => notification.id !== notificationId,
     );
 
-    const { writeClient } = await import('../lib/client');
+    const { writeClient } = await import("../lib/client");
 
     await writeClient
-      .patch(user.data._id)
+      .patch((user.data as any)._id)
       .set({ notifications: updatedNotifications })
       .commit();
 
     return { success: true };
   } catch (error) {
-    console.error('Error deleting notification:', error);
-    return { success: false, error: 'Failed to delete notification' };
+    console.error("Error deleting notification:", error);
+    return { success: false, error: "Failed to delete notification" };
   }
 };

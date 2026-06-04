@@ -1,15 +1,15 @@
-import { unstable_cache } from 'next/cache';
-import { defineQuery } from 'next-sanity';
-import { sanityFetch } from '../lib/live';
+import { unstable_cache } from "next/cache";
+import { defineQuery } from "next-sanity";
+import { sanityFetch } from "../lib/live";
 import {
   ADDRESS_QUERY,
   ALL_PRODUCTS_QUERY,
+  ALLCATEGORIES_QUERY,
   ADMIN_CATEGORIES_QUERY,
   BANNER_QUERY,
   BLOG_CATEGORIES,
   BRAND_QUERY,
   BRANDS_QUERY,
-  DEAL_PRODUCTS,
   FEATURE_PRODUCTS,
   FEATURED_CATEGORY_QUERY,
   GET_ALL_BLOG,
@@ -20,8 +20,8 @@ import {
   SINGLE_BLOG_QUERY,
   PRODUCTS_BY_VARIANT_QUERY,
   VARIANT_BY_SLUG_QUERY,
-} from './query';
-import { getOrderById } from './userQueries';
+} from "./query";
+import { getOrderById } from "./userQueries";
 
 // ============================================================================
 // CACHED DATA FETCHERS - Next.js 16 Caching Revolution
@@ -39,14 +39,14 @@ const getBanner = unstable_cache(
   async () => {
     try {
       const { data } = await sanityFetch({ query: BANNER_QUERY });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.error('Error fetching sale banner:', error);
+      console.error("Error fetching sale banner:", error);
       return [];
     }
   },
-  ['banner'],
-  { revalidate: 300, tags: ['homepage', 'banners'] },
+  ["banner"],
+  { revalidate: 300, tags: ["homepage", "banners"] },
 );
 
 /**
@@ -60,14 +60,14 @@ const getFeaturedCategory = unstable_cache(
         query: FEATURED_CATEGORY_QUERY,
         params: { quantity },
       });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.error('Error fetching featured category:', error);
+      console.error("Error fetching featured category:", error);
       return [];
     }
   },
-  ['featured-categories'],
-  { revalidate: 900, tags: ['categories', 'featured', 'homepage'] },
+  ["featured-categories"],
+  { revalidate: 900, tags: ["categories", "featured", "homepage"] },
 );
 
 /**
@@ -78,32 +78,14 @@ const getAllProducts = unstable_cache(
   async () => {
     try {
       const { data } = await sanityFetch({ query: ALL_PRODUCTS_QUERY });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.log('Error fetching all products:', error);
+      console.log("Error fetching all products:", error);
       return [];
     }
   },
-  ['all-products'],
-  { revalidate: 600, tags: ['products'] },
-);
-
-/**
- * Get deal products - cached for 5 minutes
- * Deals may change frequently
- */
-const getDealProducts = unstable_cache(
-  async () => {
-    try {
-      const { data } = await sanityFetch({ query: DEAL_PRODUCTS });
-      return data ?? [];
-    } catch (error) {
-      console.log('Error fetching deal products:', error);
-      return [];
-    }
-  },
-  ['deal-products'],
-  { revalidate: 300, tags: ['products', 'deals', 'homepage'] },
+  ["all-products"],
+  { revalidate: 600, tags: ["products"] },
 );
 
 /**
@@ -114,14 +96,14 @@ const getFeaturedProducts = unstable_cache(
   async () => {
     try {
       const { data } = await sanityFetch({ query: FEATURE_PRODUCTS });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.log('Error fetching featured products:', error);
+      console.log("Error fetching featured products:", error);
       return [];
     }
   },
-  ['featured-products'],
-  { revalidate: 600, tags: ['products', 'featured', 'homepage'] },
+  ["featured-products"],
+  { revalidate: 600, tags: ["products", "featured", "homepage"] },
 );
 
 /**
@@ -132,14 +114,14 @@ const getAllBrands = unstable_cache(
   async () => {
     try {
       const { data } = await sanityFetch({ query: BRANDS_QUERY });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.log('Error fetching all brands:', error);
+      console.log("Error fetching all brands:", error);
       return [];
     }
   },
-  ['all-brands'],
-  { revalidate: 3600, tags: ['brands'] },
+  ["all-brands"],
+  { revalidate: 3600, tags: ["brands"] },
 );
 
 /**
@@ -150,14 +132,14 @@ const getLatestBlogs = unstable_cache(
   async () => {
     try {
       const { data } = await sanityFetch({ query: LATEST_BLOG_QUERY });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.log('Error fetching latest blogs:', error);
+      console.log("Error fetching latest blogs:", error);
       return [];
     }
   },
-  ['latest-blogs'],
-  { revalidate: 300, tags: ['blogs', 'homepage'] },
+  ["latest-blogs"],
+  { revalidate: 300, tags: ["blogs", "homepage"] },
 );
 
 /**
@@ -170,14 +152,14 @@ const getAllBlogs = unstable_cache(
         query: GET_ALL_BLOG,
         params: { quantity },
       });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.log('Error fetching all blogs:', error);
+      console.log("Error fetching all blogs:", error);
       return [];
     }
   },
-  ['all-blogs'],
-  { revalidate: 600, tags: ['blogs'] },
+  ["all-blogs"],
+  { revalidate: 600, tags: ["blogs"] },
 );
 
 /**
@@ -191,14 +173,14 @@ const getSingleBlog = unstable_cache(
         query: SINGLE_BLOG_QUERY,
         params: { slug },
       });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.log('Error fetching blog:', error);
+      console.log("Error fetching blog:", error);
       return [];
     }
   },
-  ['single-blog'],
-  { revalidate: 1800, tags: ['blogs'] },
+  ["single-blog"],
+  { revalidate: 1800, tags: ["blogs"] },
 );
 
 /**
@@ -211,14 +193,14 @@ const getBlogCategories = unstable_cache(
       const { data } = await sanityFetch({
         query: BLOG_CATEGORIES,
       });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.log('Error fetching blog categories:', error);
+      console.log("Error fetching blog categories:", error);
       return [];
     }
   },
-  ['blog-categories'],
-  { revalidate: 3600, tags: ['blogs'] },
+  ["blog-categories"],
+  { revalidate: 3600, tags: ["blogs"] },
 );
 
 /**
@@ -231,14 +213,14 @@ const getOthersBlog = unstable_cache(
         query: OTHERS_BLOG_QUERY,
         params: { slug, quantity },
       });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.log('Error fetching other blogs:', error);
+      console.log("Error fetching other blogs:", error);
       return [];
     }
   },
-  ['others-blog'],
-  { revalidate: 600, tags: ['blogs'] },
+  ["others-blog"],
+  { revalidate: 600, tags: ["blogs"] },
 );
 
 /**
@@ -249,9 +231,9 @@ const getAddresses = async () => {
     const { data } = await sanityFetch({
       query: ADDRESS_QUERY,
     });
-    return data ?? [];
+    return (data ?? []) as any[];
   } catch (error) {
-    console.log('Error fetching address:', error);
+    console.log("Error fetching address:", error);
     return [];
   }
 };
@@ -278,14 +260,14 @@ const getCategories = unstable_cache(
         params: quantity ? { quantity } : {},
       });
 
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.log('Error fetching categories with product count:', error);
+      console.log("Error fetching categories with product count:", error);
       return [];
     }
   },
-  ['categories-list'],
-  { revalidate: 900, tags: ['categories', 'navigation'] },
+  ["categories-list"],
+  { revalidate: 900, tags: ["categories", "navigation"] },
 );
 
 /**
@@ -294,9 +276,9 @@ const getCategories = unstable_cache(
 const getAdminCategories = async () => {
   try {
     const { data } = await sanityFetch({ query: ADMIN_CATEGORIES_QUERY });
-    return data ?? [];
+    return (data ?? []) as any[];
   } catch (error) {
-    console.error('Error fetching admin categories:', error);
+    console.error("Error fetching admin categories:", error);
     return [];
   }
 };
@@ -316,12 +298,12 @@ const getProductBySlug = unstable_cache(
       });
       return product?.data || null;
     } catch (error) {
-      console.error('Error fetching product by slug:', error);
+      console.error("Error fetching product by slug:", error);
       return null;
     }
   },
-  ['product-by-slug'],
-  { revalidate: 1800, tags: ['products', 'reviews'] },
+  ["product-by-slug"],
+  { revalidate: 1800, tags: ["products", "reviews"] },
 );
 
 /**
@@ -339,12 +321,12 @@ const getBrand = unstable_cache(
       });
       return product?.data || null;
     } catch (error) {
-      console.error('Error fetching brand by slug:', error);
+      console.error("Error fetching brand by slug:", error);
       return null;
     }
   },
-  ['brand-by-slug'],
-  { revalidate: 1800, tags: ['brands'] },
+  ["brand-by-slug"],
+  { revalidate: 1800, tags: ["brands"] },
 );
 
 /**
@@ -362,101 +344,14 @@ const getRelatedProducts = unstable_cache(
           limit,
         },
       });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.error('Error fetching related products:', error);
+      console.error("Error fetching related products:", error);
       return [];
     }
   },
-  ['related-products'],
-  { revalidate: 900, tags: ['products'] },
-);
-
-/**
- * Get all stores - cached for 30 minutes
- */
-const getAllStores = unstable_cache(
-  async () => {
-    try {
-      const query = defineQuery(
-        `*[_type == "store" && isActive == true] | order(sortOrder asc, name asc) {
-          _id,
-          name,
-          slug,
-          image,
-          address,
-          coordinates,
-          contact,
-          hours,
-          description,
-          features,
-          sortOrder
-        }`,
-      );
-      const { data } = await sanityFetch({ query });
-      return data ?? [];
-    } catch (error) {
-      console.log('Error fetching stores:', error);
-      return [];
-    }
-  },
-  ['all-stores'],
-  { revalidate: 1800, tags: ['stores'] },
-);
-
-/**
- * Get stores by country - cached for 30 minutes
- */
-const getStoresByCountry = unstable_cache(
-  async (country: string) => {
-    try {
-      const query = defineQuery(
-        `*[_type == "store" && isActive == true && address.country == $country] | order(sortOrder asc, name asc) {
-          _id,
-          name,
-          slug,
-          image,
-          address,
-          coordinates,
-          contact,
-          hours,
-          description,
-          features,
-          sortOrder
-        }`,
-      );
-      const { data } = await sanityFetch({
-        query,
-        params: { country },
-      });
-      return data ?? [];
-    } catch (error) {
-      console.log('Error fetching stores by country:', error);
-      return [];
-    }
-  },
-  ['stores-by-country'],
-  { revalidate: 1800, tags: ['stores'] },
-);
-
-/**
- * Get available countries with stores
- */
-const getStoreCountries = unstable_cache(
-  async () => {
-    try {
-      const query = defineQuery(
-        `array::unique(*[_type == "store" && isActive == true].address.country)`,
-      );
-      const { data } = await sanityFetch({ query });
-      return data ?? [];
-    } catch (error) {
-      console.log('Error fetching store countries:', error);
-      return [];
-    }
-  },
-  ['store-countries'],
-  { revalidate: 1800, tags: ['stores'] },
+  ["related-products"],
+  { revalidate: 900, tags: ["products"] },
 );
 
 /**
@@ -469,14 +364,14 @@ const getProductsByVariant = unstable_cache(
         query: PRODUCTS_BY_VARIANT_QUERY,
         params: { variantSlug },
       });
-      return data ?? [];
+      return (data ?? []) as any[];
     } catch (error) {
-      console.error('Error fetching products by variant:', error);
+      console.error("Error fetching products by variant:", error);
       return [];
     }
   },
-  ['products-by-variant'],
-  { revalidate: 600, tags: ['products', 'variants'] },
+  ["products-by-variant"],
+  { revalidate: 600, tags: ["products", "variants"] },
 );
 
 /**
@@ -491,19 +386,18 @@ const getVariantBySlug = unstable_cache(
       });
       return data ?? null;
     } catch (error) {
-      console.error('Error fetching variant by slug:', error);
+      console.error("Error fetching variant by slug:", error);
       return null;
     }
   },
-  ['variant-by-slug'],
-  { revalidate: 1800, tags: ['variants'] },
+  ["variant-by-slug"],
+  { revalidate: 1800, tags: ["variants"] },
 );
 
 export {
   getBanner,
   getFeaturedCategory,
   getAllProducts,
-  getDealProducts,
   getFeaturedProducts,
   getAllBrands,
   getLatestBlogs,
@@ -518,9 +412,6 @@ export {
   getBrand,
   getRelatedProducts,
   getOrderById,
-  getAllStores,
-  getStoresByCountry,
-  getStoreCountries,
   getProductsByVariant,
   getVariantBySlug,
 };

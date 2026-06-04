@@ -1,39 +1,69 @@
-import { User } from 'firebase/auth';
-import { client, writeClient } from '@/sanity/lib/client';
-import { isUserAdmin } from '@/lib/adminUtils';
+import { client, writeClient } from "@/sanity/lib/client";
+import {
+  DEFAULT_ROLE,
+  isBootstrapAdminEmail,
+  legacyFlagsForRole,
+  roleFromUserDoc,
+  type Role,
+} from "@/lib/auth/roles";
 
 /**
- * Syncs a Firebase user to Sanity CMS
- * Creates a new user document in Sanity if it doesn't exist
- * Uses firebaseUid as the unique identifier
- * Automatically sets isAdmin=true if user email is in NEXT_PUBLIC_ADMIN_EMAIL
- *
- * @param firebaseUser - The Firebase user object
- * @returns The Sanity user document ID
+ * Minimal shape needed to sync a Firebase identity into Sanity.
+ * Compatible with both the client-side `firebase/auth` `User` and the
+ * server-side `firebase-admin/auth` `UserRecord`.
  */
-export async function syncUserToSanity(firebaseUser: User): Promise<string> {
+export interface SyncableFirebaseUser {
+  uid: string;
+  email?: string | null;
+  displayName?: string | null;
+  photoURL?: string | null;
+}
+
+/**
+ * Syncs a Firebase user to Sanity CMS.
+ *
+ * This is the ONLY function in the app that creates or updates the
+ * canonical Sanity user document. Every login flows through here via
+ * POST /api/auth/session. Any other route that previously did
+ * "create user if missing" inline must call this instead, otherwise
+ * documents drift (missing role, wrong _type, etc).
+ *
+ * - Looks up by `firebaseUid` first, falling back to `email`.
+ * - On miss, creates with `_id: user-${uid}` (deterministic, race-safe).
+ * - On hit, patches only drifted fields.
+ * - Auto-promotes to admin if the email is in ADMIN_EMAILS.
+ *
+ * @returns The Sanity user document _id.
+ */
+export async function syncUserToSanity(
+  firebaseUser: SyncableFirebaseUser,
+): Promise<string> {
   try {
     const { uid, email, displayName, photoURL } = firebaseUser;
 
-    console.log('firebase', await firebaseUser);
-
     if (!email) {
-      throw new Error('User email is required for Sanity sync');
+      throw new Error("User email is required for Sanity sync");
     }
 
     // Check if user already exists in Sanity (use read client for queries)
     // Check by firebaseUid first, then by email as fallback
     const existingUser = await client.fetch(
       `*[_type == "user" && (firebaseUid == $firebaseUid || email == $email)][0]`,
-      { firebaseUid: uid, email }
+      { firebaseUid: uid, email },
     );
 
     if (existingUser) {
-      // Check if user should be admin based on NEXT_PUBLIC_ADMIN_EMAIL
-      const shouldBeAdmin = isUserAdmin(email);
+      // Determine effective role.
+      // - Existing role on the doc wins (admins manage roles in Sanity).
+      // - First-time admin bootstrap: ADMIN_EMAILS promotes to admin.
+      // - Legacy boolean flags are migrated into `role` once.
+      let nextRole: Role = roleFromUserDoc(existingUser);
+      if (nextRole === "user" && isBootstrapAdminEmail(email)) {
+        nextRole = "admin";
+      }
+      const flags = legacyFlagsForRole(nextRole);
 
-      // Prepare updates object
-      const updates: any = {
+      const updates: Record<string, unknown> = {
         updatedAt: new Date().toISOString(),
       };
 
@@ -42,14 +72,21 @@ export async function syncUserToSanity(firebaseUser: User): Promise<string> {
         updates.firebaseUid = uid;
       }
 
-      // Sync isAdmin field if it doesn't match what it should be
-      if (shouldBeAdmin && existingUser.isAdmin !== true) {
-        updates.isAdmin = true;
+      if (existingUser.role !== nextRole) {
+        updates.role = nextRole;
+      }
+      // Keep legacy booleans in sync with role.
+      if (existingUser.isAdmin !== flags.isAdmin)
+        updates.isAdmin = flags.isAdmin;
+      if (existingUser.isEmployee !== flags.isEmployee)
+        updates.isEmployee = flags.isEmployee;
+      // isVendor is not auto-flipped off here — vendor approval flow owns it.
+      if (flags.isVendor && !existingUser.isVendor) {
+        updates.isVendor = true;
       }
 
-      // Only patch if there are updates to make
+      // Only patch if there are updates beyond the timestamp.
       if (Object.keys(updates).length > 1) {
-        // More than just updatedAt
         await writeClient.patch(existingUser._id).set(updates).commit();
       }
 
@@ -60,32 +97,35 @@ export async function syncUserToSanity(firebaseUser: User): Promise<string> {
     const documentId = `user-${uid}`;
 
     // Split displayName into firstName and lastName
-    let firstName = '';
-    let lastName = '';
+    let firstName = "";
+    let lastName = "";
 
     if (displayName) {
-      const nameParts = displayName.trim().split(' ');
-      firstName = nameParts[0] || '';
-      lastName = nameParts.slice(1).join(' ') || '';
+      const nameParts = displayName.trim().split(" ");
+      firstName = nameParts[0] || "";
+      lastName = nameParts.slice(1).join(" ") || "";
     } else {
       // Fallback to email username if no displayName
-      firstName = email.split('@')[0];
+      firstName = email.split("@")[0];
     }
 
-    // Check if user should be admin based on NEXT_PUBLIC_ADMIN_EMAIL
-    const shouldBeAdmin = isUserAdmin(email);
+    // New user: default role is `user`. Bootstrap admins promoted from env.
+    const initialRole: Role = isBootstrapAdminEmail(email)
+      ? "admin"
+      : DEFAULT_ROLE;
+    const flags = legacyFlagsForRole(initialRole);
 
-    console.log('🆕 Creating new user in Sanity...');
     // Create new user document in Sanity (use write client for mutations)
     // Use createIfNotExists to prevent duplicates during race conditions
     const newUser = await writeClient.createIfNotExists({
       _id: documentId,
-      _type: 'user',
+      _type: "user",
       firebaseUid: uid,
       email: email,
       firstName: firstName,
       lastName: lastName || undefined,
       profileImageUrl: photoURL || undefined,
+      role: initialRole,
       rewardPoints: 0,
       loyaltyPoints: 0,
       totalSpent: 0,
@@ -98,16 +138,16 @@ export async function syncUserToSanity(firebaseUser: User): Promise<string> {
       addresses: [],
       notifications: [],
       isActive: true,
-      vendorStatus: 'none',
-      isVendor: false,
-      isEmployee: false,
-      isAdmin: shouldBeAdmin, // Automatically set based on NEXT_PUBLIC_ADMIN_EMAIL
+      vendorStatus: "none",
+      isVendor: flags.isVendor,
+      isEmployee: flags.isEmployee,
+      isAdmin: flags.isAdmin,
       preferences: {
         newsletter: false,
         emailNotifications: true,
         smsNotifications: false,
-        preferredCurrency: 'USD',
-        preferredLanguage: 'en',
+        preferredCurrency: "USD",
+        preferredLanguage: "en",
       },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -115,21 +155,21 @@ export async function syncUserToSanity(firebaseUser: User): Promise<string> {
 
     return newUser._id;
   } catch (error: any) {
-    console.error('❌ Error syncing user to Sanity:', error);
+    console.error("Error syncing user to Sanity:", error);
 
     // Provide more helpful error messages
-    if (error?.message?.includes('Insufficient permissions')) {
+    if (error?.message?.includes("Insufficient permissions")) {
       console.error(
-        '\n❌ SANITY TOKEN PERMISSION ERROR:',
+        "\n❌ SANITY TOKEN PERMISSION ERROR:",
         "\n📝 Your SANITY_API_TOKEN doesn't have write permissions.",
-        '\n✅ Solution:',
-        '\n   1. Go to: https://www.sanity.io/manage',
-        '\n   2. Select your project:',
+        "\n✅ Solution:",
+        "\n   1. Go to: https://www.sanity.io/manage",
+        "\n   2. Select your project:",
         process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-        '\n   3. Navigate to: API → Tokens',
+        "\n   3. Navigate to: API → Tokens",
         "\n   4. Create new token with 'Editor' or 'Administrator' permissions",
-        '\n   5. Update SANITY_API_TOKEN in your .env file',
-        '\n   6. Restart your development server'
+        "\n   5. Update SANITY_API_TOKEN in your .env file",
+        "\n   6. Restart your development server",
       );
     }
 
@@ -144,7 +184,7 @@ export async function syncUserToSanity(firebaseUser: User): Promise<string> {
  * @returns The Sanity user document or null if not found
  */
 export async function getSanityUserByFirebaseUid(
-  firebaseUid: string
+  firebaseUid: string,
 ): Promise<any | null> {
   try {
     const user = await client.fetch(
@@ -168,12 +208,12 @@ export async function getSanityUserByFirebaseUid(
         createdAt,
         updatedAt
       }`,
-      { firebaseUid }
+      { firebaseUid },
     );
 
     return user || null;
   } catch (error) {
-    console.error('Error fetching Sanity user:', error);
+    console.error("Error fetching Sanity user:", error);
     return null;
   }
 }
@@ -191,13 +231,13 @@ export async function updateSanityUser(
     name?: string;
     image?: string;
     email?: string;
-  }
+  },
 ): Promise<any> {
   try {
     const user = await getSanityUserByFirebaseUid(firebaseUid);
 
     if (!user) {
-      throw new Error('User not found in Sanity');
+      throw new Error("User not found in Sanity");
     }
 
     // Use write client for patch operations
@@ -211,7 +251,7 @@ export async function updateSanityUser(
 
     return updatedUser;
   } catch (error) {
-    console.error('Error updating Sanity user:', error);
+    console.error("Error updating Sanity user:", error);
     throw error;
   }
 }

@@ -1,122 +1,116 @@
 /**
- * Admin Utility Functions
+ * Client-side role/admin helpers.
  *
- * IMPORTANT: isAdmin field only exists in Sanity database, NOT in Firebase user records.
+ * The canonical role lives on the Sanity user document (`role` field) and
+ * is mirrored into Firebase custom claims by `/api/auth/session`. This file
+ * provides convenience hooks for client components.
  *
- * This module provides admin authentication checks using TWO independent methods:
- *
- * 1. ENVIRONMENT VARIABLE (NEXT_PUBLIC_ADMIN_EMAIL):
- *    - Set in .env file as comma-separated emails
- *    - Example: NEXT_PUBLIC_ADMIN_EMAIL=admin@example.com,admin2@example.com
- *    - Can use brackets: [admin@example.com,admin2@example.com]
- *    - Fast check, works in middleware and client-side
- *    - No database query needed
- *
- * 2. SANITY DATABASE (isAdmin field on user document):
- *    - Set isAdmin=true for a user document in Sanity Studio
- *    - This field ONLY exists in Sanity, not in Firebase
- *    - More flexible, can be changed without redeployment
- *    - Requires database query, used in server-side code
- *
- * Both methods work independently. A user is admin if EITHER condition is true.
+ * Server code should import from `@/lib/auth/server` instead.
  */
 
-import React from 'react';
+import React from "react";
+import {
+  getBootstrapAdminEmails,
+  isBootstrapAdminEmail,
+  type Role,
+} from "@/lib/auth/roles";
 
-// Admin utility functions
-export const getAdminEmails = (): string[] => {
-  const adminEmailsEnv = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
-  if (!adminEmailsEnv) return [];
+export const getAdminEmails = (): string[] => getBootstrapAdminEmails();
 
-  try {
-    // Handle array format: [email1,email2] or just comma-separated: email1,email2
-    const cleanEmails = adminEmailsEnv
-      .replace(/[\[\]]/g, '') // Remove brackets if present
-      .split(',')
-      .map(email => email.trim())
-      .filter(email => email.length > 0);
-
-    return cleanEmails;
-  } catch (error) {
-    console.error('Error parsing admin emails:', error);
-    return [];
-  }
-};
-
-export const isUserAdmin = (userEmail: string | null | undefined): boolean => {
-  if (!userEmail) return false;
-
-  const adminEmails = getAdminEmails();
-  return adminEmails.includes(userEmail.toLowerCase());
-};
+export const isUserAdmin = (userEmail: string | null | undefined): boolean =>
+  isBootstrapAdminEmail(userEmail);
 
 /**
- * Comprehensive admin check that considers both database isAdmin field and environment variable
- * @param user - User object with email and isAdmin fields
- * @returns true if user is admin based on either database flag or environment variable
+ * Synchronous admin check given a (Sanity) user object.
+ * Considers both the `role` field and legacy `isAdmin` flag.
  */
 export const isAdmin = (
-  user: { email?: string | null; isAdmin?: boolean } | null | undefined,
+  user:
+    | { email?: string | null; role?: string | null; isAdmin?: boolean }
+    | null
+    | undefined,
 ): boolean => {
   if (!user) return false;
-
-  // Check if user has isAdmin flag set in database
+  if (user.role === "admin") return true;
   if (user.isAdmin === true) return true;
-
-  // Fallback to environment variable check
-  if (user.email) {
-    return isUserAdmin(user.email);
-  }
-
+  if (user.email) return isBootstrapAdminEmail(user.email);
   return false;
 };
 
+interface UseRoleResult {
+  role: Role | null;
+  isAdmin: boolean;
+  isLoading: boolean;
+}
+
 /**
- * React hook to check if user is admin
- * Checks both environment variable AND Sanity database isAdmin field
- * @param userEmail - User's email address
- * @param firebaseUid - User's Firebase UID (optional, for more accurate Sanity query)
- * @returns true if user is admin based on either env var or Sanity isAdmin field
+ * Resolve the current user's role from the server (`/api/auth/role`).
+ * Returns `{ role: null, isLoading: true }` until the lookup completes,
+ * which lets callers wait instead of treating "still checking" as
+ * "not allowed" (the bug that caused legitimate admins to be redirected
+ * to /admin/access-denied).
+ */
+export const useUserRole = (
+  userEmail: string | null | undefined,
+  firebaseUid?: string | null | undefined,
+): UseRoleResult => {
+  const [role, setRole] = React.useState<Role | null>(null);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    if (!userEmail && !firebaseUid) {
+      setRole(null);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+
+    // Optimistic bootstrap: if the email is in ADMIN_EMAILS, surface admin
+    // immediately so admin UI doesn't flash "access denied" while the
+    // server round-trip is in flight.
+    if (userEmail && isBootstrapAdminEmail(userEmail)) {
+      setRole("admin");
+    }
+
+    fetch("/api/auth/role", { credentials: "include" })
+      .then((res) => res.json())
+      .then((data: { role: Role | null }) => {
+        if (cancelled) return;
+        setRole(
+          data.role ??
+            (userEmail && isBootstrapAdminEmail(userEmail) ? "admin" : "user"),
+        );
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("useUserRole: failed to load role", err);
+        setRole(
+          userEmail && isBootstrapAdminEmail(userEmail) ? "admin" : "user",
+        );
+        setIsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userEmail, firebaseUid]);
+
+  return { role, isAdmin: role === "admin", isLoading };
+};
+
+/**
+ * Backwards-compatible boolean hook. Prefer `useUserRole` so callers can
+ * distinguish "still loading" from "not admin" — that's what fixed the
+ * /admin/access-denied flash bug.
  */
 export const useIsAdmin = (
   userEmail: string | null | undefined,
   firebaseUid?: string | null | undefined,
 ): boolean => {
-  const [isAdminInSanity, setIsAdminInSanity] = React.useState<boolean>(false);
-  const [isChecking, setIsChecking] = React.useState<boolean>(true);
-
-  React.useEffect(() => {
-    // First check env variable (fast)
-    if (userEmail && isUserAdmin(userEmail)) {
-      setIsAdminInSanity(true);
-      setIsChecking(false);
-      return;
-    }
-
-    // Then check Sanity database
-    if (userEmail || firebaseUid) {
-      setIsChecking(true);
-      fetch('/api/auth/check-admin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: userEmail, firebaseUid }),
-      })
-        .then(res => res.json())
-        .then(data => {
-          setIsAdminInSanity(data.isAdmin === true);
-          setIsChecking(false);
-        })
-        .catch(error => {
-          console.error('Error checking admin status:', error);
-          setIsAdminInSanity(false);
-          setIsChecking(false);
-        });
-    } else {
-      setIsAdminInSanity(false);
-      setIsChecking(false);
-    }
-  }, [userEmail, firebaseUid]);
-
-  // While checking, return false to prevent premature access
-  return isChecking ? false : isAdminInSanity;
+  const { isAdmin } = useUserRole(userEmail, firebaseUid);
+  return isAdmin;
 };

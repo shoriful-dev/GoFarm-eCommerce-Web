@@ -2,6 +2,7 @@ import {
   BasketIcon,
   BillIcon,
   BulbFilledIcon,
+  ControlsIcon,
   CubeIcon,
   DocumentTextIcon,
   EnvelopeIcon,
@@ -13,115 +14,116 @@ import {
   TrolleyIcon,
   UserIcon,
   UsersIcon,
-} from '@sanity/icons';
-import type { StructureResolver } from 'sanity/structure';
+} from "@sanity/icons";
+import type { StructureResolver } from "sanity/structure";
+import { apiVersion } from "./env";
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
-export const structure: StructureResolver = S =>
+export const structure: StructureResolver = (S) =>
   S.list()
-    .title('GoFarm Admin')
+    .title("GoFarm Admin")
     .items([
       // Products Section
       S.listItem()
-        .title('Products')
+        .title("Products")
         .icon(TrolleyIcon)
         .child(
           S.list()
-            .title('Products')
+            .title("Products")
             .items([
               S.listItem()
-                .title('All Products')
+                .title("All Products")
                 .icon(TrolleyIcon)
-                .schemaType('product')
+                .schemaType("product")
                 .child(
-                  S.documentTypeList('product')
-                    .title('All Products')
+                  S.documentTypeList("product")
+                    .title("All Products")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
 
               S.listItem()
-                .title('Product Variants')
+                .title("Product Variants")
                 .icon(TagIcon)
-                .schemaType('productVariant')
+                .schemaType("productVariant")
                 .child(
-                  S.documentTypeList('productVariant')
-                    .title('Product Variants')
-                    .defaultOrdering([{ field: 'weight', direction: 'asc' }]),
+                  S.documentTypeList("productVariant")
+                    .title("Product Variants")
+                    .defaultOrdering([{ field: "weight", direction: "asc" }]),
                 ),
 
               S.listItem()
-                .title('Product Weights')
+                .title("Product Weights")
                 .icon(TagIcon)
-                .schemaType('productWeight')
+                .schemaType("productWeight")
                 .child(
-                  S.documentTypeList('productWeight')
-                    .title('Product Weights')
-                    .defaultOrdering([{ field: 'weight', direction: 'asc' }]),
+                  S.documentTypeList("productWeight")
+                    .title("Product Weights")
+                    .defaultOrdering([{ field: "weight", direction: "asc" }]),
                 ),
 
               S.listItem()
-                .title('Product Sizes')
+                .title("Product Sizes")
                 .icon(TagIcon)
-                .schemaType('productSize')
+                .schemaType("productSize")
                 .child(
-                  S.documentTypeList('productSize')
-                    .title('Product Sizes')
-                    .defaultOrdering([{ field: 'weight', direction: 'asc' }]),
+                  S.documentTypeList("productSize")
+                    .title("Product Sizes")
+                    .defaultOrdering([{ field: "weight", direction: "asc" }]),
                 ),
 
               S.listItem()
-                .title('Product Colors')
+                .title("Product Colors")
                 .icon(TagIcon)
-                .schemaType('productColor')
+                .schemaType("productColor")
                 .child(
-                  S.documentTypeList('productColor')
-                    .title('Product Colors')
-                    .defaultOrdering([{ field: 'weight', direction: 'asc' }]),
+                  S.documentTypeList("productColor")
+                    .title("Product Colors")
+                    .defaultOrdering([{ field: "weight", direction: "asc" }]),
                 ),
 
               S.listItem()
-                .title('Categories')
+                .title("Categories")
                 .icon(FolderIcon)
-                .schemaType('category')
+                .schemaType("category")
                 .child(
-                  S.documentTypeList('category')
-                    .title('Categories')
-                    .defaultOrdering([{ field: 'title', direction: 'asc' }]),
+                  S.documentTypeList("category")
+                    .title("Categories")
+                    .defaultOrdering([{ field: "title", direction: "asc" }]),
                 ),
 
               S.listItem()
-                .title('Brands')
+                .title("Brands")
                 .icon(StarIcon)
-                .schemaType('brand')
+                .schemaType("brand")
                 .child(
-                  S.documentTypeList('brand')
-                    .title('Brands')
-                    .defaultOrdering([{ field: 'title', direction: 'asc' }]),
+                  S.documentTypeList("brand")
+                    .title("Brands")
+                    .defaultOrdering([{ field: "title", direction: "asc" }]),
                 ),
 
               S.listItem()
-                .title('Reviews')
+                .title("Reviews")
                 .icon(DocumentTextIcon)
-                .schemaType('review')
+                .schemaType("review")
                 .child(
-                  S.documentTypeList('review')
-                    .title('Reviews')
+                  S.documentTypeList("review")
+                    .title("Reviews")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
               S.divider(),
               S.listItem()
-                .title('Vendor Products')
+                .title("Vendor Products")
                 .icon(DocumentTextIcon)
-                .schemaType('vendorProduct')
+                .schemaType("vendorProduct")
                 .child(
-                  S.documentTypeList('vendorProduct')
-                    .title('Vendor Products')
+                  S.documentTypeList("vendorProduct")
+                    .title("Vendor Products")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
             ]),
@@ -131,21 +133,21 @@ export const structure: StructureResolver = S =>
 
       // Banners Section
       S.listItem()
-        .title('Banners')
+        .title("Banners")
         .icon(ImageIcon)
         .child(
           S.list()
-            .title('Banners')
+            .title("Banners")
             .items([
               S.listItem()
-                .title('Home Banners')
+                .title("Home Banners")
                 .icon(ImageIcon)
-                .schemaType('banner')
+                .schemaType("banner")
                 .child(
-                  S.documentTypeList('banner')
-                    .title('Home Banners')
+                  S.documentTypeList("banner")
+                    .title("Home Banners")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
             ]),
@@ -155,87 +157,77 @@ export const structure: StructureResolver = S =>
 
       // Orders & Subscriptions Section
       S.listItem()
-        .title('Orders & Subscriptions')
+        .title("Orders & Subscriptions")
         .icon(BasketIcon)
         .child(
           S.list()
-            .title('Orders & Subscriptions')
+            .title("Orders & Subscriptions")
             .items([
               S.listItem()
-                .title('All Orders')
+                .title("All Orders")
                 .icon(BasketIcon)
-                .schemaType('order')
+                .schemaType("order")
                 .child(
-                  S.documentTypeList('order')
-                    .title('All Orders')
+                  S.documentTypeList("order")
+                    .title("All Orders")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
 
               S.listItem()
-                .title('Pending Orders')
+                .title("Pending Orders")
                 .icon(BasketIcon)
-                .schemaType('order')
+                .schemaType("order")
                 .child(
-                  S.documentTypeList('order')
-                    .title('Pending Orders')
+                  S.documentTypeList("order")
+                    .title("Pending Orders")
+                    .apiVersion(apiVersion)
                     .filter('_type == "order" && status == "pending"')
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
 
               S.listItem()
-                .title('Processing Orders')
+                .title("Processing Orders")
                 .icon(BasketIcon)
-                .schemaType('order')
+                .schemaType("order")
                 .child(
-                  S.documentTypeList('order')
-                    .title('Processing Orders')
+                  S.documentTypeList("order")
+                    .title("Processing Orders")
+                    .apiVersion(apiVersion)
                     .filter('_type == "order" && status == "processing"')
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
 
               S.listItem()
-                .title('Delivered Orders')
+                .title("Delivered Orders")
                 .icon(BasketIcon)
-                .schemaType('order')
+                .schemaType("order")
                 .child(
-                  S.documentTypeList('order')
-                    .title('Delivered Orders')
+                  S.documentTypeList("order")
+                    .title("Delivered Orders")
+                    .apiVersion(apiVersion)
                     .filter('_type == "order" && status == "delivered"')
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
 
               S.listItem()
-                .title('Cancelled Orders')
+                .title("Cancelled Orders")
                 .icon(BasketIcon)
-                .schemaType('order')
+                .schemaType("order")
                 .child(
-                  S.documentTypeList('order')
-                    .title('Cancelled Orders')
+                  S.documentTypeList("order")
+                    .title("Cancelled Orders")
+                    .apiVersion(apiVersion)
                     .filter('_type == "order" && status == "cancelled"')
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
-                    ]),
-                ),
-
-              S.divider(),
-
-              S.listItem()
-                .title('Subscriptions')
-                .icon(BillIcon)
-                .schemaType('subscription')
-                .child(
-                  S.documentTypeList('subscription')
-                    .title('Subscriptions')
-                    .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
             ]),
@@ -245,59 +237,47 @@ export const structure: StructureResolver = S =>
 
       // Users & Access Section
       S.listItem()
-        .title('Users & Access')
+        .title("Users & Access")
         .icon(UsersIcon)
         .child(
           S.list()
-            .title('Users & Access')
+            .title("Users & Access")
             .items([
               S.listItem()
-                .title('All Users')
+                .title("All Users")
                 .icon(UserIcon)
-                .schemaType('user')
+                .schemaType("user")
                 .child(
-                  S.documentTypeList('user')
-                    .title('All Users')
+                  S.documentTypeList("user")
+                    .title("All Users")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
 
               S.listItem()
-                .title('User Addresses')
+                .title("User Addresses")
                 .icon(HomeIcon)
-                .schemaType('address')
+                .schemaType("address")
                 .child(
-                  S.documentTypeList('address')
-                    .title('User Addresses')
+                  S.documentTypeList("address")
+                    .title("User Addresses")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
 
               S.listItem()
-                .title('Access Requests')
+                .title("Access Requests")
                 .icon(EnvelopeIcon)
-                .schemaType('userAccessRequest')
+                .schemaType("userAccessRequest")
                 .child(
-                  S.documentTypeList('userAccessRequest')
-                    .title('Access Requests')
+                  S.documentTypeList("userAccessRequest")
+                    .title("Access Requests")
+                    .apiVersion(apiVersion)
                     .filter('_type == "userAccessRequest"')
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
-                    ]),
-                ),
-              S.divider(),
-              S.listItem()
-                .title('Local Stores')
-                .icon(EnvelopeIcon)
-                .schemaType('store')
-                .child(
-                  S.documentTypeList('store')
-                    .title('Local Stores')
-                    .filter('_type == "store"')
-                    .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
             ]),
@@ -307,42 +287,42 @@ export const structure: StructureResolver = S =>
 
       // Blog Section
       S.listItem()
-        .title('Blog')
+        .title("Blog")
         .icon(DocumentTextIcon)
         .child(
           S.list()
-            .title('Blog')
+            .title("Blog")
             .items([
               S.listItem()
-                .title('Blog Posts')
+                .title("Blog Posts")
                 .icon(DocumentTextIcon)
-                .schemaType('blog')
+                .schemaType("blog")
                 .child(
-                  S.documentTypeList('blog')
-                    .title('Blog Posts')
+                  S.documentTypeList("blog")
+                    .title("Blog Posts")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
 
               S.listItem()
-                .title('Blog Categories')
+                .title("Blog Categories")
                 .icon(FolderIcon)
-                .schemaType('blogcategory')
+                .schemaType("blogcategory")
                 .child(
-                  S.documentTypeList('blogcategory')
-                    .title('Blog Categories')
-                    .defaultOrdering([{ field: 'title', direction: 'asc' }]),
+                  S.documentTypeList("blogcategory")
+                    .title("Blog Categories")
+                    .defaultOrdering([{ field: "title", direction: "asc" }]),
                 ),
 
               S.listItem()
-                .title('Authors')
+                .title("Authors")
                 .icon(UserIcon)
-                .schemaType('author')
+                .schemaType("author")
                 .child(
-                  S.documentTypeList('author')
-                    .title('Authors')
-                    .defaultOrdering([{ field: 'name', direction: 'asc' }]),
+                  S.documentTypeList("author")
+                    .title("Authors")
+                    .defaultOrdering([{ field: "name", direction: "asc" }]),
                 ),
             ]),
         ),
@@ -351,33 +331,33 @@ export const structure: StructureResolver = S =>
 
       // Communication Section
       S.listItem()
-        .title('Communication')
+        .title("Communication")
         .icon(EnvelopeIcon)
         .child(
           S.list()
-            .title('Communication')
+            .title("Communication")
             .items([
               S.listItem()
-                .title('Contact Submissions')
+                .title("Contact Submissions")
                 .icon(EnvelopeIcon)
-                .schemaType('contact')
+                .schemaType("contact")
                 .child(
-                  S.documentTypeList('contact')
-                    .title('Contact Submissions')
+                  S.documentTypeList("contact")
+                    .title("Contact Submissions")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
 
               S.listItem()
-                .title('Sent Notifications')
+                .title("Sent Notifications")
                 .icon(BillIcon)
-                .schemaType('sentNotification')
+                .schemaType("sentNotification")
                 .child(
-                  S.documentTypeList('sentNotification')
-                    .title('Sent Notifications')
+                  S.documentTypeList("sentNotification")
+                    .title("Sent Notifications")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
             ]),
@@ -386,24 +366,37 @@ export const structure: StructureResolver = S =>
 
       // Coupon and Discount Section
       S.listItem()
-        .title('Coupon and Discount')
+        .title("Coupon and Discount")
         .icon(BulbFilledIcon)
         .child(
           S.list()
-            .title('Coupon and Discount')
+            .title("Coupon and Discount")
             .items([
               S.listItem()
-                .title('Coupons')
+                .title("Coupons")
                 .icon(CubeIcon)
-                .schemaType('coupon')
+                .schemaType("coupon")
                 .child(
-                  S.documentTypeList('coupon')
-                    .title('Coupons')
+                  S.documentTypeList("coupon")
+                    .title("Coupons")
                     .defaultOrdering([
-                      { field: '_createdAt', direction: 'desc' },
+                      { field: "_createdAt", direction: "desc" },
                     ]),
                 ),
             ]),
         ),
+
+      S.divider(),
+
+      // Store-wide configuration (singleton). Holds money / shipping /
+      // tax / loyalty values consumed by the storefront at runtime.
+      S.listItem()
+        .title("Store Settings")
+        .icon(ControlsIcon)
+        .child(
+          S.editor()
+            .id("storeSettings")
+            .schemaType("storeSettings")
+            .documentId("storeSettings"),
+        ),
     ]);
-    

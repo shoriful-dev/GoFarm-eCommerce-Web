@@ -341,7 +341,7 @@ export const userType = defineType({
               return {
                 title: `${sign}$${amount.toFixed(2)}`,
                 subtitle: `${description} • ${new Date(
-                  createdAt
+                  createdAt,
                 ).toLocaleDateString()}`,
               };
             },
@@ -488,7 +488,7 @@ export const userType = defineType({
               return {
                 title: `$${amount.toFixed(2)} - ${status}`,
                 subtitle: `${method} • ${new Date(
-                  requestedAt
+                  requestedAt,
                 ).toLocaleDateString()}`,
               };
             },
@@ -509,6 +509,30 @@ export const userType = defineType({
       initialValue: true,
       description:
         "Whether the user account is active (all users are active by default)",
+    }),
+    // -----------------------------------------------------------------------
+    //  Canonical role. All access checks read this field.
+    //  Legacy isAdmin / isVendor / isEmployee booleans below are kept as
+    //  derived mirrors so older queries keep working, but `role` is the
+    //  source of truth.
+    // -----------------------------------------------------------------------
+    defineField({
+      name: "role",
+      title: "Role",
+      type: "string",
+      options: {
+        list: [
+          { title: "User", value: "user" },
+          { title: "Admin", value: "admin" },
+          { title: "Vendor", value: "vendor" },
+          { title: "Employee", value: "employee" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "user",
+      validation: (Rule) => Rule.required(),
+      description:
+        "Primary role. Default is 'user'. Admins can promote to admin/vendor/employee. ADMIN_EMAILS in env only bootstraps the first admin(s).",
     }),
     // Vendor Account System
     defineField({
@@ -921,7 +945,7 @@ export const userType = defineType({
               return {
                 title: title,
                 subtitle: `${type} • ${read ? "Read" : "Unread"} • ${new Date(
-                  sentAt
+                  sentAt,
                 ).toLocaleDateString()}`,
               };
             },

@@ -1,4 +1,4 @@
-import { defineQuery } from 'next-sanity';
+import { defineQuery } from "next-sanity";
 
 const BANNER_QUERY = defineQuery(
   `*[_type == 'banner'] | order(publishedAt desc)`,
@@ -7,11 +7,6 @@ const FEATURED_CATEGORY_QUERY = defineQuery(
   `*[_type == 'category' && featured == true] | order(name desc)`,
 );
 const ALL_PRODUCTS_QUERY = defineQuery(`*[_type=="product"] | order(name asc)`);
-const DEAL_PRODUCTS = defineQuery(
-  `*[_type == 'product' && status == 'hot'] | order(name asc){
-  ...,"categories": categories[]->title
-}`,
-);
 const FEATURE_PRODUCTS = defineQuery(
   `*[_type == 'product' && isFeatured == true] | order(name asc){
   ...,"categories": categories[]->title
@@ -228,7 +223,6 @@ export {
   BANNER_QUERY,
   FEATURED_CATEGORY_QUERY,
   ALL_PRODUCTS_QUERY,
-  DEAL_PRODUCTS,
   FEATURE_PRODUCTS,
   BRANDS_QUERY,
   LATEST_BLOG_QUERY,

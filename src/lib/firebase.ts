@@ -1,6 +1,7 @@
-import { FirebaseApp, getApps, initializeApp } from "firebase/app";
-import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
-import { getAuth, Auth } from 'firebase/auth';
+// Firebase configuration and initialization
+import { initializeApp, getApps, FirebaseApp } from "firebase/app";
+import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
+import { getAuth, Auth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,9 +14,8 @@ const firebaseConfig = {
 };
 
 let app: FirebaseApp;
-
-if(!getApps().length){
-  app = initializeApp(firebaseConfig)
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
 } else {
   app = getApps()[0];
 }
@@ -23,12 +23,26 @@ if(!getApps().length){
 const auth: Auth = getAuth(app);
 
 let analytics: Analytics | null = null;
-if(typeof window !== 'undefined') {
-  isSupported().then((supported) => {
-    if(supported){
-      analytics = getAnalytics(app)
-    }
-  })
+let analyticsReadyPromise: Promise<Analytics | null> | null = null;
+
+if (typeof window !== "undefined") {
+  analyticsReadyPromise = isSupported()
+    .then((supported) => {
+      if (supported) {
+        analytics = getAnalytics(app);
+        return analytics;
+      }
+      return null;
+    })
+    .catch(() => null);
 }
 
-export {app, auth, analytics};
+/**
+ * Resolves once Firebase Analytics has been initialized in the browser
+ * (or immediately with `null` on the server / in unsupported environments).
+ */
+export function getAnalyticsAsync(): Promise<Analytics | null> {
+  return analyticsReadyPromise ?? Promise.resolve(null);
+}
+
+export { app, auth, analytics };

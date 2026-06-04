@@ -1,17 +1,36 @@
-import nodemailer, { Transporter } from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import nodemailer, { Transporter, SentMessageInfo } from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
-const transporter: Transporter<SMTPTransport.SentMessageInfo> =
-  nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      type: 'OAuth2',
-      user: process.env.SENDER_EMAIL_ADDRESS,
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-    },
-  });
+// Pick auth strategy based on env:
+//   - If GMAIL_APP_PASSWORD is set, use simple SMTP login (recommended for
+//     small projects; requires 2FA + an App Password on the Gmail account).
+//   - Otherwise fall back to OAuth2 with a refresh token.
+//     Note: Gmail OAuth refresh tokens issued by an OAuth client whose
+//     consent screen is in "Testing" mode expire after 7 days, which surfaces
+//     as `invalid_grant: Bad Request`. Either publish the consent screen or
+//     switch to GMAIL_APP_PASSWORD.
+const senderEmail =
+  process.env.SENDER_EMAIL_ADDRESS || "reactjsbd@gmail.com";
+
+const transporter: Transporter<SMTPTransport.SentMessageInfo> = process.env
+  .GMAIL_APP_PASSWORD
+  ? nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: senderEmail,
+        pass: process.env.GMAIL_APP_PASSWORD,
+      },
+    })
+  : nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: senderEmail,
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+      },
+    });
 
 // Type definitions
 interface OrderItem {
@@ -503,7 +522,7 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
                     <tbody>
                         ${data.items
                           .map(
-                            item => `
+                            (item) => `
                             <tr>
                                 <td>
                                     ${
@@ -528,15 +547,15 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
                             </tr>
                         `
                           )
-                          .join('')}
+                          .join("")}
                     </tbody>
                 </table>
                 
                 <div class="totals">
                     <div class="total-row">
                         <span>Subtotal (${data.items.length} ${
-                          data.items.length === 1 ? 'item' : 'items'
-                        }):</span>
+    data.items.length === 1 ? "item" : "items"
+  }):</span>
                         <span>${formatCurrency(data.subtotal)}</span>
                     </div>
                     ${
@@ -549,21 +568,21 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
                         )}</span>
                     </div>
                     `
-                        : ''
+                        : ""
                     }
                     ${
                       (data.couponDiscount || 0) > 0
                         ? `
                     <div class="total-row" style="color: #16a34a;">
                         <span>Coupon Discount${
-                          data.couponCode ? ` (${data.couponCode})` : ''
+                          data.couponCode ? ` (${data.couponCode})` : ""
                         }:</span>
                         <span>-${formatCurrency(
                           data.couponDiscount || 0
                         )}</span>
                     </div>
                     `
-                        : ''
+                        : ""
                     }
                     ${
                       (data.businessDiscount || 0) > 0
@@ -575,7 +594,7 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
                         )}</span>
                     </div>
                     `
-                        : ''
+                        : ""
                     }
                     <hr style="border: none; border-top: 2px solid #dee2e6; margin: 15px 0;" />
                     <div class="total-row">
@@ -611,7 +630,7 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
                         )}</span>
                     </div>
                     `
-                        : ''
+                        : ""
                     }
                     <hr style="border: none; border-top: 3px solid #16a34a; margin: 20px 0;" />
                     <div class="total-row final" style="background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%); color: white; border-radius: 12px; padding: 20px; margin-top: 10px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);">
@@ -627,7 +646,7 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
                         <span style="color: #15803d; font-weight: 700; font-size: 14px;">🎉 You saved on shipping!</span>
                     </div>
                     `
-                        : ''
+                        : ""
                     }
                 </div>
             </div>
@@ -639,8 +658,8 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
                     <strong>${data.shippingAddress.name}</strong><br>
                     ${data.shippingAddress.street}<br>
                     ${data.shippingAddress.city}, ${
-                      data.shippingAddress.state
-                    } ${data.shippingAddress.zipCode}<br>
+    data.shippingAddress.state
+  } ${data.shippingAddress.zipCode}<br>
                     ${data.shippingAddress.country}
                 </div>
             </div>
@@ -654,7 +673,7 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
                 <p>${data.estimatedDelivery}</p>
             </div>
             `
-                : ''
+                : ""
             }
             
             <!-- Next Steps -->
@@ -717,7 +736,7 @@ const sendOrderConfirmationEmail = async (
 
     const mailOptions = {
       from: `"gofarm Ecommerce" <${
-        process.env.SENDER_EMAIL_ADDRESS || 'reactjsbd@gmail.com'
+        process.env.SENDER_EMAIL_ADDRESS || "reactjsbd@gmail.com"
       }>`,
       to: data.customerEmail,
       subject: `Order Confirmation - ${data.orderId} | Thank you for your purchase!`,
@@ -734,37 +753,37 @@ Order Date: ${data.orderDate}
 Items Ordered:
 ${data.items
   .map(
-    item =>
+    (item) =>
       `- ${item.name} (Qty: ${item.quantity}) - $${(
         item.price * item.quantity
       ).toFixed(2)}`
   )
-  .join('\n')}
+  .join("\n")}
 
 Order Summary:
 ────────────────────────────────────
 Subtotal (${data.items.length} ${
-        data.items.length === 1 ? 'item' : 'items'
+        data.items.length === 1 ? "item" : "items"
       }):  $${data.subtotal.toFixed(2)}
 ${
   (data.productDiscount || 0) > 0
     ? `Product Discount:  -$${data.productDiscount?.toFixed(2)}`
-    : ''
+    : ""
 }
 ${
   (data.couponDiscount || 0) > 0
     ? `Coupon Discount${
-        data.couponCode ? ` (${data.couponCode})` : ''
+        data.couponCode ? ` (${data.couponCode})` : ""
       }:  -$${data.couponDiscount?.toFixed(2)}`
-    : ''
+    : ""
 }
 ${
   (data.businessDiscount || 0) > 0
     ? `Business Discount (2%):  -$${data.businessDiscount?.toFixed(2)}`
-    : ''
+    : ""
 }
 ────────────────────────────────────
-Shipping:  ${data.shipping === 0 ? 'FREE' : '$' + data.shipping.toFixed(2)}
+Shipping:  ${data.shipping === 0 ? "FREE" : "$" + data.shipping.toFixed(2)}
 Tax:  $${data.tax.toFixed(2)}
 ────────────────────────────────────
 Total Amount:  $${(data.subtotal + data.shipping + data.tax).toFixed(2)}
@@ -778,7 +797,7 @@ ${
         (data.couponDiscount || 0) +
         (data.businessDiscount || 0)
       ).toFixed(2)}`
-    : ''
+    : ""
 }
 ════════════════════════════════════
 PAYABLE AMOUNT:  $${data.total.toFixed(2)}
@@ -792,7 +811,7 @@ ${data.shippingAddress.city}, ${data.shippingAddress.state} ${
       }
 ${data.shippingAddress.country}
 
-${data.estimatedDelivery ? `Estimated Delivery: ${data.estimatedDelivery}` : ''}
+${data.estimatedDelivery ? `Estimated Delivery: ${data.estimatedDelivery}` : ""}
 
 We'll send you another email with tracking information once your order ships.
 
@@ -806,10 +825,10 @@ Thank you for choosing gofarm!
 
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error('Failed to send order confirmation email:', error);
+    console.error("Failed to send order confirmation email:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
 };
@@ -824,7 +843,7 @@ const sendMail = async ({
   try {
     const mailOptions = {
       from: `"gofarm Ecommerce" <${
-        process.env.SENDER_EMAIL_ADDRESS || 'reactjsbd@gmail.com'
+        process.env.SENDER_EMAIL_ADDRESS || "reactjsbd@gmail.com"
       }>`,
       to: email,
       subject,
@@ -835,11 +854,21 @@ const sendMail = async ({
     const result = await transporter.sendMail(mailOptions);
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error('Failed to send email:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
-    };
+    const errMsg =
+      error instanceof Error ? error.message : "Unknown error occurred";
+    if (/invalid_grant|EAUTH|XOAUTH2/i.test(errMsg)) {
+      console.error(
+        "[email] Gmail auth failed. The OAuth refresh token is invalid/expired " +
+          "(common when the OAuth consent screen is in 'Testing' mode — refresh " +
+          "tokens expire after 7 days). Either regenerate GOOGLE_REFRESH_TOKEN, " +
+          "publish the OAuth consent screen, or set GMAIL_APP_PASSWORD to use an " +
+          "App Password instead. Original error:",
+        errMsg
+      );
+    } else {
+      console.error("Failed to send email:", error);
+    }
+    return { success: false, error: errMsg };
   }
 };
 

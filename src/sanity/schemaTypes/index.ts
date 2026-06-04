@@ -19,11 +19,10 @@ import { sentNotificationType } from "./sentNotificationType";
 import { userType } from "./userType";
 import { userAccessRequestType } from "./userAccessRequestType";
 import { reviewType } from "./reviewType";
-import { subscriptionType } from "./subscriptionType";
-import { storeType } from "./storeType";
 import { vendorApplicationType } from "./vendorApplicationType";
 import { vendorProductType } from "./vendorProductType";
 import { couponType } from "./couponType";
+import { storeSettingsType } from "./storeSettingsType";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -46,10 +45,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     userType,
     userAccessRequestType,
     reviewType,
-    subscriptionType,
-    storeType,
     vendorApplicationType,
     vendorProductType,
     couponType,
+    storeSettingsType,
   ],
 };
