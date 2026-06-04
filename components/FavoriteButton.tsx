@@ -1,14 +1,14 @@
 "use client";
-import { Product, PRODUCT_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
-import useCartStore from "@/store";
-import { useAuthStore } from "@/stores/authStore";
+import { Product, PRODUCT_BY_SLUG_QUERY_RESULT } from "../sanity.types";
+import useCartStore from "../store";
+import { useAuthStore } from "../stores/authStore";
 import { Heart } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import _ from "lodash";
-import { trackWishlistAdd, trackWishlistRemove } from "@/lib/analytics";
-import QuickAuthSidebar from "@/components/sidebars/QuickAuthSidebar";
+import { trackWishlistAdd, trackWishlistRemove } from "../lib/analytics";
+import QuickAuthSidebar from "./sidebars/QuickAuthSidebar";
 
 const FavoriteButton = ({
   showProduct = false,
