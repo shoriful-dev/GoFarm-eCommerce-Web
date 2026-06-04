@@ -15,6 +15,25 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type StoreSettings = {
+  _id: string;
+  _type: "storeSettings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  label?: string;
+  currency?: string;
+  currencySymbol?: string;
+  freeShippingThreshold?: number;
+  shippingFlatRate?: number;
+  taxRate?: number;
+  lowStockThreshold?: number;
+  loyaltyPointsPerDollar?: number;
+  loyaltyPointValue?: number;
+  supportEmail?: string;
+  supportPhone?: string;
+};
+
 export type SanityImageAssetReference = {
   _ref: string;
   _type: "reference";
@@ -211,148 +230,6 @@ export type VendorApplication = {
   approvalNotes?: string;
   rejectionReason?: string;
   adminNotes?: string;
-};
-
-export type Store = {
-  _id: string;
-  _type: "store";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  image?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  address?: {
-    street?: string;
-    house?: string;
-    city?: string;
-    state?: string;
-    zipCode?: string;
-    country?:
-      | "US"
-      | "CA"
-      | "BD"
-      | "UK"
-      | "AU"
-      | "DE"
-      | "FR"
-      | "ES"
-      | "IT"
-      | "NL"
-      | "BE"
-      | "CH"
-      | "AT"
-      | "PL"
-      | "SE"
-      | "NO"
-      | "DK"
-      | "FI"
-      | "IE"
-      | "PT"
-      | "GR"
-      | "CZ"
-      | "HU"
-      | "RO"
-      | "BG"
-      | "HR"
-      | "SK"
-      | "SI"
-      | "LU"
-      | "MT"
-      | "CY"
-      | "JP"
-      | "KR"
-      | "CN"
-      | "IN"
-      | "SG"
-      | "MY"
-      | "TH"
-      | "ID"
-      | "PH"
-      | "VN"
-      | "NZ"
-      | "ZA"
-      | "AE"
-      | "SA"
-      | "IL"
-      | "TR"
-      | "BR"
-      | "MX"
-      | "AR"
-      | "CL"
-      | "CO";
-  };
-  coordinates?: {
-    lat?: number;
-    lng?: number;
-  };
-  contact?: {
-    phone?: string;
-    email?: string;
-  };
-  hours?: {
-    monday?: {
-      open?: string;
-      close?: string;
-      closed?: boolean;
-    };
-    tuesday?: {
-      open?: string;
-      close?: string;
-      closed?: boolean;
-    };
-    wednesday?: {
-      open?: string;
-      close?: string;
-      closed?: boolean;
-    };
-    thursday?: {
-      open?: string;
-      close?: string;
-      closed?: boolean;
-    };
-    friday?: {
-      open?: string;
-      close?: string;
-      closed?: boolean;
-    };
-    saturday?: {
-      open?: string;
-      close?: string;
-      closed?: boolean;
-    };
-    sunday?: {
-      open?: string;
-      close?: string;
-      closed?: boolean;
-    };
-  };
-  description?: string;
-  features?: Array<string>;
-  isActive?: boolean;
-  sortOrder?: number;
-};
-
-export type Subscription = {
-  _id: string;
-  _type: "subscription";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  email?: string;
-  status?: "active" | "unsubscribed" | "pending";
-  subscribedAt?: string;
-  unsubscribedAt?: string;
-  source?: "footer" | "popup" | "checkout" | "other";
-  ipAddress?: string;
-  userAgent?: string;
 };
 
 export type ProductReference = {
@@ -587,6 +464,7 @@ export type User = {
   }>;
   lastLogin?: string;
   isActive?: boolean;
+  role?: "user" | "admin" | "vendor" | "employee";
   isVendor?: boolean;
   vendorStatus?: "none" | "pending" | "active" | "rejected" | "suspended";
   vendorAppliedAt?: string;
@@ -1066,7 +944,6 @@ export type Product = {
     } & ProductColorReference
   >;
   isFeatured?: boolean;
-  isOffer?: boolean;
   enableRatingsManagement?: boolean;
   averageRating?: number;
   totalReviews?: number;
@@ -1235,6 +1112,7 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | StoreSettings
   | SanityImageAssetReference
   | CategoryReference
   | BrandReference
@@ -1248,8 +1126,6 @@ export type AllSanitySchemaTypes =
   | Slug
   | UserReference
   | VendorApplication
-  | Store
-  | Subscription
   | ProductReference
   | Review
   | UserAccessRequest
@@ -1285,21 +1161,433 @@ export type AllSanitySchemaTypes =
   | SanityImageAsset
   | Geopoint;
 
-// Source: src/components/AvailableCoupons.tsx
+// Source: app/(client)/payment-success/page.tsx
 // Variable: query
-// Query: *[        _type == "coupon" &&         isActive == true &&         isPublic == true &&        startDate <= $now &&        (!defined(expiryDate) || expiryDate > $now)      ] | order(discountValue desc) [0...6] {        _id,        name,        code,        description,        discountType,        discountValue,        minimumOrderAmount,        expiryDate      }
+// Query: *[_type == 'order' && firebaseUid == $userId] | order(orderDate desc){  ...,  products[]{    ...,product->  },  subtotal,  shipping,  tax,  totalPrice,  productDiscount,  amountDiscount,  businessDiscount,  coupon {    code,    discountType,    discountValue,    discountAmount  }}
 export type QueryResult = Array<{
   _id: string;
-  name: string | null;
-  code: string | null;
-  description: string | null;
-  discountType: "fixed" | "percentage" | null;
-  discountValue: number | null;
-  minimumOrderAmount: number | null;
-  expiryDate: string | null;
+  _type: "order";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  orderNumber?: string;
+  invoice?: {
+    id?: string;
+    number?: string;
+    hosted_invoice_url?: string;
+  };
+  stripeCheckoutSessionId?: string;
+  stripeCustomerId?: string;
+  firebaseUid?: string;
+  clerkPaymentId?: string;
+  clerkPaymentStatus?: string;
+  customerName?: string;
+  email?: string;
+  stripePaymentIntentId?: string;
+  sslcommerzTransactionId?: string;
+  sslcommerzSessionKey?: string;
+  sslcommerzValidationId?: string;
+  sslcommerzBankTransactionId?: string;
+  sslcommerzCardType?: string;
+  sslcommerzCardIssuer?: string;
+  sslcommerzCardBrand?: string;
+  sslcommerzCardNo?: string;
+  sslcommerzTransactionDate?: string;
+  paidAt?: string;
+  products: Array<{
+    product: {
+      _id: string;
+      _type: "product";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      name?: string;
+      slug?: Slug;
+      images?: Array<{
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      }>;
+      description?: string;
+      price?: number;
+      baseWeight?: number;
+      discount?: number;
+      categories?: Array<
+        {
+          _key: string;
+        } & CategoryReference
+      >;
+      stock?: number;
+      brand?: BrandReference;
+      status?: "hot" | "new" | "sale";
+      variant?: ProductVariantReference;
+      hasWeights?: boolean;
+      useAllWeights?: boolean;
+      weights?: Array<
+        {
+          _key: string;
+        } & ProductWeightReference
+      >;
+      hasVariants?: boolean;
+      useAllSizes?: boolean;
+      sizes?: Array<
+        {
+          _key: string;
+        } & ProductSizeReference
+      >;
+      useAllColors?: boolean;
+      colors?: Array<
+        {
+          _key: string;
+        } & ProductColorReference
+      >;
+      isFeatured?: boolean;
+      enableRatingsManagement?: boolean;
+      averageRating?: number;
+      totalReviews?: number;
+      ratingDistribution?: {
+        fiveStars?: number;
+        fourStars?: number;
+        threeStars?: number;
+        twoStars?: number;
+        oneStar?: number;
+      };
+    } | null;
+    quantity?: number;
+    _key: string;
+  }> | null;
+  subtotal: number | null;
+  tax: number | null;
+  shipping: number | null;
+  totalPrice: number | null;
+  currency?: string;
+  amountDiscount: number | null;
+  productDiscount: number | null;
+  businessDiscount: number | null;
+  coupon: {
+    code: string | null;
+    discountType: "fixed" | "percentage" | null;
+    discountValue: number | null;
+    discountAmount: number | null;
+  } | null;
+  address?: {
+    state?: string;
+    zip?: string;
+    city?: string;
+    address?: string;
+    name?: string;
+  };
+  status?:
+    | "address_confirmed"
+    | "cancelled"
+    | "completed"
+    | "delivered"
+    | "failed_delivery"
+    | "order_confirmed"
+    | "out_for_delivery"
+    | "packed"
+    | "pending"
+    | "ready_for_delivery"
+    | "rescheduled";
+  orderDate?: string;
+  paymentStatus?: "cancelled" | "failed" | "paid" | "pending";
+  paymentMethod?:
+    | "card"
+    | "cash_on_delivery"
+    | "clerk"
+    | "sslcommerz"
+    | "stripe";
+  addressConfirmedBy?: string;
+  addressConfirmedAt?: string;
+  orderConfirmedBy?: string;
+  orderConfirmedAt?: string;
+  packedBy?: string;
+  packedAt?: string;
+  packingNotes?: string;
+  assignedWarehouseBy?: string;
+  assignedWarehouseAt?: string;
+  dispatchedBy?: string;
+  dispatchedAt?: string;
+  assignedDeliverymanId?: string;
+  assignedDeliverymanName?: string;
+  deliveredBy?: string;
+  deliveredAt?: string;
+  deliveryNotes?: string;
+  deliveryAttempts?: number;
+  rescheduledDate?: string;
+  rescheduledReason?: string;
+  cashCollected?: boolean;
+  cashCollectedAmount?: number;
+  cashCollectedAt?: string;
+  cashSubmittedToAccounts?: boolean;
+  cashSubmittedBy?: string;
+  cashSubmittedAt?: string;
+  cashSubmissionNotes?: string;
+  assignedAccountsEmployeeId?: string;
+  assignedAccountsEmployeeName?: string;
+  cashSubmissionStatus?: "confirmed" | "not_submitted" | "pending" | "rejected";
+  cashSubmissionRejectionReason?: string;
+  paymentReceivedBy?: string;
+  paymentReceivedAt?: string;
+  cancellationRequested?: boolean;
+  cancellationRequestedAt?: string;
+  cancellationRequestReason?: string;
+  cancelledAt?: string;
+  cancelledBy?: string;
+  cancellationReason?: string;
+  amountPaid?: number;
+  refundedToWallet?: boolean;
+  refundAmount?: number;
+  statusHistory?: Array<{
+    status?: string;
+    changedBy?: string;
+    changedByRole?:
+      | "accounts"
+      | "admin"
+      | "callcenter"
+      | "deliveryman"
+      | "incharge"
+      | "packer"
+      | "system"
+      | "warehouse";
+    changedAt?: string;
+    notes?: string;
+    _key: string;
+  }>;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/helpers/index.ts
+// Variable: PRODUCT_BY_CATEGORY_QUERY
+// Query: *[_type == 'product' && references(*[_type == "category" && slug.current == $categorySlug]._id)] | order(name asc)
+export type PRODUCT_BY_CATEGORY_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  images?: Array<{
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+  description?: string;
+  price?: number;
+  baseWeight?: number;
+  discount?: number;
+  categories?: Array<
+    {
+      _key: string;
+    } & CategoryReference
+  >;
+  stock?: number;
+  brand?: BrandReference;
+  status?: "hot" | "new" | "sale";
+  variant?: ProductVariantReference;
+  hasWeights?: boolean;
+  useAllWeights?: boolean;
+  weights?: Array<
+    {
+      _key: string;
+    } & ProductWeightReference
+  >;
+  hasVariants?: boolean;
+  useAllSizes?: boolean;
+  sizes?: Array<
+    {
+      _key: string;
+    } & ProductSizeReference
+  >;
+  useAllColors?: boolean;
+  colors?: Array<
+    {
+      _key: string;
+    } & ProductColorReference
+  >;
+  isFeatured?: boolean;
+  enableRatingsManagement?: boolean;
+  averageRating?: number;
+  totalReviews?: number;
+  ratingDistribution?: {
+    fiveStars?: number;
+    fourStars?: number;
+    threeStars?: number;
+    twoStars?: number;
+    oneStar?: number;
+  };
+}>;
+
+// Source: sanity/helpers/index.ts
+// Variable: SALE_QUERY
+// Query: *[_type == 'sale'] | order(name asc)
+export type SALE_QUERY_RESULT = Array<never>;
+
+// Source: sanity/helpers/index.ts
+// Variable: MY_ORDERS_QUERY
+// Query: *[_type == 'order' && firebaseUid == $userId] | order(orderDate desc)[$start...$end]{    ...,    paymentStatus,    paymentMethod,    productDiscount,    amountDiscount,    businessDiscount,    products[]{      ...,      product->{        _id,        name,        slug,        "image": images[0],        price      }    }  }
+export type MY_ORDERS_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "order";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  orderNumber?: string;
+  invoice?: {
+    id?: string;
+    number?: string;
+    hosted_invoice_url?: string;
+  };
+  stripeCheckoutSessionId?: string;
+  stripeCustomerId?: string;
+  firebaseUid?: string;
+  clerkPaymentId?: string;
+  clerkPaymentStatus?: string;
+  customerName?: string;
+  email?: string;
+  stripePaymentIntentId?: string;
+  sslcommerzTransactionId?: string;
+  sslcommerzSessionKey?: string;
+  sslcommerzValidationId?: string;
+  sslcommerzBankTransactionId?: string;
+  sslcommerzCardType?: string;
+  sslcommerzCardIssuer?: string;
+  sslcommerzCardBrand?: string;
+  sslcommerzCardNo?: string;
+  sslcommerzTransactionDate?: string;
+  paidAt?: string;
+  products: Array<{
+    product: {
+      _id: string;
+      name: string | null;
+      slug: Slug | null;
+      image: {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      } | null;
+      price: number | null;
+    } | null;
+    quantity?: number;
+    _key: string;
+  }> | null;
+  subtotal?: number;
+  tax?: number;
+  shipping?: number;
+  totalPrice?: number;
+  currency?: string;
+  amountDiscount: number | null;
+  productDiscount: number | null;
+  businessDiscount: number | null;
+  coupon?: {
+    code?: string;
+    discountType?: "fixed" | "percentage";
+    discountValue?: number;
+    discountAmount?: number;
+    couponRef?: CouponReference;
+  };
+  address?: {
+    state?: string;
+    zip?: string;
+    city?: string;
+    address?: string;
+    name?: string;
+  };
+  status?:
+    | "address_confirmed"
+    | "cancelled"
+    | "completed"
+    | "delivered"
+    | "failed_delivery"
+    | "order_confirmed"
+    | "out_for_delivery"
+    | "packed"
+    | "pending"
+    | "ready_for_delivery"
+    | "rescheduled";
+  orderDate?: string;
+  paymentStatus: "cancelled" | "failed" | "paid" | "pending" | null;
+  paymentMethod:
+    | "card"
+    | "cash_on_delivery"
+    | "clerk"
+    | "sslcommerz"
+    | "stripe"
+    | null;
+  addressConfirmedBy?: string;
+  addressConfirmedAt?: string;
+  orderConfirmedBy?: string;
+  orderConfirmedAt?: string;
+  packedBy?: string;
+  packedAt?: string;
+  packingNotes?: string;
+  assignedWarehouseBy?: string;
+  assignedWarehouseAt?: string;
+  dispatchedBy?: string;
+  dispatchedAt?: string;
+  assignedDeliverymanId?: string;
+  assignedDeliverymanName?: string;
+  deliveredBy?: string;
+  deliveredAt?: string;
+  deliveryNotes?: string;
+  deliveryAttempts?: number;
+  rescheduledDate?: string;
+  rescheduledReason?: string;
+  cashCollected?: boolean;
+  cashCollectedAmount?: number;
+  cashCollectedAt?: string;
+  cashSubmittedToAccounts?: boolean;
+  cashSubmittedBy?: string;
+  cashSubmittedAt?: string;
+  cashSubmissionNotes?: string;
+  assignedAccountsEmployeeId?: string;
+  assignedAccountsEmployeeName?: string;
+  cashSubmissionStatus?: "confirmed" | "not_submitted" | "pending" | "rejected";
+  cashSubmissionRejectionReason?: string;
+  paymentReceivedBy?: string;
+  paymentReceivedAt?: string;
+  cancellationRequested?: boolean;
+  cancellationRequestedAt?: string;
+  cancellationRequestReason?: string;
+  cancelledAt?: string;
+  cancelledBy?: string;
+  cancellationReason?: string;
+  amountPaid?: number;
+  refundedToWallet?: boolean;
+  refundAmount?: number;
+  statusHistory?: Array<{
+    status?: string;
+    changedBy?: string;
+    changedByRole?:
+      | "accounts"
+      | "admin"
+      | "callcenter"
+      | "deliveryman"
+      | "incharge"
+      | "packer"
+      | "system"
+      | "warehouse";
+    changedAt?: string;
+    notes?: string;
+    _key: string;
+  }>;
+}>;
+
+// Source: sanity/helpers/index.ts
+// Variable: COUNT_QUERY
+// Query: count(*[_type == 'order' && firebaseUid == $userId])
+export type COUNT_QUERY_RESULT = number;
+
+// Source: sanity/queries/query.ts
 // Variable: BANNER_QUERY
 // Query: *[_type == 'banner'] | order(publishedAt desc)
 export type BANNER_QUERY_RESULT = Array<{
@@ -1320,12 +1608,12 @@ export type BANNER_QUERY_RESULT = Array<{
   buttonHref?: string;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: FEATURED_CATEGORY_QUERY
 // Query: *[_type == 'category' && featured == true] | order(name desc)
 export type FEATURED_CATEGORY_QUERY_RESULT = Array<never>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: ALL_PRODUCTS_QUERY
 // Query: *[_type=="product"] | order(name asc)
 export type ALL_PRODUCTS_QUERY_RESULT = Array<{
@@ -1378,7 +1666,6 @@ export type ALL_PRODUCTS_QUERY_RESULT = Array<{
     } & ProductColorReference
   >;
   isFeatured?: boolean;
-  isOffer?: boolean;
   enableRatingsManagement?: boolean;
   averageRating?: number;
   totalReviews?: number;
@@ -1391,69 +1678,7 @@ export type ALL_PRODUCTS_QUERY_RESULT = Array<{
   };
 }>;
 
-// Source: src/sanity/queries/query.ts
-// Variable: DEAL_PRODUCTS
-// Query: *[_type == 'product' && status == 'hot'] | order(name asc){  ...,"categories": categories[]->title}
-export type DEAL_PRODUCTS_RESULT = Array<{
-  _id: string;
-  _type: "product";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  images?: Array<{
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
-  }>;
-  description?: string;
-  price?: number;
-  baseWeight?: number;
-  discount?: number;
-  categories: Array<string | null> | null;
-  stock?: number;
-  brand?: BrandReference;
-  status: "hot";
-  variant?: ProductVariantReference;
-  hasWeights?: boolean;
-  useAllWeights?: boolean;
-  weights?: Array<
-    {
-      _key: string;
-    } & ProductWeightReference
-  >;
-  hasVariants?: boolean;
-  useAllSizes?: boolean;
-  sizes?: Array<
-    {
-      _key: string;
-    } & ProductSizeReference
-  >;
-  useAllColors?: boolean;
-  colors?: Array<
-    {
-      _key: string;
-    } & ProductColorReference
-  >;
-  isFeatured?: boolean;
-  isOffer?: boolean;
-  enableRatingsManagement?: boolean;
-  averageRating?: number;
-  totalReviews?: number;
-  ratingDistribution?: {
-    fiveStars?: number;
-    fourStars?: number;
-    threeStars?: number;
-    twoStars?: number;
-    oneStar?: number;
-  };
-}>;
-
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: FEATURE_PRODUCTS
 // Query: *[_type == 'product' && isFeatured == true] | order(name asc){  ...,"categories": categories[]->title}
 export type FEATURE_PRODUCTS_RESULT = Array<{
@@ -1502,7 +1727,6 @@ export type FEATURE_PRODUCTS_RESULT = Array<{
     } & ProductColorReference
   >;
   isFeatured: true;
-  isOffer?: boolean;
   enableRatingsManagement?: boolean;
   averageRating?: number;
   totalReviews?: number;
@@ -1515,7 +1739,7 @@ export type FEATURE_PRODUCTS_RESULT = Array<{
   };
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: BRANDS_QUERY
 // Query: *[_type=='brand'] | order(name asc)
 export type BRANDS_QUERY_RESULT = Array<{
@@ -1536,7 +1760,7 @@ export type BRANDS_QUERY_RESULT = Array<{
   };
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: LATEST_BLOG_QUERY
 // Query: *[_type == 'blog' && isLatest == true]|order(name asc){    ...,    blogcategories[]->{    title  }  }
 export type LATEST_BLOG_QUERY_RESULT = Array<{
@@ -1563,7 +1787,7 @@ export type LATEST_BLOG_QUERY_RESULT = Array<{
   body?: BlockContent;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: GET_ALL_BLOG
 // Query: *[_type == 'blog'] | order(publishedAt desc)[0...$quantity]{  ...,       blogcategories[]->{    title}    }
 export type GET_ALL_BLOG_RESULT = Array<{
@@ -1590,7 +1814,7 @@ export type GET_ALL_BLOG_RESULT = Array<{
   body?: BlockContent;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: SINGLE_BLOG_QUERY
 // Query: *[_type == "blog" && slug.current == $slug][0]{  ...,     author->{    name,    image,  },  blogcategories[]->{    title,    "slug": slug.current,  },}
 export type SINGLE_BLOG_QUERY_RESULT = {
@@ -1627,7 +1851,7 @@ export type SINGLE_BLOG_QUERY_RESULT = {
   body?: BlockContent;
 } | null;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: BLOG_CATEGORIES
 // Query: *[_type == "blog"]{     blogcategories[]->{    ...    }  }
 export type BLOG_CATEGORIES_RESULT = Array<{
@@ -1643,7 +1867,7 @@ export type BLOG_CATEGORIES_RESULT = Array<{
   }> | null;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: OTHERS_BLOG_QUERY
 // Query: *[  _type == "blog"  && defined(slug.current)  && slug.current != $slug]|order(publishedAt desc)[0...$quantity]{...  publishedAt,  title,  mainImage,  slug,  author->{    name,    image,  },  categories[]->{    title,    "slug": slug.current,  }}
 export type OTHERS_BLOG_QUERY_RESULT = Array<{
@@ -1669,7 +1893,7 @@ export type OTHERS_BLOG_QUERY_RESULT = Array<{
   categories: null;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: ADDRESS_QUERY
 // Query: *[_type=="address"] | order(publishedAt desc)
 export type ADDRESS_QUERY_RESULT = Array<{
@@ -1695,7 +1919,7 @@ export type ADDRESS_QUERY_RESULT = Array<{
   createdAt?: string;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: ALLCATEGORIES_QUERY
 // Query: *[_type == 'category'] | order(name asc) [0...$quantity]
 export type ALLCATEGORIES_QUERY_RESULT = Array<{
@@ -1716,7 +1940,7 @@ export type ALLCATEGORIES_QUERY_RESULT = Array<{
   };
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: ADMIN_CATEGORIES_QUERY
 // Query: *[_type == 'category'] | order(title asc) {    _id,    title,    slug,    description,    featured  }
 export type ADMIN_CATEGORIES_QUERY_RESULT = Array<{
@@ -1727,7 +1951,7 @@ export type ADMIN_CATEGORIES_QUERY_RESULT = Array<{
   featured: null;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: PRODUCT_BY_SLUG_QUERY
 // Query: *[_type == "product" && slug.current == $slug] | order(name asc) [0]{    ...,    "averageRating": math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating),    "totalReviews": count(*[_type == "review" && product._ref == ^._id && status == "approved"]),    variant->{      _id,      title,      slug    },    brand->{      _id,      title,      slug    },    categories[]->{      _id,      title,      slug    },    "weights": select(      useAllWeights == true => *[_type == "productWeight" && isActive == true] | order(weight asc) {        _id,        name,        value,        unit,        numericValue,        isActive      },      weights[]->{        _id,        name,        value,        unit,        numericValue,        isActive      }    ),    "sizes": select(      useAllSizes == true => *[_type == "productSize" && isActive == true] | order(weight asc) {        _id,        value,        isActive      },      sizes[]->{        _id,        value,        isActive      }    ),    "colors": select(      useAllColors == true => *[_type == "productColor" && isActive == true] | order(weight asc) {        _id,        name,        "value": hexCode,        isActive      },      colors[]->{        _id,        name,        "value": hexCode,        isActive      }    )  }
 export type PRODUCT_BY_SLUG_QUERY_RESULT = {
@@ -1817,7 +2041,6 @@ export type PRODUCT_BY_SLUG_QUERY_RESULT = {
       }>
     | null;
   isFeatured?: boolean;
-  isOffer?: boolean;
   enableRatingsManagement?: boolean;
   averageRating: number | null;
   totalReviews: number;
@@ -1830,7 +2053,7 @@ export type PRODUCT_BY_SLUG_QUERY_RESULT = {
   };
 } | null;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: RELATED_PRODUCTS_QUERY
 // Query: *[_type == "product" && count((categories[]._ref)[@ in $categoryIds]) > 0 && slug.current != $currentSlug] | order(name asc) [0...$limit]{    _id,    name,    slug,    price,    discount,    stock,    images,    categories[]->{      _id,      title,      slug    }  }
 export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
@@ -1855,14 +2078,14 @@ export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
   }> | null;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: BRAND_QUERY
 // Query: *[_type == "product" && slug.current == $slug]{"brandName": brand->title}
 export type BRAND_QUERY_RESULT = Array<{
   brandName: string | null;
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: PRODUCTS_BY_VARIANT_QUERY
 // Query: *[_type == "product" && variant->slug.current == $variantSlug] | order(name asc) {    ...,    variant->{      _id,      title,      slug,      description,      image    },    brand->{      _id,      title,      slug    },    categories[]->{      _id,      title,      slug    },    "averageRating": math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating),    "totalReviews": count(*[_type == "review" && product._ref == ^._id && status == "approved"])  }
 export type PRODUCTS_BY_VARIANT_QUERY_RESULT = Array<{
@@ -1931,7 +2154,6 @@ export type PRODUCTS_BY_VARIANT_QUERY_RESULT = Array<{
     } & ProductColorReference
   >;
   isFeatured?: boolean;
-  isOffer?: boolean;
   enableRatingsManagement?: boolean;
   averageRating: number | null;
   totalReviews: number;
@@ -1944,7 +2166,7 @@ export type PRODUCTS_BY_VARIANT_QUERY_RESULT = Array<{
   };
 }>;
 
-// Source: src/sanity/queries/query.ts
+// Source: sanity/queries/query.ts
 // Variable: VARIANT_BY_SLUG_QUERY
 // Query: *[_type == "productVariant" && slug.current == $slug][0]{    _id,    title,    slug,    description,    image,    seoTitle,    seoDescription,    "productCount": count(*[_type == "product" && variant._ref == ^._id])  }
 export type VARIANT_BY_SLUG_QUERY_RESULT = {
@@ -1968,11 +2190,14 @@ export type VARIANT_BY_SLUG_QUERY_RESULT = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[\n        _type == "coupon" && \n        isActive == true && \n        isPublic == true &&\n        startDate <= $now &&\n        (!defined(expiryDate) || expiryDate > $now)\n      ] | order(discountValue desc) [0...6] {\n        _id,\n        name,\n        code,\n        description,\n        discountType,\n        discountValue,\n        minimumOrderAmount,\n        expiryDate\n      }': QueryResult;
+    "*[_type == 'order' && firebaseUid == $userId] | order(orderDate desc){\n  ...,\n  products[]{\n    ...,product->\n  },\n  subtotal,\n  shipping,\n  tax,\n  totalPrice,\n  productDiscount,\n  amountDiscount,\n  businessDiscount,\n  coupon {\n    code,\n    discountType,\n    discountValue,\n    discountAmount\n  }\n}": QueryResult;
+    "*[_type == 'product' && references(*[_type == \"category\" && slug.current == $categorySlug]._id)] | order(name asc)": PRODUCT_BY_CATEGORY_QUERY_RESULT;
+    "*[_type == 'sale'] | order(name asc)": SALE_QUERY_RESULT;
+    "*[_type == 'order' && firebaseUid == $userId] | order(orderDate desc)[$start...$end]{\n    ...,\n    paymentStatus,\n    paymentMethod,\n    productDiscount,\n    amountDiscount,\n    businessDiscount,\n    products[]{\n      ...,\n      product->{\n        _id,\n        name,\n        slug,\n        \"image\": images[0],\n        price\n      }\n    }\n  }": MY_ORDERS_QUERY_RESULT;
+    "count(*[_type == 'order' && firebaseUid == $userId])": COUNT_QUERY_RESULT;
     "*[_type == 'banner'] | order(publishedAt desc)": BANNER_QUERY_RESULT;
     "*[_type == 'category' && featured == true] | order(name desc)": FEATURED_CATEGORY_QUERY_RESULT;
     '*[_type=="product"] | order(name asc)': ALL_PRODUCTS_QUERY_RESULT;
-    "*[_type == 'product' && status == 'hot'] | order(name asc){\n  ...,\"categories\": categories[]->title\n}": DEAL_PRODUCTS_RESULT;
     "*[_type == 'product' && isFeatured == true] | order(name asc){\n  ...,\"categories\": categories[]->title\n}": FEATURE_PRODUCTS_RESULT;
     "*[_type=='brand'] | order(name asc) ": BRANDS_QUERY_RESULT;
     " *[_type == 'blog' && isLatest == true]|order(name asc){\n    ...,\n    blogcategories[]->{\n    title\n  }\n  }": LATEST_BLOG_QUERY_RESULT;
