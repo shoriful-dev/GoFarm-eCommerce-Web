@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { useAuthStore } from "@/stores/authStore";
+import { useEffect, useState } from "react";
+// import { useAuthStore } from "@/stores/authStore";
 import Container from "./Container";
 import HeaderMenu from "./layout/HeaderMenu";
 import ProductsMegaMenu from "./layout/ProductsMegaMenu";
@@ -16,6 +16,7 @@ import UserDropdown from "./UserDropdown";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Store } from "lucide-react";
 import TopHeaderBadge from "./TopHeaderBadge";
+import { useAuthStore } from "../stores/authStore";
 
 const ClientHeader = () => {
   const { user, loading } = useAuthStore();

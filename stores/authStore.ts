@@ -15,8 +15,8 @@ import {
   signInWithEmailLink,
   UserCredential,
 } from "firebase/auth";
-import { auth } from "@/lib/firebase";
 import { toast } from "sonner";
+import { auth } from "../lib/firebase";
 
 // User -> Sanity sync is handled atomically inside `/api/auth/session`
 // (see app/api/auth/session/route.ts). The session route mints the
