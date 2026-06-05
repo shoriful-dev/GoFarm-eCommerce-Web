@@ -288,7 +288,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         // Load and sync cart/wishlist from Sanity (the user doc is
         // guaranteed to exist at this point because /api/auth/session
         // awaited syncUserToSanity before responding).
-        const { default: useCartStore } = await import("@/store");
+        const { default: useCartStore } = await import("../store");
         await useCartStore.getState().loadCartFromSanity();
         await useCartStore.getState().loadWishlistFromSanity();
 

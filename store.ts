@@ -2,7 +2,7 @@ import { Product } from './sanity.types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import _ from 'lodash';
-import { auth } from '@/lib/firebase';
+import { auth } from './lib/firebase';
 
 // Helper function to get auth token
 async function getAuthToken(): Promise<string | null> {

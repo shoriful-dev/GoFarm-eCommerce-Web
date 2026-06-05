@@ -1,6 +1,6 @@
 // Centralized analytics service for Firebase event tracking
 
-import { analytics, getAnalyticsAsync } from "@/lib/firebase";
+import { analytics, getAnalyticsAsync } from "../lib/firebase";
 import {
   logEvent,
   setUserId,

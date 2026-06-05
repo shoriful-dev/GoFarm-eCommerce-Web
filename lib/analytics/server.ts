@@ -11,7 +11,7 @@
  * Docs: https://developers.google.com/analytics/devguides/collection/protocol/ga4
  */
 
-import type { GA4Item } from "@/lib/analytics";
+import type { GA4Item } from "../../lib/analytics";
 
 const ENDPOINT = "https://www.google-analytics.com/mp/collect";
 const DEBUG_ENDPOINT = "https://www.google-analytics.com/debug/mp/collect";
