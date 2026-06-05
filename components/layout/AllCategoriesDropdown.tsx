@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronDown, LayoutGrid, Loader2 } from "lucide-react";
-import { urlFor } from "@/sanity/lib/image";
+import { urlFor } from "../../sanity/lib/image";
 
 interface CategoryItem {
   _id: string;

@@ -1,5 +1,5 @@
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
-import { contactConfig } from "@/config/contact";
+import { contactConfig } from "../../config/contact";
 
 interface ContactItemData {
   title: string;

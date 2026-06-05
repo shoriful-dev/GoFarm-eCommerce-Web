@@ -1,5 +1,4 @@
 "use client";
-
 import {
   X,
   Home,
@@ -30,10 +29,10 @@ import { FC, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
-import { useAuthStore } from "@/stores/authStore";
-import useStore from "@/store";
-import { useUserDataStore } from "@/stores/userDataStore";
-import { useIsAdmin } from "@/lib/adminUtils";
+import { useAuthStore } from "../../stores/authStore";
+import useStore from "../..//store";
+import { useUserDataStore } from "../../stores/userDataStore";
+import { useIsAdmin } from "../../lib/adminUtils";
 import Logo from "../common/Logo";
 import SocialMedia from "../common/SocialMedia";
 
@@ -188,17 +187,17 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 z-[100] bg-gray-900/45 backdrop-blur-sm"
+            className="fixed inset-0 z-100 bg-gray-900/45 backdrop-blur-sm"
           />
 
           {/* Panel */}
           <motion.aside
             key="sidebar-panel"
-            initial={{ x: "-100%" }}
+            initial={{ x: '-100%' }}
             animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{ type: "tween", ease: "easeInOut", duration: 0.28 }}
-            className="fixed inset-y-0 left-0 z-[101] w-[88%] max-w-sm bg-white shadow-2xl flex flex-col"
+            exit={{ x: '-100%' }}
+            transition={{ type: 'tween', ease: 'easeInOut', duration: 0.28 }}
+            className="fixed inset-y-0 left-0 z-101 w-[88%] max-w-sm bg-white shadow-2xl flex flex-col"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile menu"
@@ -224,29 +223,24 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                   <Link
                     href={accountHref}
                     onClick={onClose}
-                    className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-gradient-to-br from-gofarm-light-green/10 to-white hover:border-gofarm-green/40 transition-colors"
+                    className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 bg-linear-to-br from-gofarm-light-green/10 to-white hover:border-gofarm-green/40 transition-colors"
                   >
                     <div className="w-11 h-11 rounded-full bg-gofarm-green text-white flex items-center justify-center font-bold uppercase shrink-0">
-                      {(user.displayName ?? user.email ?? "U").charAt(0)}
+                      {(user.displayName ?? user.email ?? 'U').charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-gray-900 truncate">
-                        {user.displayName ?? "Welcome back"}
+                        {user.displayName ?? 'Welcome back'}
                       </p>
-                      <p className="text-xs text-gray-500 truncate">
-                        {user.email}
-                      </p>
+                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
                       <p className="text-[11px] font-semibold text-gofarm-green mt-0.5 truncate">
                         Go to {accountLabel}
                       </p>
                     </div>
-                    <ChevronRight
-                      size={18}
-                      className="text-gray-400 shrink-0"
-                    />
+                    <ChevronRight size={18} className="text-gray-400 shrink-0" />
                   </Link>
                 ) : (
-                  <div className="rounded-xl border border-gray-200 bg-gradient-to-br from-gofarm-light-green/10 to-white p-4">
+                  <div className="rounded-xl border border-gray-200 bg-linear-to-br from-gofarm-light-green/10 to-white p-4">
                     <div className="flex items-center gap-2 text-gray-700 mb-3">
                       <Sparkles size={16} className="text-gofarm-green" />
                       <p className="text-sm font-semibold">Welcome to GoFarm</p>
@@ -288,11 +282,9 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                     className="relative flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-gofarm-green/40 hover:bg-gofarm-light-green/5 transition-colors"
                   >
                     <ShoppingCart size={18} className="text-gofarm-green" />
-                    <span className="text-[11px] font-semibold text-gray-700">
-                      Cart
-                    </span>
+                    <span className="text-[11px] font-semibold text-gray-700">Cart</span>
                     {cartCount > 0 && (
-                      <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 bg-gofarm-green text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                      <span className="absolute top-1.5 right-1.5 min-w-4.5 h-4.5 px-1 bg-gofarm-green text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                         {cartCount}
                       </span>
                     )}
@@ -304,11 +296,9 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                     className="relative flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-pink-300 hover:bg-pink-50/50 transition-colors"
                   >
                     <Heart size={18} className="text-pink-500" />
-                    <span className="text-[11px] font-semibold text-gray-700">
-                      Wishlist
-                    </span>
+                    <span className="text-[11px] font-semibold text-gray-700">Wishlist</span>
                     {wishlistCount > 0 && (
-                      <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 bg-pink-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                      <span className="absolute top-1.5 right-1.5 min-w-4.5 h-4.5 px-1 bg-pink-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                         {wishlistCount}
                       </span>
                     )}
@@ -316,13 +306,11 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
 
                   <Link
                     onClick={onClose}
-                    href={user ? "/orders" : "/sign-in"}
+                    href={user ? '/orders' : '/sign-in'}
                     className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-50/50 transition-colors"
                   >
                     <Package size={18} className="text-blue-500" />
-                    <span className="text-[11px] font-semibold text-gray-700">
-                      Orders
-                    </span>
+                    <span className="text-[11px] font-semibold text-gray-700">Orders</span>
                   </Link>
                 </div>
               </div>
@@ -332,9 +320,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
                   Browse
                 </h3>
-                <nav className="flex flex-col gap-1">
-                  {mainMenuItems.map(renderMenuLink)}
-                </nav>
+                <nav className="flex flex-col gap-1">{mainMenuItems.map(renderMenuLink)}</nav>
               </div>
 
               {/* My Account */}
@@ -343,9 +329,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                   <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
                     My Account
                   </h3>
-                  <nav className="flex flex-col gap-1">
-                    {userMenuItems.map(renderMenuLink)}
-                  </nav>
+                  <nav className="flex flex-col gap-1">{userMenuItems.map(renderMenuLink)}</nav>
                 </div>
               )}
 
@@ -355,9 +339,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                   <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 inline-flex items-center gap-1.5 text-gofarm-green">
                     <Shield size={12} /> Admin
                   </h3>
-                  <nav className="flex flex-col gap-1">
-                    {adminMenuItems.map(renderMenuLink)}
-                  </nav>
+                  <nav className="flex flex-col gap-1">{adminMenuItems.map(renderMenuLink)}</nav>
                 </div>
               )}
               {user && isVendor && !isAdmin && (
@@ -365,9 +347,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                   <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 inline-flex items-center gap-1.5 text-gofarm-green">
                     <Store size={12} /> Vendor
                   </h3>
-                  <nav className="flex flex-col gap-1">
-                    {vendorMenuItems.map(renderMenuLink)}
-                  </nav>
+                  <nav className="flex flex-col gap-1">{vendorMenuItems.map(renderMenuLink)}</nav>
                 </div>
               )}
               {user && isEmployee && !isAdmin && (
@@ -375,9 +355,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                   <h3 className="text-[11px] font-bold uppercase tracking-wider mb-2 inline-flex items-center gap-1.5 text-gofarm-green">
                     <Briefcase size={12} /> Employee
                   </h3>
-                  <nav className="flex flex-col gap-1">
-                    {employeeMenuItems.map(renderMenuLink)}
-                  </nav>
+                  <nav className="flex flex-col gap-1">{employeeMenuItems.map(renderMenuLink)}</nav>
                 </div>
               )}
 
@@ -386,7 +364,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <Link
                   href="/deal"
                   onClick={onClose}
-                  className="block rounded-xl bg-gradient-to-br from-gofarm-green to-gofarm-light-green p-4 text-white shadow-sm hover:shadow-md transition-shadow"
+                  className="block rounded-xl bg-linear-to-br from-gofarm-green to-gofarm-light-green p-4 text-white shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <Flame size={16} className="text-amber-300" />
@@ -407,9 +385,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
                   Support
                 </h3>
-                <nav className="flex flex-col gap-1">
-                  {supportMenuItems.map(renderMenuLink)}
-                </nav>
+                <nav className="flex flex-col gap-1">{supportMenuItems.map(renderMenuLink)}</nav>
               </div>
 
               {/* Notifications hint */}
@@ -424,12 +400,8 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                       <Bell size={16} />
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-900">
-                        Notifications
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        Order updates and offers
-                      </p>
+                      <p className="text-sm font-semibold text-gray-900">Notifications</p>
+                      <p className="text-xs text-gray-500">Order updates and offers</p>
                     </div>
                     <ChevronRight size={16} className="text-gray-400" />
                   </Link>

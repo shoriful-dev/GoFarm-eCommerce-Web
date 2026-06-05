@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Crown, Lock, Menu, Sparkles, X } from "lucide-react";
-import Container from "@/components/Container";
+import Container from "../../components/Container";
 
 const PURCHASE_URL =
   process.env.NEXT_PUBLIC_PURCHASE_CODE_URL || "https://reactbd.com";
