@@ -1,12 +1,12 @@
 "use client";
 import { Loader2, Search, X, Star } from "lucide-react";
 import { useCallback, useEffect, useState, useRef } from "react";
-import { client } from "@/sanity/lib/client";
-import { urlFor } from "@/sanity/lib/image";
+import { client } from "../../sanity/lib/client";
+import { urlFor } from "../../sanity/lib/image";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useOutsideClick } from "@/hooks";
+import { useOutsideClick } from "../../hooks";
 
 interface SearchProduct {
   _id: string;
@@ -144,13 +144,13 @@ const ProductRow = ({ product: p, onSelect }: ProductRowProps) => {
           </div>
           <div className="mt-0.5 flex items-center gap-2 text-xs text-gray-500">
             {p.brand?.title && (
-              <span className="truncate max-w-[120px]">{p.brand.title}</span>
+              <span className="truncate max-w-30">{p.brand.title}</span>
             )}
             {p.brand?.title && p.category && (
               <span className="text-gray-300">•</span>
             )}
             {p.category && (
-              <span className="truncate max-w-[120px] capitalize">
+              <span className="truncate max-w-30 capitalize">
                 {p.category}
               </span>
             )}
@@ -319,7 +319,7 @@ const SearchBar = () => {
               setOpen(true);
             }}
             placeholder="Search products..."
-            className="w-full bg-gray-50 hover:bg-gray-100 focus:bg-white border border-gray-200 focus:border-gofarm-green focus:ring-2 focus:ring-gofarm-green/20 rounded-lg pl-9 pr-9 py-2 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-all min-w-[200px] md:min-w-60"
+            className="w-full bg-gray-50 hover:bg-gray-100 focus:bg-white border border-gray-200 focus:border-gofarm-green focus:ring-2 focus:ring-gofarm-green/20 rounded-lg pl-9 pr-9 py-2 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-all min-w-50 md:min-w-60"
             aria-label="Search products"
           />
           {search && (
@@ -340,7 +340,7 @@ const SearchBar = () => {
 
       {open && (
         <div className="absolute left-0 right-0 top-full mt-2 z-50 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
-          <div className="max-h-[480px] overflow-y-auto">
+          <div className="max-h-120 overflow-y-auto">
             {showSearchState ? (
               <div className="py-3">
                 <div className="px-4 pb-2 flex items-center justify-between">
@@ -406,7 +406,7 @@ const SearchBar = () => {
                           <button
                             type="button"
                             onClick={() => handleSelectRecent(term)}
-                            className="truncate max-w-[140px]"
+                            className="truncate max-w-35"
                           >
                             {term}
                           </button>
