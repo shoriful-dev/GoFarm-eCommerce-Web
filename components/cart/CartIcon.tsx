@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import useCartStore from "@/store";
-import { useAuthStore } from "@/stores/authStore";
+import useCartStore from "../../store";
+import { useAuthStore } from "../../stores/authStore";
 import { ShoppingCart, Loader2 } from "lucide-react";
-import QuickAuthSidebar from "@/components/sidebars/QuickAuthSidebar";
+import QuickAuthSidebar from "../../components/sidebars/QuickAuthSidebar";
 
 const CartIcon = () => {
   const { items, isLoadingCart } = useCartStore();

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   User,
@@ -16,14 +16,15 @@ import {
   Store,
   ArrowRight,
 } from "lucide-react";
-import { useAuthStore } from "@/stores/authStore";
-import { useUserDataStore } from "@/stores/userDataStore";
+import { useAuthStore } from "../stores/authStore";
+import { useUserDataStore } from "../stores/userDataStore";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { useIsAdmin } from "@/lib/adminUtils";
+} from "../components/ui/popover";
+import { useIsAdmin } from "../lib/adminUtils";
+import Image from "next/image";
 
 const UserDropdown = () => {
   const { user, logout } = useAuthStore();
@@ -170,7 +171,7 @@ const UserDropdown = () => {
           <button className="flex items-center md:gap-2.5 md:py-2 md:px-3 md:rounded-xl md:border md:border-gofarm-green/20 md:hover:border-gofarm-green md:hover:bg-gofarm-green/5 md:hoverEffect md:hover:shadow-sm group transition-all duration-200">
             <div className="relative">
               {user.photoURL ? (
-                <img
+                <Image
                   src={user.photoURL}
                   alt={user.displayName || "User"}
                   className="w-9 h-9 rounded-full object-cover border-2 border-gofarm-green/30 md:group-hover:border-gofarm-green transition-all ring-2 ring-white shadow-sm"
@@ -201,7 +202,7 @@ const UserDropdown = () => {
             <div className="absolute inset-0 bg-grid-white/5 mask-[linear-linear(0deg,transparent,rgba(255,255,255,0.1))]"></div>
             <div className="relative flex items-center gap-3">
               {user.photoURL ? (
-                <img
+                <Image
                   src={user.photoURL}
                   alt={user.displayName || "User"}
                   className="w-14 h-14 rounded-full object-cover border-3 border-white shadow-lg ring-2 ring-white/20"

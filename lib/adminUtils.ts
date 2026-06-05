@@ -13,7 +13,7 @@ import {
   getBootstrapAdminEmails,
   isBootstrapAdminEmail,
   type Role,
-} from "@/lib/auth/roles";
+} from "../lib/auth/roles";
 
 export const getAdminEmails = (): string[] => getBootstrapAdminEmails();
 

@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2, Mail, Lock } from "lucide-react";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "../../stores/authStore";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetDescription,
-} from "@/components/ui/sheet";
+} from "../../components/ui/sheet";
 
 interface QuickAuthSidebarProps {
   open: boolean;
