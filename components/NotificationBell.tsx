@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useAuthStore } from "@/stores/authStore";
-import { useUserDataStore } from "@/stores/userDataStore";
+import { useAuthStore } from "../stores/authStore";
+import { useUserDataStore } from "../stores/userDataStore";
 import { Bell } from "lucide-react";
 
 export default function NotificationBell() {
