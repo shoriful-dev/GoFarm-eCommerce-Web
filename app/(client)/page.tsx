@@ -1,12 +1,12 @@
-import NewsletterSection from "@/components/NewsletterSection";
-import HomeBanner from "@/components/HomeBanner";
-import ProductGrid from "@/components/ProductGrid";
-import ScrollToTop from "@/components/ScrollToTop";
-import { getCategories, getAllProducts } from "@/sanity/queries";
-import { generateOrganizationSchema, generateWebsiteSchema } from "@/lib/seo";
+import NewsletterSection from "../../components/NewsletterSection";
+import HomeBanner from "../../components/HomeBanner";
+import ProductGrid from "../../components/ProductGrid";
+import ScrollToTop from "../../components/ScrollToTop";
+import { getCategories, getAllProducts } from "../../sanity/queries";
+import { generateOrganizationSchema, generateWebsiteSchema } from "../../lib/seo";
 import nextDynamic from "next/dynamic";
 import type { Metadata } from "next";
-import type { Category } from "@/sanity.types";
+import type { Category } from "../../sanity.types";
 
 // Below-the-fold sections are lazy-loaded so the initial JS bundle for the
 // home route stays minimal. Each gets a lightweight placeholder so layout
@@ -18,20 +18,20 @@ const SectionPlaceholder = ({ height = "h-72" }: { height?: string }) => (
 );
 
 const AvailableCoupons = nextDynamic(
-  () => import("@/components/AvailableCoupons"),
+  () => import("../../components/AvailableCoupons"),
   { loading: () => <SectionPlaceholder height="h-48" /> },
 );
 const HomeCategories = nextDynamic(
-  () => import("@/components/HomeCategories"),
+  () => import("../../components/HomeCategories"),
   { loading: () => <SectionPlaceholder height="h-96" /> },
 );
-const ShopFeatures = nextDynamic(() => import("@/components/ShopFeatures"), {
+const ShopFeatures = nextDynamic(() => import("../../components/ShopFeatures"), {
   loading: () => <SectionPlaceholder height="h-40" />,
 });
-const ShopByBrands = nextDynamic(() => import("@/components/ShopByBrands"), {
+const ShopByBrands = nextDynamic(() => import("../../components/ShopByBrands"), {
   loading: () => <SectionPlaceholder height="h-48" />,
 });
-const LatestBlog = nextDynamic(() => import("@/components/LatestBlog"), {
+const LatestBlog = nextDynamic(() => import("../../components/LatestBlog"), {
   loading: () => <SectionPlaceholder height="h-96" />,
 });
 
