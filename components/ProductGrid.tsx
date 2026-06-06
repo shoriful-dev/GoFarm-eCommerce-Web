@@ -5,7 +5,7 @@ import ProductCard from "./ProductCard";
 import ProductListCard from "./ProductListCard";
 import ProductTypeCarousel from "./ProductTypeCarousel";
 import { motion, AnimatePresence } from "motion/react";
-import { client } from "@/sanity/lib/client";
+import { client } from "../sanity/lib/client";
 import HomeTabbar from "./HomeTabbar";
 import NoProductAvailable from "./product/NoProductAvailable";
 import {
@@ -19,22 +19,22 @@ import {
   Eye,
 } from "lucide-react";
 import Container from "./Container";
-import { ALL_PRODUCTS_QUERY_RESULT } from "@/sanity.types";
-import { Button } from "@/components/ui/button";
+import { ALL_PRODUCTS_QUERY_RESULT } from "../sanity.types";
+import { Button } from "../components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "../components/ui/select";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 import { ProductGridSkeleton } from "./ProductSkeletons";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { Slider } from "../components/ui/slider";
+import { Separator } from "../components/ui/separator";
 
 type ViewMode = "grid-2" | "grid-3" | "grid-4" | "grid-5" | "list";
 type SortOption =

@@ -1,13 +1,14 @@
 import { memo } from "react";
-import { Product } from "@/sanity.types";
+import { Product } from "../sanity.types";
 import PriceView from "./PriceView";
 import Link from "next/link";
 import AddToCartButton from "./AddToCartButton";
-import { Star, Package, Flame, Heart, Eye } from "lucide-react";
-import { image } from "@/sanity/image";
+import { Star, Package, Flame, Eye } from "lucide-react";
+import { image } from "../sanity/image";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import FavoriteButton from "./FavoriteButton";
+import Image from "next/image";
 
 const ProductListCard = memo(({ product }: { product: Product }) => {
   const finalPrice = product.discount
@@ -29,7 +30,7 @@ const ProductListCard = memo(({ product }: { product: Product }) => {
         <div className="relative shrink-0 w-full sm:w-48 h-48 bg-gofarm-light-orange/10 rounded-lg overflow-hidden">
           {product?.images && (
             <Link href={`/product/${product?.slug?.current}`}>
-              <img
+              <Image
                 src={image(product.images[0]).size(400, 400).url()}
                 className={`w-full h-full object-contain transition-transform duration-500 ${
                   product?.stock !== 0

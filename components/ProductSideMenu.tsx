@@ -1,10 +1,10 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { Product } from "@/sanity.types";
-import useCartStore from "@/store";
-import { useCompareStore } from "@/stores/compareStore";
-import { useShareStore } from "@/stores/shareStore";
-import { useCartAddedModalStore } from "@/stores/cartAddedModalStore";
+import { cn } from "../lib/utils";
+import { Product } from "../sanity.types";
+import useCartStore from "../store";
+import { useCompareStore } from "../stores/compareStore";
+import { useShareStore } from "../stores/shareStore";
+import { useCartAddedModalStore } from "../stores/cartAddedModalStore";
 import { Heart, ArrowLeftRight, Share2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
