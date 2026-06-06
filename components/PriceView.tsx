@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import PriceFormatter from "./PriceFormatter";
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils";
 
 interface Props {
   price: number | undefined;

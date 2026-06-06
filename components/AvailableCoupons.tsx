@@ -1,11 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from 'react';
+import { Card, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
 import {
-  Tag,
   Copy,
   Check,
   Calendar,
@@ -14,20 +13,20 @@ import {
   Sparkles,
   Gift,
   Percent,
-} from "lucide-react";
-import { client } from "@/sanity/lib/client";
-import { defineQuery } from "next-sanity";
-import { format } from "date-fns";
-import { toast } from "sonner";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+} from 'lucide-react';
+import { client } from '../sanity/lib/client';
+import { defineQuery } from 'next-sanity';
+import { format } from 'date-fns';
+import { toast } from 'sonner';
+import Link from 'next/link';
+import { cn } from '../lib/utils';
 
 interface PublicCoupon {
   _id: string;
   name: string;
   code: string;
   description?: string;
-  discountType: "percentage" | "fixed";
+  discountType: 'percentage' | 'fixed';
   discountValue: number;
   minimumOrderAmount: number;
   expiryDate?: string;
@@ -66,7 +65,7 @@ export default function AvailableCoupons() {
       const data = await client.fetch(query, { now });
       setCoupons(data);
     } catch (error) {
-      console.error("Error fetching public coupons:", error);
+      console.error('Error fetching public coupons:', error);
     } finally {
       setLoading(false);
     }
@@ -75,9 +74,9 @@ export default function AvailableCoupons() {
   const copyCode = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
-    toast.success("Coupon code copied!", {
+    toast.success('Coupon code copied!', {
       description: `Use code "${code}" at checkout`,
-      icon: "🎉",
+      icon: '🎉',
     });
     setTimeout(() => setCopiedCode(null), 2000);
   };
@@ -85,7 +84,7 @@ export default function AvailableCoupons() {
   if (loading) {
     return (
       <section className="py-16 lg:py-20 bg-linear-to-br from-emerald-50 via-white to-green-50 relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-linear(0deg,white,rgba(255,255,255,0.6))] bg-[size:32px_32px]" />
+        <div className="absolute inset-0 bg-grid-slate-100 mask[linear-linear(0deg,white,rgba(255,255,255,0.6))] bg-size:[32px_32px]" />
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-12">
             <div className="h-10 bg-gray-200 rounded-xl w-80 mx-auto mb-4 animate-pulse" />
@@ -133,8 +132,8 @@ export default function AvailableCoupons() {
           </h2>
 
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto animate-in fade-in slide-in-from-top-8 duration-700 delay-200">
-            Save big with our handpicked deals! Limited time offers that make
-            shopping even more delightful
+            Save big with our handpicked deals! Limited time offers that make shopping even more
+            delightful
           </p>
         </div>
 
@@ -144,13 +143,11 @@ export default function AvailableCoupons() {
             <Card
               key={coupon._id}
               className={cn(
-                "group relative hover:shadow-2xl transition-all duration-500 border-2",
-                "hover:scale-[1.02] hover:-translate-y-1",
-                "bg-white/80 backdrop-blur-sm",
-                "animate-in fade-in slide-in-from-bottom-8 duration-700",
-                index === 0
-                  ? "border-green-300"
-                  : "border-gray-200 hover:border-green-300"
+                'group relative hover:shadow-2xl transition-all duration-500 border-2',
+                'hover:scale-[1.02] hover:-translate-y-1',
+                'bg-white/80 backdrop-blur-sm',
+                'animate-in fade-in slide-in-from-bottom-8 duration-700',
+                index === 0 ? 'border-green-300' : 'border-gray-200 hover:border-green-300',
               )}
               style={{ animationDelay: `${index * 100}ms` }}
             >
@@ -180,7 +177,7 @@ export default function AvailableCoupons() {
                         <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
                           <TrendingDown className="w-5 h-5 animate-bounce" />
                           <span className="text-2xl font-black tracking-tight">
-                            {coupon.discountType === "percentage"
+                            {coupon.discountType === 'percentage'
                               ? `${coupon.discountValue}% OFF`
                               : `$${coupon.discountValue} OFF`}
                           </span>
@@ -188,7 +185,7 @@ export default function AvailableCoupons() {
                       </div>
                       <div className="shrink-0">
                         <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                          {coupon.discountType === "percentage" ? (
+                          {coupon.discountType === 'percentage' ? (
                             <Percent className="w-6 h-6" />
                           ) : (
                             <span className="text-2xl font-bold">$</span>
@@ -217,10 +214,10 @@ export default function AvailableCoupons() {
                         size="sm"
                         onClick={() => copyCode(coupon.code)}
                         className={cn(
-                          "shrink-0 transition-all duration-300",
+                          'shrink-0 transition-all duration-300',
                           copiedCode === coupon.code
-                            ? "bg-green-500 hover:bg-green-600 text-white"
-                            : "bg-white hover:bg-green-50 text-gray-700 border border-gray-200"
+                            ? 'bg-green-500 hover:bg-green-600 text-white'
+                            : 'bg-white hover:bg-green-50 text-gray-700 border border-gray-200',
                         )}
                       >
                         {copiedCode === coupon.code ? (
@@ -246,7 +243,7 @@ export default function AvailableCoupons() {
                       <div className="flex items-center gap-3 p-2.5 rounded-lg bg-amber-50/50 border border-amber-100">
                         <div className="w-2 h-2 rounded-full bg-linear-to-r from-amber-400 to-orange-400 animate-pulse" />
                         <span className="text-gray-600">
-                          Minimum order:{" "}
+                          Minimum order:{' '}
                           <strong className="text-gray-900 font-bold">
                             ${coupon.minimumOrderAmount}
                           </strong>
@@ -257,12 +254,9 @@ export default function AvailableCoupons() {
                       <div className="flex items-center gap-3 p-2.5 rounded-lg bg-blue-50/50 border border-blue-100">
                         <Calendar className="w-4 h-4 text-blue-500" />
                         <span className="text-gray-600">
-                          Expires{" "}
+                          Expires{' '}
                           <strong className="text-gray-900 font-bold">
-                            {format(
-                              new Date(coupon.expiryDate),
-                              "MMM dd, yyyy"
-                            )}
+                            {format(new Date(coupon.expiryDate), 'MMM dd, yyyy')}
                           </strong>
                         </span>
                       </div>

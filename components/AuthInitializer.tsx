@@ -1,8 +1,7 @@
 "use client";
-
 import { useEffect } from "react";
-import { useAuthStore } from "@/stores/authStore";
-import { useUserDataStore } from "@/stores/userDataStore";
+import { useAuthStore } from "../stores/authStore";
+import { useUserDataStore } from "../stores/userDataStore";
 
 export default function AuthInitializer() {
   const user = useAuthStore((state) => state.user);

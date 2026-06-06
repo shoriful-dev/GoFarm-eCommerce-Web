@@ -10,12 +10,12 @@
  * Mount once near the root of the tree (in app/layout.tsx).
  */
 import { useEffect, useRef } from "react";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "../stores/authStore";
 import {
   setAnalyticsUser,
   clearAnalyticsUser,
   trackEvent,
-} from "@/lib/analytics";
+} from "../lib/analytics";
 
 export default function AnalyticsProvider() {
   const user = useAuthStore((s) => s.user);
