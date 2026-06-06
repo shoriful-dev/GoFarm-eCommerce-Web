@@ -1,14 +1,14 @@
 "use client";
-import { Product, PRODUCT_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
+import { Product, PRODUCT_BY_SLUG_QUERY_RESULT } from "../sanity.types";
 import { useEffect, useState, memo, useCallback } from "react";
-import { showToast } from "@/lib/toast";
+import { showToast } from "../lib/toast";
 import PriceFormatter from "./PriceFormatter";
 import { Button } from "./ui/button";
-import useCartStore from "@/store";
+import useCartStore from "../store";
 import QuantityButtons from "./QuantityButtons";
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils";
 import { ShoppingBag } from "lucide-react";
-import { trackAddToCart } from "@/lib/analytics";
+import { trackAddToCart } from "../lib/analytics";
 
 interface Props {
   product: Product | PRODUCT_BY_SLUG_QUERY_RESULT;
