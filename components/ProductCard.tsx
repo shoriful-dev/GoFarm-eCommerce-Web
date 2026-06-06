@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Product } from "@/sanity.types";
+import { Product } from "../sanity.types";
 import PriceView from "./PriceView";
 import Link from "next/link";
 import AddToCartButton from "./AddToCartButton";
@@ -7,7 +7,8 @@ import Title from "./Title";
 import { StarIcon } from "@sanity/icons";
 import ProductSideMenu from "./ProductSideMenu";
 import { Badge } from "./ui/badge";
-import { image } from "@/sanity/image";
+import { image } from "../sanity/image";
+import Image from "next/image";
 
 const ProductCard = memo(({ product }: { product: Product }) => {
   const isOutOfStock = product?.stock === 0;
@@ -23,7 +24,7 @@ const ProductCard = memo(({ product }: { product: Product }) => {
             href={`/product/${product?.slug?.current}`}
             className="block h-full"
           >
-            <img
+            <Image
               src={image(product.images[0]).size(500, 500).url()}
               className={`w-full h-full object-cover transition-all duration-500 ${
                 isOutOfStock ? "opacity-40 grayscale" : "group-hover:scale-110"
