@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent } from "../components/ui/card";
+import { Skeleton } from "../components/ui/skeleton";
 
 // Product Grid Skeleton for shop pages
 export const ProductGridSkeleton = () => (
