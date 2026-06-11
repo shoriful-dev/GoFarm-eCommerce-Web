@@ -15,7 +15,6 @@ import NotificationBell from "./NotificationBell";
 import UserDropdown from "./UserDropdown";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Store } from "lucide-react";
-import TopHeaderBadge from "./TopHeaderBadge";
 import { useAuthStore } from "../stores/authStore";
 
 const ClientHeader = () => {
@@ -103,9 +102,6 @@ const ClientHeader = () => {
     return `/sign-in?redirectTo=${encodeURIComponent(currentPath)}`;
   };
 
-  const purchaseUrl =
-    process.env.NEXT_PUBLIC_PURCHASE_CODE_URL ||
-    "https://buymeacoffee.com/reactbd/e/484104";
 
   return (
     <header
@@ -113,8 +109,6 @@ const ClientHeader = () => {
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      {/* Purchase Badge */}
-      <TopHeaderBadge purchaseUrl={purchaseUrl} />
 
       {/* Top Header */}
       <div className="border-b border-gofarm-light-gray">

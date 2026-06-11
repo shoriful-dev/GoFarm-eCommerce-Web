@@ -1,26 +1,27 @@
-import { Store } from "lucide-react";
 import type { Metadata } from "next";
-import PremiumFeature from "@/components/PremiumFeature";
+import { Store } from "lucide-react";
+import Container from "@/components/Container";
 
 export const metadata: Metadata = {
-  title: "Local Stores — Premium feature",
+  title: "Local Stores",
   description:
-    "The Local Stores locator is part of the GoFarm premium build. Get the production code to enable it on your deployment.",
-  robots: { index: false, follow: false },
+    "Find local stores near you with farm-fresh produce and everyday essentials.",
 };
 
 export default function StoreListPage() {
   return (
-    <PremiumFeature
-      featureName="Local Stores"
-      Icon={Store}
-      description="The full Local Stores locator — interactive map, store filters, hours, contact info, and amenities — ships with the GoFarm premium build."
-      bullets={[
-        "Interactive Google Maps with custom markers and clustering",
-        "Search and filter stores by city, amenities, and services",
-        "Live store hours, contact details, and directions",
-        "Sanity-managed store data with admin tooling",
-      ]}
-    />
+    <Container className="py-16 md:py-24">
+      <div className="mx-auto max-w-2xl text-center space-y-6">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gofarm-light-green/20 text-gofarm-green mx-auto">
+          <Store className="h-8 w-8" />
+        </div>
+        <h1 className="text-3xl md:text-4xl font-bold text-gofarm-black">
+          Local Stores
+        </h1>
+        <p className="text-gofarm-gray text-lg">
+          Coming soon! Discover local stores and vendors near you.
+        </p>
+      </div>
+    </Container>
   );
 }

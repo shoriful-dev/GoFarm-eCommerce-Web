@@ -1,26 +1,27 @@
-import { LayoutGrid } from "lucide-react";
 import type { Metadata } from "next";
-import PremiumFeature from "@/components/PremiumFeature";
+import { LayoutGrid } from "lucide-react";
+import Container from "@/components/Container";
 
 export const metadata: Metadata = {
-  title: "Collection — Premium feature",
+  title: "Collection",
   description:
-    "The full Collection storefront is part of the GoFarm premium build. Get the production code to enable it on your deployment.",
-  robots: { index: false, follow: false },
+    "Browse our curated collection of farm-fresh produce, dairy, and pantry essentials.",
 };
 
 export default function CollectionPage() {
   return (
-    <PremiumFeature
-      featureName="Collection"
-      Icon={LayoutGrid}
-      description="The full Collection experience — multi-view product grids, advanced filtering, sorting, search, and curated category lanes — ships with the GoFarm premium build."
-      bullets={[
-        "Switchable 3 / 4 / 5-column and list views with smooth transitions",
-        "Filter by featured, new, on-sale, and hot products",
-        "Search, sort by name / price / rating, and paginated results",
-        "Sanity-managed curation with cached, SEO-friendly fetches",
-      ]}
-    />
+    <Container className="py-16 md:py-24">
+      <div className="mx-auto max-w-2xl text-center space-y-6">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gofarm-light-green/20 text-gofarm-green mx-auto">
+          <LayoutGrid className="h-8 w-8" />
+        </div>
+        <h1 className="text-3xl md:text-4xl font-bold text-gofarm-black">
+          Collection
+        </h1>
+        <p className="text-gofarm-gray text-lg">
+          Coming soon! Browse our curated collections of quality products.
+        </p>
+      </div>
+    </Container>
   );
 }

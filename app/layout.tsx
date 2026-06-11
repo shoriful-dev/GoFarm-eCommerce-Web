@@ -5,7 +5,6 @@ import { Toaster } from "sonner";
 import AuthInitializer from "@/components/AuthInitializer";
 import AnalyticsProvider from "@/components/AnalyticsProvider";
 import ShareSidebar from "@/components/ShareSidebar";
-import PurchaseFloatingButton from "@/components/PurchaseFloatingButton";
 import CartAddedModal from "@/components/CartAddedModal";
 import "./globals.css";
 
@@ -97,7 +96,6 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
         <AnalyticsProvider />
         <ShareSidebar />
         {children}
-        <PurchaseFloatingButton />
         <CartAddedModal />
         <Toaster
           position="bottom-right"

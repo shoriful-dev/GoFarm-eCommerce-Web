@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
 import { Briefcase } from "lucide-react";
-import PremiumFeature from "@/components/PremiumFeature";
 
 export const metadata: Metadata = {
   title: "Vendor Management",
   robots: { index: false, follow: false },
 };
 
-export default function VendorManagementPremiumPage() {
+export default function VendorManagementPage() {
   return (
-    <PremiumFeature
-      featureName="Vendor Management"
-      Icon={Briefcase}
-      title="Vendor management is a premium feature"
-      description="The full admin vendor management suite — vendor directory, vendor product moderation, application review, and vendor settings — is part of the premium GoFarm code package."
-      bullets={[
-        "Vendor directory with status & performance metrics",
-        "Vendor product approval / moderation queue",
-        "Vendor application review and platform-wide settings",
-      ]}
-      homeHref="/admin"
-    />
+    <div className="p-6 md:p-8">
+      <div className="mx-auto max-w-2xl text-center space-y-6 py-16">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gofarm-light-green/20 text-gofarm-green mx-auto">
+          <Briefcase className="h-8 w-8" />
+        </div>
+        <h1 className="text-3xl font-bold text-gofarm-black">
+          Vendor Management
+        </h1>
+        <p className="text-gofarm-gray text-lg">
+          Coming soon! Manage vendors, products, and applications here.
+        </p>
+      </div>
+    </div>
   );
 }

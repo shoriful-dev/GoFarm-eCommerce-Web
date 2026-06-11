@@ -1,26 +1,27 @@
-import { Flame } from "lucide-react";
 import type { Metadata } from "next";
-import PremiumFeature from "@/components/PremiumFeature";
+import { Flame } from "lucide-react";
+import Container from "@/components/Container";
 
 export const metadata: Metadata = {
-  title: "Hot Deals — Premium feature",
+  title: "Hot Deals",
   description:
-    "The Hot Deals storefront is part of the GoFarm premium build. Get the production code to enable it on your deployment.",
-  robots: { index: false, follow: false },
+    "Browse our hottest deals on farm-fresh produce, dairy, and pantry essentials.",
 };
 
 export default function DealPage() {
   return (
-    <PremiumFeature
-      featureName="Hot Deals"
-      Icon={Flame}
-      description="The full Hot Deals experience — countdown banners, curated discount feeds, and the deal-aware product grid — ships with the GoFarm premium build."
-      bullets={[
-        "Live deal countdown with timezone-aware expiry",
-        "Curated deal feed with category & discount filters",
-        "Discount-tier badges on product cards across the site",
-        "Sanity-managed deal scheduling and analytics hooks",
-      ]}
-    />
+    <Container className="py-16 md:py-24">
+      <div className="mx-auto max-w-2xl text-center space-y-6">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gofarm-light-orange text-gofarm-orange mx-auto">
+          <Flame className="h-8 w-8" />
+        </div>
+        <h1 className="text-3xl md:text-4xl font-bold text-gofarm-black">
+          Hot Deals
+        </h1>
+        <p className="text-gofarm-gray text-lg">
+          Coming soon! Stay tuned for our hottest deals and discounts.
+        </p>
+      </div>
+    </Container>
   );
 }

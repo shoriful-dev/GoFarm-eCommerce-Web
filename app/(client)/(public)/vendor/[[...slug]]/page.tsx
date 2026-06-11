@@ -1,24 +1,25 @@
 import type { Metadata } from "next";
 import { Store } from "lucide-react";
-import PremiumFeature from "@/components/PremiumFeature";
+import Container from "@/components/Container";
 
 export const metadata: Metadata = {
   title: "Vendor Dashboard",
-  robots: { index: false, follow: false },
 };
 
-export default function VendorPremiumPage() {
+export default function VendorPage() {
   return (
-    <PremiumFeature
-      featureName="Vendor Dashboard"
-      Icon={Store}
-      title="The vendor experience is a premium feature"
-      description="The full vendor onboarding, dashboard, and storefront management — including product, order, analytics, and settings flows — is part of the premium GoFarm code package."
-      bullets={[
-        "Vendor application & approval workflow",
-        "Product, order, and analytics dashboards",
-        "Vendor-specific APIs and admin moderation tools",
-      ]}
-    />
+    <Container className="py-16 md:py-24">
+      <div className="mx-auto max-w-2xl text-center space-y-6">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gofarm-light-green/20 text-gofarm-green mx-auto">
+          <Store className="h-8 w-8" />
+        </div>
+        <h1 className="text-3xl md:text-4xl font-bold text-gofarm-black">
+          Vendor Dashboard
+        </h1>
+        <p className="text-gofarm-gray text-lg">
+          Coming soon! Vendor onboarding, dashboard, and storefront management.
+        </p>
+      </div>
+    </Container>
   );
 }

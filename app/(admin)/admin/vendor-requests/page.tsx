@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
 import { UserCheck } from "lucide-react";
-import PremiumFeature from "@/components/PremiumFeature";
 
 export const metadata: Metadata = {
   title: "Vendor Requests",
   robots: { index: false, follow: false },
 };
 
-export default function VendorRequestsPremiumPage() {
+export default function VendorRequestsPage() {
   return (
-    <PremiumFeature
-      featureName="Vendor Requests"
-      Icon={UserCheck}
-      title="Vendor request moderation is a premium feature"
-      description="The full vendor application moderation flow — including request review, approval, rejection, and audit history — is part of the premium GoFarm code package."
-      bullets={[
-        "Premium & business account request queues",
-        "Approve / reject with notes and email notifications",
-        "Status filters, search, and bulk actions",
-      ]}
-      homeHref="/admin"
-    />
+    <div className="p-6 md:p-8">
+      <div className="mx-auto max-w-2xl text-center space-y-6 py-16">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gofarm-light-green/20 text-gofarm-green mx-auto">
+          <UserCheck className="h-8 w-8" />
+        </div>
+        <h1 className="text-3xl font-bold text-gofarm-black">
+          Vendor Requests
+        </h1>
+        <p className="text-gofarm-gray text-lg">
+          Coming soon! Manage vendor applications and requests here.
+        </p>
+      </div>
+    </div>
   );
 }
