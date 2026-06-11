@@ -26,6 +26,8 @@ const ProductCard = memo(({ product }: { product: Product }) => {
           >
             <Image
               src={image(product.images[0]).size(500, 500).url()}
+              width={500}
+              height={500}
               className={`w-full h-full object-cover transition-all duration-500 ${
                 isOutOfStock ? "opacity-40 grayscale" : "group-hover:scale-110"
               }`}
