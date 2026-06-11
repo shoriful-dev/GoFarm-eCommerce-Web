@@ -193,7 +193,7 @@ const SingleBlogPage = async ({
                     alt={blog.title || "Blog Image"}
                     width={1200}
                     height={600}
-                    className="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover"
+                    className="w-full h-75 sm:h-100 lg:h-125 object-cover"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
                 </div>

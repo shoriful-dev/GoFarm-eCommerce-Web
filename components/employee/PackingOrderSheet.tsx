@@ -19,7 +19,6 @@ import PriceFormatter from "@/components/PriceFormatter";
 import { Employee } from "@/types/employee";
 import { markAsPacked } from "@/actions/orderEmployeeActions";
 import OrderNotes from "./OrderNotes";
-import Image from "next/image";
 
 interface PackingOrderSheetProps {
   order: any;
@@ -34,7 +33,6 @@ interface PackingOrderSheetProps {
 
 export default function PackingOrderSheet({
   order,
-  employee,
   isOpen,
   onClose,
   onUpdate,
@@ -182,7 +180,7 @@ export default function PackingOrderSheet({
                 >
                   {item.product?.image && (
                     <div className="relative w-12 h-12 shrink-0">
-                      <Image
+                      <img
                         src={urlFor(item.product.image)
                           .width(60)
                           .height(60)

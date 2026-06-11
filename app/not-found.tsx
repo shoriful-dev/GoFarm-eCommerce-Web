@@ -1,8 +1,7 @@
 import Logo from "@/components/common/Logo";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "@/images";
-import { Home, Search, ShoppingBag, HelpCircle } from "lucide-react";
+import { Search, ShoppingBag, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NotFoundPage = () => {
@@ -17,8 +16,8 @@ const NotFoundPage = () => {
       <div className="max-w-3xl w-full text-center">
         <div className="flex flex-col items-center justify-center space-y-8">
           {/* 404 with background image */}
-          <div className="relative w-full h-[400px] flex items-center justify-center bg-center bg-no-repeat">
-            <Image
+          <div className="relative w-full h-100 flex items-center justify-center bg-center bg-no-repeat">
+            <img
               src={notFound}
               alt="404 Background"
               fill

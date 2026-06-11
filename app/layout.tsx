@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import { Jost } from "next/font/google";
 import { Toaster } from "sonner";
 import AuthInitializer from "@/components/AuthInitializer";

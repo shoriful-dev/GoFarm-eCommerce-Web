@@ -11,7 +11,6 @@ import {
 import { getAllBrands } from "@/sanity/queries";
 import { Brand } from "@/sanity.types";
 import { urlFor } from "@/sanity/lib/image";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Package, Tag, Award } from "lucide-react";
 
@@ -85,7 +84,7 @@ const BrandsPage = async () => {
                   {/* Brand Image */}
                   <div className="relative h-32 sm:h-36 lg:h-40 bg-linear-to-br from-gofarm-light-orange/30 to-gofarm-light-green/10 overflow-hidden">
                     {brand.image ? (
-                      <Image
+                      <img
                         src={urlFor(brand.image).url()}
                         alt={brand.title || "Brand"}
                         fill

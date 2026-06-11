@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ChevronDown, LayoutGrid, Loader2 } from "lucide-react";
 import { urlFor } from "../../sanity/lib/image";
 
@@ -114,7 +113,7 @@ const AllCategoriesDropdown = () => {
                     >
                       <div className="relative w-11 h-11 shrink-0 rounded-lg overflow-hidden bg-gofarm-light-gray/40 border border-gofarm-light-gray group-hover:border-gofarm-light-green/50 flex items-center justify-center">
                         {cat.image ? (
-                          <Image
+                          <img
                             src={urlFor(cat.image)
                               .width(96)
                               .height(96)

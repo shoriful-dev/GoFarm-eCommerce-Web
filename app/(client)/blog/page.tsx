@@ -9,7 +9,6 @@ import { urlFor } from "@/sanity/lib/image";
 import { getAllBlogs } from "@/sanity/queries";
 import dayjs from "dayjs";
 import { Calendar, Clock, ArrowRight, User, Eye, BookOpen } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 const BlogPage = async () => {
@@ -145,7 +144,7 @@ const BlogPage = async () => {
               >
                 {blog?.mainImage && (
                   <div className="relative overflow-hidden aspect-16/10">
-                    <Image
+                    <img
                       src={urlFor(blog.mainImage).url()}
                       alt={blog?.title || "Blog image"}
                       fill
