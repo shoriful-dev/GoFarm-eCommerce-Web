@@ -61,7 +61,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   signIn: async (email: string, password: string) => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
-      // Sync will happen in onAuthStateChanged
+      // Ensure session is set before returning to prevent redirect loops
+      const token = await result.user.getIdToken(true);
+      await fetch("/api/auth/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken: token }),
+      });
       toast.success("Successfully signed in!");
       return result;
     } catch (error: any) {
@@ -104,7 +110,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      // Sync will happen in onAuthStateChanged
+      // Ensure session is set before returning
+      const token = await result.user.getIdToken(true);
+      await fetch("/api/auth/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken: token }),
+      });
       // Don't show success toast here - let the calling component handle it after Sanity check
       return result;
     } catch (error: any) {
@@ -118,7 +130,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const provider = new GithubAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      // Sync will happen in onAuthStateChanged
+      // Ensure session is set before returning
+      const token = await result.user.getIdToken(true);
+      await fetch("/api/auth/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken: token }),
+      });
       // Don't show success toast here - let the calling component handle it after Sanity check
       return result;
     } catch (error: any) {
