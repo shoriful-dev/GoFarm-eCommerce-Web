@@ -174,6 +174,8 @@ const UserDropdown = () => {
                 <Image
                   src={user.photoURL}
                   alt={user.displayName || "User"}
+                  width={36}
+                  height={36}
                   className="w-9 h-9 rounded-full object-cover border-2 border-gofarm-green/30 md:group-hover:border-gofarm-green transition-all ring-2 ring-white shadow-sm"
                 />
               ) : (
@@ -205,6 +207,8 @@ const UserDropdown = () => {
                 <Image
                   src={user.photoURL}
                   alt={user.displayName || "User"}
+                  width={56}
+                  height={56}
                   className="w-14 h-14 rounded-full object-cover border-3 border-white shadow-lg ring-2 ring-white/20"
                 />
               ) : (
