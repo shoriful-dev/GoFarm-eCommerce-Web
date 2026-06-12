@@ -30,6 +30,7 @@ import { PortableText } from "next-sanity";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import profileImage from "@/images/profile.png";
 
 const SingleBlogPage = async ({
   params,
@@ -115,28 +116,21 @@ const SingleBlogPage = async ({
 
                 {/* Meta Information */}
                 <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-600">
-                  {blog?.author?.name && (
-                    <div className="flex items-center gap-2">
-                      {blog?.author?.image && (
-                        <Image
-                          src={urlFor(blog.author.image)
-                            .width(32)
-                            .height(32)
-                            .url()}
-                          alt={blog.author.name}
-                          width={32}
-                          height={32}
-                          className="rounded-full"
-                        />
-                      )}
-                      <div className="flex items-center gap-1">
-                        <User size={16} />
-                        <span className="font-medium text-gofarm-green">
-                          {blog.author.name}
-                        </span>
-                      </div>
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={profileImage}
+                      alt="Shoriful Islam"
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                    <div className="flex items-center gap-1">
+                      <User size={16} />
+                      <span className="font-medium text-gofarm-green">
+                        Shoriful Islam
+                      </span>
                     </div>
-                  )}
+                  </div>
 
                   <div className="flex items-center gap-1">
                     <Calendar size={16} />
