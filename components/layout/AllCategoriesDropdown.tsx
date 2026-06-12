@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronDown, LayoutGrid, Loader2 } from "lucide-react";

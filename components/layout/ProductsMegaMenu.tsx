@@ -14,14 +14,6 @@ const PREMIUM_BULLETS = [
   "Quick links: recent, recommended, promotions, new arrivals",
 ];
 
-/**
- * Header "Products" trigger.
- *
- * In the open-source build the actual mega menu (live category browser,
- * preview imagery, quick-link rails) is gated behind the premium release.
- * Clicking the pill opens a compact premium-feature card that links out
- * to the purchase URL configured via NEXT_PUBLIC_PURCHASE_CODE_URL.
- */
 const ProductsMegaMenu = () => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
