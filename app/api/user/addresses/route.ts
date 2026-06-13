@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       countryCode,
       stateCode,
       subArea,
-      default: isDefault,
+      isDefault,
       type,
       phone,
     } = body;
@@ -139,13 +139,13 @@ export async function POST(request: NextRequest) {
       city,
       state,
       zip,
-      country: country || "",
-      countryCode: countryCode || "",
-      stateCode: stateCode || "",
-      subArea: subArea || "",
+      country: country || "United States",
+      countryCode: countryCode || undefined,
+      stateCode: stateCode || undefined,
+      subArea: subArea || undefined,
       default: isDefault || false,
       type: type || "home",
-      phone: phone || null,
+      phone: phone || undefined,
       user: {
         _type: "reference",
         _ref: sanityUser._id,
@@ -158,10 +158,10 @@ export async function POST(request: NextRequest) {
       addressId: newAddress._id,
       message: "Address created successfully",
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating address:", error);
     return NextResponse.json(
-      { error: "Failed to create address" },
+      { error: error?.message || "Failed to create address" },
       { status: 500 },
     );
   }
@@ -192,7 +192,7 @@ export async function PUT(request: NextRequest) {
       countryCode,
       stateCode,
       subArea,
-      default: isDefault,
+      isDefault,
       type,
       phone,
     } = body;
@@ -244,13 +244,13 @@ export async function PUT(request: NextRequest) {
         city,
         state,
         zip,
-        country: country || "",
-        countryCode: countryCode || "",
-        stateCode: stateCode || "",
-        subArea: subArea || "",
+        country: country || "United States",
+        countryCode: countryCode || undefined,
+        stateCode: stateCode || undefined,
+        subArea: subArea || undefined,
         default: isDefault || false,
         type: type || "home",
-        phone: phone || null,
+        phone: phone || undefined,
         updatedAt: new Date().toISOString(),
       })
       .commit();
@@ -260,10 +260,10 @@ export async function PUT(request: NextRequest) {
       address: updatedAddress,
       message: "Address updated successfully",
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating address:", error);
     return NextResponse.json(
-      { error: "Failed to update address" },
+      { error: error?.message || "Failed to update address" },
       { status: 500 },
     );
   }

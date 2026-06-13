@@ -57,29 +57,35 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 
-  // Issued-at must be within 5 minutes — protects against stale tokens being
-  // exchanged for long-lived cookies.
-  if (
+  // Issued-at must be within 5 minutes to mint a NEW session cookie.
+  // This protects against stale tokens being exchanged for long-lived cookies.
+  let cookieValue: string | null = null;
+  const isTokenOld =
     decoded.auth_time &&
-    Date.now() - decoded.auth_time * 1000 > 5 * 60 * 1000
-  ) {
-    return NextResponse.json(
-      { error: "Token too old, sign in again" },
-      { status: 401 },
-    );
-  }
+    Date.now() - decoded.auth_time * 1000 > 5 * 60 * 1000;
 
-  let cookieValue: string;
-  try {
-    cookieValue = await adminAuth.createSessionCookie(idToken, {
-      expiresIn: SESSION_TTL_MS,
-    });
-  } catch (err) {
-    console.error("createSessionCookie failed:", err);
-    return NextResponse.json(
-      { error: "Failed to create session" },
-      { status: 500 },
-    );
+  if (isTokenOld) {
+    // Token is too old to mint a new cookie. Check if they have a valid existing cookie.
+    const existingCookie = req.cookies.get(SESSION_COOKIE)?.value;
+    if (!existingCookie) {
+      return NextResponse.json(
+        { error: "Token too old, sign in again" },
+        { status: 401 },
+      );
+    }
+    cookieValue = existingCookie;
+  } else {
+    try {
+      cookieValue = await adminAuth.createSessionCookie(idToken, {
+        expiresIn: SESSION_TTL_MS,
+      });
+    } catch (err) {
+      console.error("createSessionCookie failed:", err);
+      return NextResponse.json(
+        { error: "Failed to create session" },
+        { status: 500 },
+      );
+    }
   }
 
   const userRecord = await adminAuth.getUser(decoded.uid).catch(() => null);

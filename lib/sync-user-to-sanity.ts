@@ -39,11 +39,11 @@ export async function syncUserToSanity(
   firebaseUser: SyncableFirebaseUser,
 ): Promise<string> {
   try {
-    const { uid, email, displayName, photoURL } = firebaseUser;
-
-    if (!email) {
-      throw new Error("User email is required for Sanity sync");
-    }
+    const { uid, displayName, photoURL } = firebaseUser;
+    
+    // For users logging in via phone, they might not have an email.
+    // Use a deterministic fallback email so it passes Sanity's validation.
+    const email = firebaseUser.email || `${uid}@phone-user.local`;
 
     // Check if user already exists in Sanity (use read client for queries)
     // Check by firebaseUid first, then by email as fallback
