@@ -84,6 +84,9 @@ export function AddAddressSidebar({
         });
         onClose();
 
+        // Add a short delay to allow Sanity CDN to index the new document
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         // Call the callback to refresh addresses if provided
         if (onAddressAdded) {
           await onAddressAdded();
