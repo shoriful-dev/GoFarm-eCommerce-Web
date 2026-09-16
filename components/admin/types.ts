@@ -10,7 +10,7 @@ export interface User {
   createdAt: number;
   lastSignInAt: number;
   emailVerified: boolean;
-}
+};
 
 export interface Order {
   _id: string;
