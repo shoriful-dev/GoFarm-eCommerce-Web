@@ -154,4 +154,4 @@ export interface ChartDataPoint {
   revenue: number;
   orders: number;
   users: number;
-}
+};
