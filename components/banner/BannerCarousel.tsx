@@ -139,4 +139,4 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
       </Carousel>
     </div>
   );
-}
+};
