@@ -87,7 +87,7 @@ export interface Order {
   refundedToWallet?: boolean;
   refundAmount?: number;
   amountPaid?: number;
-}
+};
 
 export interface Product {
   _id: string;
