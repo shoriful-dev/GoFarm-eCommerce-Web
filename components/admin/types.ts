@@ -146,7 +146,7 @@ export interface Analytics {
     ordersByStatus: Array<{ status: string; count: number }>;
     ordersByPaymentMethod: Array<{ method: string; count: number }>;
   };
-}
+};
 
 export interface ChartDataPoint {
   month: string;
