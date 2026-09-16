@@ -132,7 +132,7 @@ export interface Product {
     _type: "image";
     _key: string;
   }>;
-}
+};
 
 export interface Analytics {
   overview: {
