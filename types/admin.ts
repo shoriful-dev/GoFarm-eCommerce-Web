@@ -54,10 +54,5 @@ export interface CombinedUser {
   isVendor?: boolean;
   vendorStatus?: string;
 
-  /**
-   * Set when the Sanity user document has been activated. Undefined for
-   * rows that haven't been hydrated from Sanity yet — UI should treat
-   * `undefined` as "active".
-   */
   isActive?: boolean;
 }
