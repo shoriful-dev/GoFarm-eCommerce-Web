@@ -34,10 +34,6 @@ export interface CombinedUser {
   emailVerified: boolean;
   banned: boolean;
 
-  /**
-   * Sanity role string. Kept as `string` (not the `Role` union) because
-   * legacy documents may carry values we haven't normalized yet.
-   */
   role: string;
 
   loyaltyPoints: number;
