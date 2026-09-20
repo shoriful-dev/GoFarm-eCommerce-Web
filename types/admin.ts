@@ -18,7 +18,6 @@
  * "active by default" rather than "inactive".
  */
 export interface CombinedUser {
-  /** Stable row key — usually equal to `firebaseUid`. */
   id: string;
   firebaseUid: string;
   sanityId?: string;
