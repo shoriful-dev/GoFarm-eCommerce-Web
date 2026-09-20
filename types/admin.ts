@@ -55,4 +55,4 @@ export interface CombinedUser {
   vendorStatus?: string;
 
   isActive?: boolean;
-}
+};
