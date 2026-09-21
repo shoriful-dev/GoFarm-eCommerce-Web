@@ -88,7 +88,7 @@ export interface OrderEmployeeTracking {
   paymentReceivedBy?: string; // accounts employee email
   paymentReceivedAt?: string;
   statusHistory?: OrderStatusHistoryItem[];
-}
+};
 
 export interface OrderStatusHistoryItem {
   status: string;
