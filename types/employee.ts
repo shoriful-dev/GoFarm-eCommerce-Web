@@ -53,7 +53,7 @@ export interface EmployeePerformance {
   paymentsReceived?: number;
   lastActiveAt?: string;
   averageProcessingTime?: number; // in minutes
-}
+};
 
 // Order tracking fields for employees
 export interface OrderEmployeeTracking {
