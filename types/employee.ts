@@ -127,7 +127,7 @@ export interface OrderWithTracking {
     quantity: number;
   }>;
   tracking?: OrderEmployeeTracking;
-}
+};
 
 // Role-based permissions configuration
 export const ROLE_PERMISSIONS: Record<EmployeeRole, EmployeePermissions> = {
