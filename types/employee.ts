@@ -92,7 +92,7 @@ export interface OrderEmployeeTracking {
 
 export interface OrderStatusHistoryItem {
   status: string;
-  changedBy: string; // employee email
+  changedBy: string;
   changedByRole: EmployeeRole | "admin" | "system";
   changedAt: string;
   notes?: string;
