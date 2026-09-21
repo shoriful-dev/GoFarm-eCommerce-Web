@@ -96,7 +96,7 @@ export interface OrderStatusHistoryItem {
   changedByRole: EmployeeRole | "admin" | "system";
   changedAt: string;
   notes?: string;
-}
+};
 
 // Extended Order type with employee tracking
 export interface OrderWithTracking {
