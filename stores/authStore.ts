@@ -17,12 +17,6 @@ import {
 } from "firebase/auth";
 import { toast } from "sonner";
 import { auth } from "../lib/firebase";
-
-// Module-level flag to suppress the next auth-state-change-driven session
-// sync. Set this to true immediately before calling a Firebase auth method
-// that briefly authenticates a user we do NOT want to log in (e.g. email
-// + password sign-up: we create the account, then immediately sign out so
-// the user must sign in explicitly from the sign-in page).
 let skipNextAuthSync = false;
 
 interface AuthState {
