@@ -28,7 +28,7 @@ export interface Employee {
   performance?: EmployeePerformance;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 export interface EmployeePermissions {
   canViewOrders: boolean;
