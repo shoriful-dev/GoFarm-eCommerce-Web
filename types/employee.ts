@@ -41,7 +41,7 @@ export interface EmployeePermissions {
   canViewAnalytics: boolean;
   canManageEmployees: boolean;
   canAccessAdmin: boolean;
-}
+};
 
 export interface EmployeePerformance {
   ordersProcessed: number;
