@@ -96,7 +96,7 @@ async function main() {
         }`,
       );
     }
-  }
+  };
 
   console.log(
     `\n[sync-claims] done. updated=${updated}, skipped=${skipped}, failed=${failed}\n`,
