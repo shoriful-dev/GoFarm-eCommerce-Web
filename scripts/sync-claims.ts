@@ -1,15 +1,3 @@
-/**
- * One-time backfill: copy `isAdmin` / `isEmployee` / `isVendor` flags from
- * Sanity user docs into Firebase Auth custom claims.
- *
- * Usage:
- *   pnpm tsx scripts/sync-claims.ts            # dry-run
- *   pnpm tsx scripts/sync-claims.ts --apply    # actually write claims
- *
- * Requires (server-only) env: FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY,
- *   NEXT_PUBLIC_FIREBASE_PROJECT_ID, NEXT_PUBLIC_SANITY_PROJECT_ID,
- *   NEXT_PUBLIC_SANITY_DATASET, SANITY_API_READ_TOKEN.
- */
 import { createClient } from "@sanity/client";
 import { adminAuth } from "../lib/firebase/admin";
 
