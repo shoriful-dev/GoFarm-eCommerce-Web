@@ -2,9 +2,6 @@
  * One-time backfill: copy `isAdmin` / `isEmployee` / `isVendor` flags from
  * Sanity user docs into Firebase Auth custom claims.
  *
- * After running this, `requireRole()` in `lib/auth/server.ts` can decide roles
- * synchronously from the JWT — no Sanity round-trip on every request.
- *
  * Usage:
  *   pnpm tsx scripts/sync-claims.ts            # dry-run
  *   pnpm tsx scripts/sync-claims.ts --apply    # actually write claims
