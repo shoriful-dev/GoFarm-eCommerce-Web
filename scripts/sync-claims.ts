@@ -105,7 +105,7 @@ async function main() {
   if (!apply && updated > 0) {
     console.log("[sync-claims] Re-run with --apply to commit changes.\n");
   }
-}
+};
 
 main().catch((err) => {
   console.error("[sync-claims] fatal:", err);
