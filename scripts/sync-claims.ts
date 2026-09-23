@@ -23,7 +23,7 @@ interface SanityUserFlags {
   isAdmin?: boolean;
   isEmployee?: boolean;
   isVendor?: boolean;
-}
+};
 
 async function main() {
   const apply = process.argv.includes("--apply");
