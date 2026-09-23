@@ -18,12 +18,6 @@ import {
 import { toast } from "sonner";
 import { auth } from "../lib/firebase";
 
-// User -> Sanity sync is handled atomically inside `/api/auth/session`
-// (see app/api/auth/session/route.ts). The session route mints the
-// __session cookie, ensures the Sanity user document exists (joined by
-// firebaseUid), writes the role custom claim, and returns. The client
-// must NOT call /api/auth/sync-user separately — that route is removed.
-
 // Module-level flag to suppress the next auth-state-change-driven session
 // sync. Set this to true immediately before calling a Firebase auth method
 // that briefly authenticates a user we do NOT want to log in (e.g. email
