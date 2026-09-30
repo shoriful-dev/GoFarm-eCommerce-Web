@@ -11,7 +11,7 @@ export type EmployeeStatus = "active" | "inactive" | "suspended";
 
 export interface Employee {
   _id: string;
-  userId: string; // Reference to user document
+  userId: string;
   firebaseUid: string; // Firebase UID
   email: string;
   firstName: string;
