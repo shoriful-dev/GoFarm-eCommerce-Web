@@ -85,7 +85,7 @@ export interface OrderEmployeeTracking {
   cashSubmissionNotes?: string;
   assignedAccountsEmployeeId?: string; // accounts employee ID
   assignedAccountsEmployeeName?: string; // accounts employee name
-  paymentReceivedBy?: string; // accounts employee email
+  paymentReceivedBy?: string;
   paymentReceivedAt?: string;
   statusHistory?: OrderStatusHistoryItem[];
 };
