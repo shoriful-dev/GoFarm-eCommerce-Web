@@ -83,7 +83,7 @@ export interface OrderEmployeeTracking {
   cashSubmittedBy?: string; // deliveryman employee email
   cashSubmittedAt?: string;
   cashSubmissionNotes?: string;
-  assignedAccountsEmployeeId?: string; // accounts employee ID
+  assignedAccountsEmployeeId?: string;
   assignedAccountsEmployeeName?: string;
   paymentReceivedBy?: string;
   paymentReceivedAt?: string;
